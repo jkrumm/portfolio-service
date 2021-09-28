@@ -5,7 +5,9 @@ import redis
 from rq import Queue, Connection
 from flask import render_template, Blueprint, jsonify, request, current_app
 
-from project.server.main.tasks import create_task
+from project.server.main.tasks.daily import daily
+from project.server.main.tasks.marketcap import marketcap
+from project.server.main.tasks.portfolio import portfolio
 
 main_blueprint = Blueprint("main", __name__,)
 
@@ -20,7 +22,17 @@ def run_task():
     task_type = request.form["type"]
     with Connection(redis.from_url(current_app.config["REDIS_URL"])):
         q = Queue()
-        task = q.enqueue(create_task, task_type)
+
+        if task_type == "portfolio":
+            task = q.enqueue(portfolio)
+        elif task_type == "marketcap":
+            task = q.enqueue(marketcap)
+        elif task_type == "daily":
+            task = q.enqueue(daily)
+        else:
+            response_object = {"status": "error", "error": "wrong task_type"}
+            return jsonify(response_object), 400
+
     response_object = {
         "status": "success",
         "data": {

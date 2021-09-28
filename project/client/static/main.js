@@ -7,7 +7,7 @@ $( document ).ready(() => {
 $('.btn').on('click', function() {
   $.ajax({
     url: '/tasks',
-    data: { type: $(this).data('type') },
+    data: { type: $(this).data('type').toString() },
     method: 'POST'
   })
   .done((res) => {
