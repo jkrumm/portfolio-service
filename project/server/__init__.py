@@ -5,8 +5,8 @@ import os
 
 from flask import Flask
 from flask_bootstrap import Bootstrap
+from prometheus_flask_exporter import PrometheusMetrics
 
-# instantiate the extensions
 bootstrap = Bootstrap()
 
 
@@ -22,6 +22,8 @@ def create_app(script_info=None):
     # set config
     app_settings = os.getenv("APP_SETTINGS")
     app.config.from_object(app_settings)
+
+    PrometheusMetrics(app)
 
     # set up extensions
     bootstrap.init_app(app)

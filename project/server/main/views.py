@@ -4,22 +4,25 @@
 import redis
 from rq import Queue, Connection
 from flask import render_template, Blueprint, jsonify, request, current_app
+from prometheus_client import Summary, Counter
 
 from project.server.main.tasks.daily import daily
 from project.server.main.tasks.marketcap import marketcap
 from project.server.main.tasks.portfolio import portfolio
 
-main_blueprint = Blueprint("main", __name__,)
-
+main_blueprint = Blueprint("main", __name__, )
 
 @main_blueprint.route("/", methods=["GET"])
 def home():
     return render_template("main/home.html")
 
 
+c = Counter('my_failures', 'Description of counter')
+
 @main_blueprint.route("/tasks", methods=["POST"])
 def run_task():
     task_type = request.form["type"]
+    c.inc()  # Increment by 1
     with Connection(redis.from_url(current_app.config["REDIS_URL"])):
         q = Queue()
 
@@ -40,6 +43,7 @@ def run_task():
         }
     }
     return jsonify(response_object), 202
+# Decorate function with metric.
 
 
 @main_blueprint.route("/tasks/<task_id>", methods=["GET"])
