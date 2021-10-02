@@ -3,14 +3,33 @@
 
 import os
 
+import sentry_sdk
 from flask import Flask
 from flask_bootstrap import Bootstrap
 from prometheus_flask_exporter import PrometheusMetrics
+from sentry_sdk.integrations.flask import FlaskIntegration
+from sentry_sdk.integrations.rq import RqIntegration
+import logging
+from sentry_sdk.integrations.logging import LoggingIntegration
 
 bootstrap = Bootstrap()
 
 
 def create_app(script_info=None):
+    # All of this is already happening by default!
+    sentry_logging = LoggingIntegration(
+        level=logging.INFO,  # Capture info and above as breadcrumbs
+        event_level=logging.ERROR  # Send errors as events
+    )
+    sentry_sdk.init(
+        dsn="https://4511a9595a5947bc99e734d2fe23f8fa@o1018904.ingest.sentry.io/5984692",
+        integrations=[FlaskIntegration(), RqIntegration()],
+
+        # Set traces_sample_rate to 1.0 to capture 100%
+        # of transactions for performance monitoring.
+        # We recommend adjusting this value in production.
+        traces_sample_rate=1.0
+    )
 
     # instantiate the app
     app = Flask(

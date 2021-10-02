@@ -7,11 +7,13 @@ networks:
 volumes:
     prometheus_data: {}
     grafana_data: {}
+    loki_data: {}
 
 services:
   redis:
     image: redis:alpine
     container_name: redis
+    restart: on-failure
     networks:
       - ps-net
 
@@ -29,9 +31,14 @@ services:
       - APP_SETTINGS=project.server.config.DevelopmentConfig
     depends_on:
       - redis
-    tty: true
+#    tty: true
     networks:
       - ps-net
+    restart: unless-stopped
+#    logging:
+#      driver: loki
+#      options:
+#        loki-url: "loki:3100/loki/api/v1/push"
 
   worker:
     build:
@@ -47,6 +54,10 @@ services:
       - redis
     networks:
       - ps-net
+#    logging:
+#      driver: loki
+#      options:
+#        loki-url: "http://localhost:3100/loki/api/v1/push"
 
 #  dashboard:
 #    build: ./project/dashboard
@@ -56,6 +67,17 @@ services:
 #    command: rq-dashboard -H redis
 #    depends_on:
 #      - redis
+
+#  loki:
+#    image: grafana/loki:2.0.0
+#    container_name: loki
+#    command: -config.file=/mnt/config/loki-config.yml
+#    restart: unless-stopped
+#    networks:
+#      - ps-net
+#    volumes:
+#      - ./loki-config.yaml:/mnt/config/loki-config.yml
+#      - loki_data:/loki
 
   prometheus:
     image: prom/prometheus:v2.30.0

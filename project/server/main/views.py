@@ -1,5 +1,5 @@
 # project/server/main/views.py
-
+import logging
 
 import redis
 from rq import Queue, Connection
@@ -7,10 +7,12 @@ from flask import render_template, Blueprint, jsonify, request, current_app
 from prometheus_client import Summary, Counter
 
 from project.server.main.tasks.daily import daily
+from project.server.main.tasks.db import trigger_error_queue
 from project.server.main.tasks.marketcap import marketcap
 from project.server.main.tasks.portfolio import portfolio
 
 main_blueprint = Blueprint("main", __name__, )
+
 
 @main_blueprint.route("/", methods=["GET"])
 def home():
@@ -18,6 +20,7 @@ def home():
 
 
 c = Counter('my_failures', 'Description of counter')
+
 
 @main_blueprint.route("/tasks", methods=["POST"])
 def run_task():
@@ -43,6 +46,8 @@ def run_task():
         }
     }
     return jsonify(response_object), 202
+
+
 # Decorate function with metric.
 
 
@@ -63,3 +68,30 @@ def get_status(task_id):
     else:
         response_object = {"status": "error"}
     return jsonify(response_object)
+
+
+@main_blueprint.route("/debug-sentry", methods=["GET"])
+def trigger_error():
+    division_by_zero = 1 / 0
+
+
+@main_blueprint.route("/test-logging", methods=["GET"])
+def test_logging():
+    logging.debug("I am ignored")
+    logging.info("I am a breadcrumb")
+    logging.error("I am an event", extra=dict(bar=43))
+    logging.exception("An exception happened")
+
+
+@main_blueprint.route("/debug-sentry-rq", methods=["GET"])
+def trigger_error_rq():
+    with Connection(redis.from_url(current_app.config["REDIS_URL"])):
+        q = Queue()
+        task = q.enqueue(trigger_error_queue)
+    response_object = {
+        "status": "success",
+        "data": {
+            "task_id": task.get_id()
+        }
+    }
+    return jsonify(response_object), 202
