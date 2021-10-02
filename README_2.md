@@ -1,9 +1,12 @@
 # dockprom
 
-A monitoring solution for Docker hosts and containers with [Prometheus](https://prometheus.io/), [Grafana](http://grafana.org/), [cAdvisor](https://github.com/google/cadvisor),
-[NodeExporter](https://github.com/prometheus/node_exporter) and alerting with [AlertManager](https://github.com/prometheus/alertmanager).
+A monitoring solution for Docker hosts and containers with [Prometheus](https://prometheus.io/)
+, [Grafana](http://grafana.org/), [cAdvisor](https://github.com/google/cadvisor),
+[NodeExporter](https://github.com/prometheus/node_exporter) and alerting
+with [AlertManager](https://github.com/prometheus/alertmanager).
 
-***If you're looking for the Docker Swarm version please go to [stefanprodan/swarmprom](https://github.com/stefanprodan/swarmprom)***
+***If you're looking for the Docker Swarm version please go
+to [stefanprodan/swarmprom](https://github.com/stefanprodan/swarmprom)***
 
 ## Install
 
@@ -16,7 +19,8 @@ cd dockprom
 ADMIN_USER=admin ADMIN_PASSWORD=admin ADMIN_PASSWORD_HASH=JDJhJDE0JE91S1FrN0Z0VEsyWmhrQVpON1VzdHVLSDkyWHdsN0xNbEZYdnNIZm1pb2d1blg4Y09mL0ZP docker-compose up -d
 ```
 
-**Caddy v2 does not accept plaintext passwords. It MUST be provided as a hash value. The above password hash corresponds to ADMIN_PASSWORD 'admin'. To know how to generate hash password, refer [Updating Caddy to v2](#Updating-Caddy-to-v2)**
+**Caddy v2 does not accept plaintext passwords. It MUST be provided as a hash value. The above password hash corresponds
+to ADMIN_PASSWORD 'admin'. To know how to generate hash password, refer [Updating Caddy to v2](#Updating-Caddy-to-v2)**
 
 Prerequisites:
 
@@ -25,8 +29,9 @@ Prerequisites:
 
 ## Updating Caddy to v2
 
-Perform a `docker run --rm caddy caddy hash-password --plaintext 'ADMIN_PASSWORD'` in order to generate a hash for your new password.
-ENSURE that you replace `ADMIN_PASSWORD` with new plain text password and `ADMIN_PASSWORD_HASH` with the hashed password references in [docker-compose.yml](./docker-compose.yml) for the caddy container.
+Perform a `docker run --rm caddy caddy hash-password --plaintext 'ADMIN_PASSWORD'` in order to generate a hash for your
+new password. ENSURE that you replace `ADMIN_PASSWORD` with new plain text password and `ADMIN_PASSWORD_HASH` with the
+hashed password references in [docker-compose.yml](./docker-compose.yml) for the caddy container.
 
 Containers:
 
@@ -40,7 +45,9 @@ Containers:
 
 ## Setup Grafana
 
-Navigate to `http://<host-ip>:3000` and login with user ***admin*** password ***admin***. You can change the credentials in the compose file or by supplying the `ADMIN_USER` and `ADMIN_PASSWORD` environment variables on compose up. The config file can be added directly in grafana part like this
+Navigate to `http://<host-ip>:3000` and login with user ***admin*** password ***admin***. You can change the credentials
+in the compose file or by supplying the `ADMIN_USER` and `ADMIN_PASSWORD` environment variables on compose up. The
+config file can be added directly in grafana part like this
 
 ```yaml
 grafana:
@@ -84,8 +91,8 @@ The Docker Host Dashboard shows key metrics for monitoring the resource usage of
 * Network usage graph by device (inbound Bps, Outbound Bps)
 * Swap usage and activity graphs
 
-For storage and particularly Free Storage graph, you have to specify the fstype in grafana graph request.
-You can find it in `grafana/dashboards/docker_host.json`, at line 480 :
+For storage and particularly Free Storage graph, you have to specify the fstype in grafana graph request. You can find
+it in `grafana/dashboards/docker_host.json`, at line 480 :
 
 ```yaml
 "expr": "sum(node_filesystem_free_bytes{fstype=\"btrfs\"})",
@@ -132,11 +139,14 @@ The Monitor Services Dashboard shows key metrics for monitoring the containers t
 
 ## Define alerts
 
-Three alert groups have been setup within the [alert.rules](https://github.com/stefanprodan/dockprom/blob/master/prometheus/alert.rules) configuration file:
+Three alert groups have been setup within
+the [alert.rules](https://github.com/stefanprodan/dockprom/blob/master/prometheus/alert.rules) configuration file:
 
-* Monitoring services alerts [targets](https://github.com/stefanprodan/dockprom/blob/master/prometheus/alert.rules#L2-L11)
+* Monitoring services
+  alerts [targets](https://github.com/stefanprodan/dockprom/blob/master/prometheus/alert.rules#L2-L11)
 * Docker Host alerts [host](https://github.com/stefanprodan/dockprom/blob/master/prometheus/alert.rules#L13-L40)
-* Docker Containers alerts [containers](https://github.com/stefanprodan/dockprom/blob/master/prometheus/alert.rules#L42-L69)
+* Docker Containers
+  alerts [containers](https://github.com/stefanprodan/dockprom/blob/master/prometheus/alert.rules#L42-L69)
 
 You can modify the alert rules and reload them by making a HTTP POST call to Prometheus:
 
@@ -245,16 +255,18 @@ Trigger an alert if a container is using more than 1.2GB of RAM for more than 30
 
 ## Setup alerting
 
-The AlertManager service is responsible for handling alerts sent by Prometheus server.
-AlertManager can send notifications via email, Pushover, Slack, HipChat or any other system that exposes a webhook interface.
-A complete list of integrations can be found [here](https://prometheus.io/docs/alerting/configuration).
+The AlertManager service is responsible for handling alerts sent by Prometheus server. AlertManager can send
+notifications via email, Pushover, Slack, HipChat or any other system that exposes a webhook interface. A complete list
+of integrations can be found [here](https://prometheus.io/docs/alerting/configuration).
 
 You can view and silence notifications by accessing `http://<host-ip>:9093`.
 
-The notification receivers can be configured in [alertmanager/config.yml](https://github.com/stefanprodan/dockprom/blob/master/alertmanager/config.yml) file.
+The notification receivers can be configured
+in [alertmanager/config.yml](https://github.com/stefanprodan/dockprom/blob/master/alertmanager/config.yml) file.
 
-To receive alerts via Slack you need to make a custom integration by choose ***incoming web hooks*** in your Slack team app page.
-You can find more details on setting up Slack integration [here](http://www.robustperception.io/using-slack-with-the-alertmanager/).
+To receive alerts via Slack you need to make a custom integration by choose ***incoming web hooks*** in your Slack team
+app page. You can find more details on setting up Slack
+integration [here](http://www.robustperception.io/using-slack-with-the-alertmanager/).
 
 Copy the Slack Webhook URL into the ***api_url*** field and specify a Slack ***channel***.
 
@@ -284,11 +296,13 @@ To push data, simply execute:
 echo "some_metric 3.14" | curl --data-binary @- http://user:password@localhost:9091/metrics/job/some_job
 ```
 
-Please replace the `user:password` part with your user and password set in the initial configuration (default: `admin:admin`).
+Please replace the `user:password` part with your user and password set in the initial configuration (
+default: `admin:admin`).
 
 ## Updating Grafana to v5.2.2
 
-[In Grafana versions >= 5.1 the id of the grafana user has been changed](http://docs.grafana.org/installation/docker/#migration-from-a-previous-version-of-the-docker-container-to-5-1-or-later). Unfortunately this means that files created prior to 5.1 won’t have the correct permissions for later versions.
+[In Grafana versions >= 5.1 the id of the grafana user has been changed](http://docs.grafana.org/installation/docker/#migration-from-a-previous-version-of-the-docker-container-to-5-1-or-later)
+. Unfortunately this means that files created prior to 5.1 won’t have the correct permissions for later versions.
 
 | Version |   User  | User ID |
 |:-------:|:-------:|:-------:|

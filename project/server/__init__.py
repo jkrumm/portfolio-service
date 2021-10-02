@@ -1,6 +1,7 @@
 # project/server/__init__.py
 
 
+import logging
 import os
 
 import sentry_sdk
@@ -8,9 +9,8 @@ from flask import Flask
 from flask_bootstrap import Bootstrap
 from prometheus_flask_exporter import PrometheusMetrics
 from sentry_sdk.integrations.flask import FlaskIntegration
-from sentry_sdk.integrations.rq import RqIntegration
-import logging
 from sentry_sdk.integrations.logging import LoggingIntegration
+from sentry_sdk.integrations.rq import RqIntegration
 
 bootstrap = Bootstrap()
 

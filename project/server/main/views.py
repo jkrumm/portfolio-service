@@ -2,9 +2,9 @@
 import logging
 
 import redis
-from rq import Queue, Connection
 from flask import render_template, Blueprint, jsonify, request, current_app
-from prometheus_client import Summary, Counter
+from prometheus_client import Counter
+from rq import Queue, Connection
 
 from project.server.main.tasks.daily import daily
 from project.server.main.tasks.db import trigger_error_queue
