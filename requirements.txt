@@ -9,3 +9,5 @@ prometheus_flask_exporter
 sentry-sdk[flask]
 sentry-sdk[rq]
 sentry-sdk[logging]
+nomics-python
+python-dotenv

@@ -8,7 +8,7 @@ from rq import Queue, Connection
 
 from project.server.main.tasks.daily import daily
 from project.server.main.tasks.db import trigger_error_queue
-from project.server.main.tasks.marketcap import marketcap
+from project.server.main.tasks.marketcap import marketcap_current
 from project.server.main.tasks.portfolio import portfolio
 
 main_blueprint = Blueprint("main", __name__, )
@@ -32,7 +32,7 @@ def run_task():
         if task_type == "portfolio":
             task = q.enqueue(portfolio)
         elif task_type == "marketcap":
-            task = q.enqueue(marketcap)
+            task = q.enqueue(marketcap_current)
         elif task_type == "daily":
             task = q.enqueue(daily)
         else:

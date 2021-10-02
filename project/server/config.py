@@ -7,7 +7,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 class BaseConfig(object):
     """Base configuration."""
-
+    NOMICS_KEY = os.environ.get("NOMICS_KEY")
     WTF_CSRF_ENABLED = True
     REDIS_URL = "redis://redis:6379/0"
     QUEUES = ["default"]
@@ -15,7 +15,6 @@ class BaseConfig(object):
 
 class DevelopmentConfig(BaseConfig):
     """Development configuration."""
-
     WTF_CSRF_ENABLED = False
 
 
