@@ -22,7 +22,7 @@ def create_app(script_info=None):
         event_level=logging.ERROR  # Send errors as events
     )
     sentry_sdk.init(
-        dsn="https://4511a9595a5947bc99e734d2fe23f8fa@o1018904.ingest.sentry.io/5984692",
+        dsn=os.environ.get('SENTRY'),
         integrations=[FlaskIntegration(), RqIntegration()],
 
         # Set traces_sample_rate to 1.0 to capture 100%

@@ -11,3 +11,6 @@ sentry-sdk[rq]
 sentry-sdk[logging]
 nomics-python
 python-dotenv
+requests
+pandas
+numpy
