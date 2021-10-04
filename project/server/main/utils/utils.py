@@ -1,5 +1,6 @@
 import os
 
+import requests
 from nomics import Nomics
 
 
@@ -23,3 +24,10 @@ def f(string):
             return round(f, 2)
     else:
         return None
+
+
+def get_json(url):
+    response = requests.get(url)
+    response.raise_for_status()  # raises exception when not a 2xx response
+    if response.status_code != 204:
+        return list(response.json())
