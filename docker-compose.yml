@@ -8,7 +8,7 @@ volumes:
   prometheus_data: { }
   grafana_data: { }
   loki_data: { }
-  db_data: { }
+  mariadb_data:
 
 services:
   redis:
@@ -18,21 +18,38 @@ services:
     networks:
       - ps-net
 
-  db:
-    image: mysql
+  mariadb:
+    image: mariadb:latest
+    container_name: mariadb
     restart: always
-    container_name: db
     environment:
-      MYSQL_DATABASE: 'db'
-      MYSQL_USER: 'user'
-      MYSQL_PASSWORD: 'pw'
-      MYSQL_ROOT_PASSWORD: 'pw'
+      MYSQL_USER: adminer
+      MYSQL_PASSWORD: adminer
+      MARIADB_ROOT_PASSWORD: root
+      MYSQL_DATABASE: db
     ports:
       - 3306:3306
-    expose:
-      - 3306
     volumes:
-      - db_data:/var/lib/mysql
+      - mariadb_data:/var/lib/mysql
+      - ./init:/docker-entrypoint-initdb.d
+      # - ./my.cnf:/etc/mysql/my.cnf
+    networks:
+      - ps-net
+
+  adminer:
+    image: adminer:latest
+    container_name: adminer
+    environment:
+      ADMINER_DEFAULT_SERVER: mariadb
+    restart: always
+    ports:
+      - 7777:8080
+    expose:
+      - 8080
+    volumes:
+      - ./adminer.css:/var/www/html/adminer.css
+    networks:
+      - ps-net
 
   web:
     build:
@@ -48,7 +65,8 @@ services:
       - APP_SETTINGS=project.server.config.DevelopmentConfig
     depends_on:
       - redis
-      - db
+      - mariadb
+    #      - db
     #    tty: true
     networks:
       - ps-net
@@ -70,7 +88,8 @@ services:
     restart: unless-stopped
     depends_on:
       - redis
-      - db
+      - mariadb
+    #      - db
     networks:
       - ps-net
   #    logging:
@@ -149,23 +168,23 @@ services:
     networks:
       - ps-net
 
-  cadvisor:
-    image: gcr.io/cadvisor/cadvisor:v0.40.0
-    container_name: cadvisor
-    privileged: true
-    devices:
-      - /dev/kmsg:/dev/kmsg
-    volumes:
-      - /:/rootfs:ro
-      - /var/run:/var/run:ro
-      - /sys:/sys:ro
-      - /var/lib/docker:/var/lib/docker:ro
-      #- /cgroup:/cgroup:ro #doesn't work on MacOS only for Linux
-    restart: unless-stopped
-    expose:
-      - 8080
-    networks:
-      - ps-net
+  #  cadvisor:
+  #    image: gcr.io/cadvisor/cadvisor:v0.40.0
+  #    container_name: cadvisor
+  #    privileged: true
+  #    devices:
+  #      - /dev/kmsg:/dev/kmsg
+  #    volumes:
+  #      - /:/rootfs:ro
+  #      - /var/run:/var/run:ro
+  #      - /sys:/sys:ro
+  #      - /var/lib/docker:/var/lib/docker:ro
+  #      #- /cgroup:/cgroup:ro #doesn't work on MacOS only for Linux
+  #    restart: unless-stopped
+  #    expose:
+  #      - 8080
+  #    networks:
+  #      - ps-net
 
   grafana:
     image: grafana/grafana:8.1.5

@@ -1,10 +1,10 @@
-Flask==1.1.2
-Flask-Bootstrap==3.3.7.1
-Flask-Testing==0.8.1
-Flask-WTF==0.14.3
-redis==3.5.3
-rq==1.7.0
-prometheus-client==0.11.0
+Flask
+Flask-Bootstrap
+Flask-Testing
+Flask-WTF
+redis
+rq
+prometheus-client
 prometheus_flask_exporter
 sentry-sdk[flask]
 sentry-sdk[rq]
@@ -12,6 +12,4 @@ sentry-sdk[logging]
 nomics-python
 python-dotenv
 requests
-pandas
-numpy
-SQLAlchemy
+mysql-connector-python

@@ -1,6 +1,3 @@
-# project/server/__init__.py
-
-
 import logging
 import os
 
@@ -41,6 +38,8 @@ def create_app(script_info=None):
     # set config
     app_settings = os.getenv("APP_SETTINGS")
     app.config.from_object(app_settings)
+
+    # db.init_app(app)
 
     PrometheusMetrics(app)
 

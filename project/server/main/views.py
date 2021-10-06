@@ -6,6 +6,7 @@ from flask import render_template, Blueprint, jsonify, request, current_app
 from prometheus_client import Counter
 from rq import Queue, Connection
 
+from project.server.config import fetchAll
 from project.server.main.tasks.daily import daily
 from project.server.main.tasks.db import trigger_error_queue
 from project.server.main.tasks.marketcap import marketcap_current
@@ -95,3 +96,9 @@ def trigger_error_rq():
         }
     }
     return jsonify(response_object), 202
+
+
+@main_blueprint.route("/test_db", methods=["GET"])
+def test_records():
+    test_db = fetchAll("SELECT * FROM db.test")
+    return jsonify(test_db)

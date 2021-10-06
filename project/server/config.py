@@ -2,6 +2,8 @@
 
 import os
 
+import mysql.connector as mariadb
+
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 
@@ -11,6 +13,10 @@ class BaseConfig(object):
     WTF_CSRF_ENABLED = True
     REDIS_URL = "redis://redis:6379/0"
     QUEUES = ["default"]
+    # Database
+    # SQLALCHEMY_DATABASE_URI = os.environ.get("SQLALCHEMY_DATABASE_URI")
+    # SQLALCHEMY_ECHO = False
+    # SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 
 class DevelopmentConfig(BaseConfig):
@@ -24,3 +30,19 @@ class TestingConfig(BaseConfig):
     TESTING = True
     WTF_CSRF_ENABLED = False
     PRESERVE_CONTEXT_ON_EXCEPTION = False
+
+
+config = {
+    'host': 'mariadb',
+    'port': 3306,
+    'user': 'root',
+    'password': 'root',
+    'database': 'db'
+}
+mariadb_connection = mariadb.connect(**config)
+
+
+def fetchAll(sql):
+    cur = mariadb_connection.cursor()
+    cur.execute(sql)
+    return cur.fetchall()
