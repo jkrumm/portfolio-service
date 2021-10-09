@@ -1,3 +1,4 @@
+import datetime
 import os
 
 import requests
@@ -31,3 +32,17 @@ def get_json(url):
     response.raise_for_status()  # raises exception when not a 2xx response
     if response.status_code != 204:
         return list(response.json())
+
+
+def get_time():
+    ts = datetime.datetime.now()
+    return ts - datetime.timedelta(minutes=ts.minute % 5,
+                                   seconds=ts.second,
+                                   microseconds=ts.microsecond)
+
+
+def transform_time(string):
+    ts = datetime.datetime.strptime(string, "%Y-%m-%dT%H:%M:%SZ")
+    return ts - datetime.timedelta(minutes=ts.minute % 5,
+                                   seconds=ts.second,
+                                   microseconds=ts.microsecond)

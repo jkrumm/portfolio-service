@@ -101,4 +101,4 @@ def trigger_error_rq():
 @main_blueprint.route("/test_db", methods=["GET"])
 def test_records():
     test_db = fetchAll("SELECT * FROM db.test")
-    return jsonify(test_db)
+    return jsonify(test_db), 200

@@ -32,17 +32,19 @@ class TestingConfig(BaseConfig):
     PRESERVE_CONTEXT_ON_EXCEPTION = False
 
 
-config = {
+dbConfig = {
     'host': 'mariadb',
     'port': 3306,
     'user': 'root',
     'password': 'root',
     'database': 'db'
 }
-mariadb_connection = mariadb.connect(**config)
 
 
 def fetchAll(sql):
+    mariadb_connection = mariadb.connect(**dbConfig)
     cur = mariadb_connection.cursor()
     cur.execute(sql)
-    return cur.fetchall()
+    data = cur.fetchall()
+    mariadb_connection.close()
+    return data
