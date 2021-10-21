@@ -13,3 +13,5 @@ nomics-python
 python-dotenv
 requests
 mysql-connector-python
+ccxt
+pandas

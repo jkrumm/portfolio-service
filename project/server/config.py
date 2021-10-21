@@ -13,6 +13,11 @@ class BaseConfig(object):
     WTF_CSRF_ENABLED = True
     REDIS_URL = "redis://redis:6379/0"
     QUEUES = ["default"]
+    # Exchanges
+    # BINANCE_KEY = os.environ.get("BINANCE_KEY")
+    # BINANCE_SECRET = os.environ.get("BINANCE_SECRET")
+    # BITMEX_KEY = os.environ.get("BITMEX_KEY")
+    # BITMEX_SECRET = os.environ.get("BITMEX_SECRET")
     # Database
     # SQLALCHEMY_DATABASE_URI = os.environ.get("SQLALCHEMY_DATABASE_URI")
     # SQLALCHEMY_ECHO = False

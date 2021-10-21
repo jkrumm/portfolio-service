@@ -13,14 +13,14 @@ def marketcap():
 
 def marketcap_current():
     start = time.perf_counter()
-    print("TASK: marketcap_current")
-    logging.info("TASK: marketcap_current")
+    print("TASK: marketcap_current started")
+    logging.info("TASK: marketcap_current started")
 
     ########################
     # Get Dashboard
     ########################
     dashboard_fetched = get_json("https://api.nomics.com/v1/currencies/ticker?key=" + os.environ.get(
-        'NOMICS_KEY') + "&interval=1d,30d,7d&convert=USD&sort=rank")[:250]
+        'NOMICS_KEY') + "&interval=1d,30d,7d&convert=USD&sort=rank")[:100]
     print(len(dashboard_fetched))
     print(dashboard_fetched[0:2])
 
@@ -32,7 +32,7 @@ def marketcap_current():
     ids = []
 
     for i in dashboard_fetched:
-        if len(ids) <= 50:
+        if len(ids) <= 100:
             ids.append(i.get('id'))
         dashboard.append({
             "currency": "BTC",
@@ -95,5 +95,6 @@ def marketcap_current():
     print(dashboard[0:2])
 
     end = time.perf_counter()
-    print(f"ELAPSED TIME: {end - start:0.2f} seconds")
+    print("TASK: marketcap_current completed in " + str(f(end - start)) + "s")
+    logging.info("TASK: marketcap_current completed in " + str(f(end - start)) + "s")
     return True

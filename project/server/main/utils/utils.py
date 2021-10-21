@@ -46,3 +46,10 @@ def transform_time(string):
     return ts - datetime.timedelta(minutes=ts.minute % 5,
                                    seconds=ts.second,
                                    microseconds=ts.microsecond)
+
+
+def transform_time_ccxt(string):
+    ts = datetime.datetime.strptime(string, "%Y-%m-%dT%H:%M:%S.%fZ")
+    return ts - datetime.timedelta(minutes=ts.minute % 5,
+                                   seconds=ts.second,
+                                   microseconds=ts.microsecond)
