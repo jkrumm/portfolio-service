@@ -15,8 +15,8 @@ cli = FlaskGroup(create_app=create_app)
 
 @cli.command()
 def test():
-    """Runs the unit tests without test coverage."""
-    tests = unittest.TestLoader().discover("project/tests", pattern="test*.py")
+    """Runs the unit tests without portfolio.json coverage."""
+    tests = unittest.TestLoader().discover("project/tests", pattern="portfolio.json*.py")
     result = unittest.TextTestRunner(verbosity=2).run(tests)
     if result.wasSuccessful():
         return 0

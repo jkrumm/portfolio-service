@@ -1,12 +1,13 @@
 import datetime
-import os
 
 import requests
 from nomics import Nomics
 
+from project.server.config import os_get
+
 
 def get_nomics():
-    return Nomics(os.environ.get('NOMICS_KEY'))
+    return Nomics(os_get('NOMICS_KEY'))
 
 
 def percentage(one, two):
@@ -16,13 +17,20 @@ def percentage(one, two):
         return None
 
 
-def f(string):
-    if string:
-        f = float(string)
+def f(val):
+    if val:
+        f = float(val)
         if f > 100000:
             return int(f)
         else:
             return round(f, 2)
+    else:
+        return None
+
+
+def f_btc(val):
+    if val:
+        return round(float(val), 6)
     else:
         return None
 

@@ -1,8 +1,8 @@
 import datetime
 import logging
-import os
 import time
 
+from project.server.config import os_get
 from project.server.main.utils.utils import percentage, get_json, f, get_time, transform_time
 
 
@@ -19,7 +19,7 @@ def marketcap_current():
     ########################
     # Get Dashboard
     ########################
-    dashboard_fetched = get_json("https://api.nomics.com/v1/currencies/ticker?key=" + os.environ.get(
+    dashboard_fetched = get_json("https://api.nomics.com/v1/currencies/ticker?key=" + os_get(
         'NOMICS_KEY') + "&interval=1d,30d,7d&convert=USD&sort=rank")[:100]
     print(len(dashboard_fetched))
     print(dashboard_fetched[0:2])
@@ -77,7 +77,7 @@ def marketcap_current():
     # Add Sparklines
     ########################
 
-    url = "https://api.nomics.com/v1/currencies/sparkline?key=" + os.environ.get('NOMICS_KEY')
+    url = "https://api.nomics.com/v1/currencies/sparkline?key=" + os_get('NOMICS_KEY')
     url += "&ids=" + str(ids)[1:-1].replace(" ", "").replace("'", "")
     url += "&end=" + datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ")
     url += "&start=" + (datetime.datetime.now() - datetime.timedelta(days=44)).strftime("%Y-%m-%dT%H:%M:%SZ")

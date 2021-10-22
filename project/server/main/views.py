@@ -6,7 +6,7 @@ from flask import render_template, Blueprint, jsonify, request, current_app
 from prometheus_client import Counter
 from rq import Queue, Connection
 
-from project.server.config import fetchAll
+from project.server.config import db_fetch, db_insert
 from project.server.main.tasks.daily import daily
 from project.server.main.tasks.db import trigger_error_queue
 from project.server.main.tasks.marketcap import marketcap_current
@@ -76,7 +76,7 @@ def trigger_error():
     division_by_zero = 1 / 0
 
 
-@main_blueprint.route("/test-logging", methods=["GET"])
+@main_blueprint.route("/portfolio.json-logging", methods=["GET"])
 def test_logging():
     logging.debug("I am ignored")
     logging.info("I am a breadcrumb")
@@ -100,5 +100,11 @@ def trigger_error_rq():
 
 @main_blueprint.route("/test_db", methods=["GET"])
 def test_records():
-    test_db = fetchAll("SELECT * FROM db.test")
+    test_db = db_fetch("SELECT * FROM db.test")
+    return jsonify(test_db), 200
+
+
+@main_blueprint.route("/test_db_insert", methods=["GET"])
+def test_db_insert():
+    test_db = db_insert("test", {"val": "99"})
     return jsonify(test_db), 200
