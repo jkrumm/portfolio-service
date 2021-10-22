@@ -6,7 +6,7 @@ from pprint import pprint
 import ccxt
 import pandas as pd
 
-from project.server.config import os_get
+from project.server.config import os_get, db_insert_test, db_insert
 from project.server.main.utils.utils import f, get_time, transform_time_ccxt, get_json, f_btc, percentage
 
 
@@ -267,7 +267,8 @@ def portfolio():
     pm['current_btc_1w'] = percentage(pm['current_btc'], portfolio_1w['current_btc']) if portfolio_1w else None
     pm['current_percentage'] = round(pm['current'] / pm['total'] * 100 - 100, 2)
 
-    # pm = {key: value for key, value in sorted(pm.items())}
+    db_insert_test('portfolio_current', pm)
+    db_insert('portfolio_current', pm)
 
     pprint(pm)
 

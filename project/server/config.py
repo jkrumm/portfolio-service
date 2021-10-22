@@ -103,8 +103,11 @@ def json_to_values_string(obj):
     # append each value to a new list of values
     for v, val in enumerate(obj):
         if type(obj[val]) == str:
-            val = str(Json(obj[val])).replace('"', '')
-        val_list += [str(val)]
+            val_list.append(str(Json(obj[val])).replace('"', ''))
+        elif obj[val] == None:
+            val_list.append("NULL")
+        else:
+            val_list.append(str(obj[val]))
 
     # put parenthesis around each record string
     values_str += "(" + ', '.join(val_list) + "),\n"
