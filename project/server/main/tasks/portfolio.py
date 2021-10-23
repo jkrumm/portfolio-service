@@ -1,13 +1,13 @@
 import logging
 import time
 from datetime import datetime, timedelta
-from pprint import pprint
 
 import ccxt
 import pandas as pd
 
 from project.server.config import os_get, db_insert, db_insert_many, db_fetch, db_aggregate
-from project.server.main.utils.utils import f, get_time, transform_time_ccxt, get_json, f_btc, percentage, map_portfolio
+from project.server.main.utils.utils import f, get_time, transform_time_ccxt, get_json, f_btc, percentage, \
+    map_portfolio
 
 
 def portfolio():
@@ -71,64 +71,50 @@ def portfolio():
     ##################################################################################################################
 
     def get_binance_balances(exchange):
-        binance_balance = exchange.fetch_balance()
-
+        binance_balance = exchange.fetch_balance()['info']['balances']
         balances = []
-        for symbol, value in binance_balance['total'].items():
-            if value > 0.0:
-                bid_price = get_price(exchange, symbol)
-                if round(bid_price * value, 2) > 10.0:
-                    # get the bid price from the ticker price
-                    bid_price = get_price(exchange, symbol)
-                    bid_price_btc = get_price_btc(exchange, symbol)
-                    # balance_24h = {}
-                    # for b in portfolio_24h['binance_balances']:
-                    #     if symbol == b['asset']:
-                    #         balance_24h = b
-                    # balance_1w = {}
-                    # for b in portfolio_1w['binance_balances']:
-                    #     if symbol == b['asset']:
-                    #         balance_1w = b
-                    balance = {}
-                    balance["time"] = str(get_time())
-                    balance['asset'] = symbol
-                    balance['total'] = f(value)
-                    balance['price'] = f(bid_price)
-                    balance['price_btc'] = f_btc(bid_price_btc)
-                    balance['balance'] = f(bid_price * balance['total'])
-                    balance['balance_btc'] = f_btc((bid_price * balance['total']) / BTC_USD)
-                    # if balance_24h and balance_1w:
-                    #     balance['price_24h'] = percentage(balance['price'], balance_24h['price'])
-                    #     balance['price_1w'] = percentage(balance['price'], balance_1w['price'])
-                    #     balance['price_btc_24h'] = percentage(balance['price_btc'], balance_24h['price_btc'])
-                    #     balance['price_btc_1w'] = percentage(balance['price_btc'], balance_1w['price_btc'])
-                    #     balance['balance_24h'] = percentage(balance['balance'], balance_24h['balance'])
-                    #     balance['balance_1w'] = percentage(balance['balance'], balance_1w['balance'])
-                    #     balance['balance_btc_24h'] = percentage(balance['balance_btc'], balance_24h['balance_btc'])
-                    #     balance['balance_btc_1w'] = percentage(balance['balance_btc'], balance_1w['balance_btc'])
-                    # else:
-                    #     balance['price_24h'] = None
-                    #     balance['price_1w'] = None
-                    #     balance['price_btc_24h'] = None
-                    #     balance['price_btc_1w'] = None
-                    #     balance['balance_24h'] = None
-                    #     balance['balance_1w'] = None
-                    #     balance['balance_btc_24h'] = None
-                    #     balance['balance_btc_1w'] = None
+        for i, obj in enumerate(binance_balance):
+            used = f(obj['locked'])
+            used = used if (used > 0.001 and obj['asset'] != "BTC") else 0.0
+            free = f(obj['free'])
+            free = free if (free > 0.001 and obj['asset'] != "BTC") else 0.0
+            total = f(used + free)
+            if total and total > 0.0:
+                bid_price = get_price(exchange, obj['asset'])
+                if round(bid_price * total, 2) > 10.0:
+                    bid_price_btc = get_price_btc(exchange, obj['asset'])
+                    balance = {
+                        'timestamp': str(get_time()),
+                        'currency': obj['asset'],
+                        'amount': total,
+                        'price': f(bid_price),
+                        'price_btc': f_btc(bid_price_btc),
+                        'balance': f(bid_price * total),
+                        'balance_btc': f_btc((bid_price * total) / BTC_USD),
+                        'used': used,
+                        'free': free
+                    }
+                    used_percentage = percentage(free, total) * -1 if free != 0 else 100
+                    used_percentage = 100 if 100 > used_percentage > 98 else used_percentage
+                    balance['used_percentage'] = used_percentage
                     balances.append(balance)
-
-        df = pd.DataFrame(balances)
-        return df
+        return balances
 
     binance_balances = get_binance_balances(binance)
-    binance_balances_total = {}
-    binance_balances = binance_balances.sort_values('balance', ascending=False).reset_index(drop=True)
-    binance_balances_total['total'] = f(binance_balances.balance.sum())
-    binance_balances_total['total_btc'] = f_btc(binance_balances.balance_btc.sum())
-    binance_balances_total['count'] = len(binance_balances.index)
-    binance_balances_total['assets'] = binance_balances['asset'].tolist()
-    print(binance_balances_total)
-    pprint(binance_balances)
+    binance_balances = sorted(binance_balances, key=lambda d: d['balance'], reverse=True)
+    # pprint(binance_balances)
+    db_insert_many('binance_balances', binance_balances)
+
+    get_binance_balances_df = pd.DataFrame(binance_balances)
+    binance_balances_total = {
+        'total': f(get_binance_balances_df.balance.sum()),
+        'total_btc': f_btc(get_binance_balances_df.balance_btc.sum()),
+        'count': len(get_binance_balances_df.index),
+        'assets': get_binance_balances_df['currency'].tolist()
+    }
+
+    # get_binance_balances_df = get_binance_balances_df.sort_values('balance', ascending=False).reset_index(drop=True)
+    # print(binance_balances_total)
 
     ##################################################################################################################
     # BITMEX
@@ -251,7 +237,7 @@ def portfolio():
     db_insert('portfolio', pm)
     db_aggregate()
 
-    pprint(pm)
+    # pprint(pm)
 
     all_assets = get_json(os_get("WATCHLIST_GITHUB"))
     for item in binance_balances_total['assets']:
@@ -278,20 +264,21 @@ def portfolio():
     # drop table if exists portfolio_current;
 
     for o in boo:
-        a = {}
-        a['symbol'] = o['symbol']
-        a['amount'] = f(o['amount'])
-        a['timestamp'] = str(get_time())
-        if (o['symbol'][-1] == 'C'):
+        a = {
+            'symbol': o['symbol'],
+            'amount': f(o['amount']),
+            'timestamp': str(get_time())
+        }
+        if o['symbol'][-1] == 'C':
             a['price'] = f_btc(float(o['price']))
             current = f_btc(binance.fetchTicker(a['symbol'])['bid'])
             a['market'] = current
-            a['market_percentage'] = percentage(current, a['price'])
+            a['market_percentage'] = percentage(current, a['price']) * -1
         else:
             a['price'] = f(o['price'])
             current = binance.fetchTicker(a['symbol'])['bid']
             a['market'] = f(current)
-            a['market_percentage'] = percentage(current, a['price'])
+            a['market_percentage'] = percentage(current, a['price']) * -1
         a['side'] = o['side']
         binance_open_orders.append(a)
 
@@ -300,13 +287,13 @@ def portfolio():
     # pprint(binance_open_orders_pd.head(15))
     # print(list(binance_open_orders_pd))
     # binance_open_orders_dict = binance_open_orders_pd.to_dict('records')
-    pprint(binance_open_orders[0:2])
+    # pprint(binance_open_orders[0:2])
 
     # result = binance_open_orders_pd.to_json(orient="records")
     # parsed = json.loads(result)
     # print(json.dumps(parsed, indent=4))
 
-    binance_open_orders = sorted(binance_open_orders, key=lambda d: d['market_percentage'], reverse=True)
+    binance_open_orders = sorted(binance_open_orders, key=lambda d: d['market_percentage'])
 
     # db_insert_many_test("binance_orders", binance_open_orders)
     db_insert_many("binance_orders", binance_open_orders)

@@ -113,6 +113,8 @@ def db_insert_many(table, records):
     cur = db.cursor()
     if table == "binance_orders":
         cur.execute("TRUNCATE TABLE binance_orders")
+    if table == "binance_balances":
+        cur.execute("TRUNCATE TABLE binance_balances")
     sql_string = "INSERT INTO %s (%s) VALUES %s" % (
         table,
         ', '.join([list(x.keys()) for x in records][0]),

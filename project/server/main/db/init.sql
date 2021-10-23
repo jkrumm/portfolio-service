@@ -12,8 +12,24 @@ CREATE TABLE binance_orders(
                                PRIMARY KEY(id)
 );
 
+drop table if exists binance_balances;
 
-drop table if exists portfolio;
+CREATE TABLE binance_balances(
+                                 id SMALLINT NOT NULL AUTO_INCREMENT,
+                                 timstamp DATETIME NOT NULL,
+                                 currency VARCHAR(6) NOT NULL,
+                                 amount DECIMAL(25,6) NOT NULL,
+                                 price DECIMAL(20,2) NOT NULL,
+                                 price_btc DECIMAL(14,6) NOT NULL,
+                                 balance DECIMAL(20,2) NOT NULL,
+                                 balance_btc DECIMAL(14,6) NOT NULL,
+                                 used DECIMAL(25,6) NOT NULL,
+                                 free DECIMAL(25,6) NOT NULL,
+                                 used_percentage DECIMAL(7,2) NOT NULL,
+                                 PRIMARY KEY(id)
+);
+
+--drop table if exists portfolio;
 
 CREATE TABLE portfolio(
                           id MEDIUMINT NOT NULL AUTO_INCREMENT,

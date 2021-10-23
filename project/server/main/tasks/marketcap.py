@@ -35,7 +35,7 @@ def marketcap_current():
         if len(ids) <= 100:
             ids.append(i.get('id'))
         dashboard.append({
-            "currency": "BTC",
+            "currency": i.get('currency'),
             "name": i.get('name'),  # not
             "price": f(i.get('price')),
             "time": str(get_time()),

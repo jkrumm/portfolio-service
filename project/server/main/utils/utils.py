@@ -22,6 +22,8 @@ def f(val):
         f = float(val)
         if f > 100000:
             return int(f)
+        elif 0 < f < 0.001:
+            return round(f, 6)
         else:
             return round(f, 2)
     else:
@@ -70,6 +72,12 @@ def transform_interval(n):
         return '12H'
     if int(n) == 1:
         return '1D'
+
+
+def drop_keys(obj, keys):
+    for key in keys:
+        obj.remove(key)
+    return obj
 
 
 def map_portfolio(records):
