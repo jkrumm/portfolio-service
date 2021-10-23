@@ -29,9 +29,6 @@ def portfolio():
     binance.load_markets()
     bitmex.load_markets()
 
-    portfolio_24h = None
-    portfolio_1w = None
-
     portfolio_24h = db_fetch("SELECT * FROM portfolio WHERE timestamp > '%s' ORDER BY timestamp DESC LIMIT 1;" % str(
         datetime.utcnow() - timedelta(hours=24)))
     portfolio_24h = map_portfolio(portfolio_24h)[0]
@@ -44,7 +41,7 @@ def portfolio():
     # pprint(list(portfolio_1w))
     # pprint(map_portfolio(portfolio_1w))
 
-    def get_price(exchange, curr: str) -> float:
+    def get_price(exchange, curr: str):
         if curr == 'USDT':
             return 1.0
         else:
@@ -52,7 +49,7 @@ def portfolio():
             mid_point = tick['bid']
             return round(float(mid_point), 2)
 
-    def get_price_btc(exchange, curr: str) -> float:
+    def get_price_btc(exchange, curr: str):
         if curr == 'BTC':
             return 1.0
         else:
@@ -63,11 +60,11 @@ def portfolio():
             except:
                 return None
 
-    BTC_USD = binance.fetchTicker('BTC/USDT')['bid']
-    ETH_USD = binance.fetchTicker('ETH/USDT')['bid']
+    btc_usd = binance.fetchTicker('BTC/USDT')['bid']
+    eth_usd = binance.fetchTicker('ETH/USDT')['bid']
 
     ##################################################################################################################
-    # BINANCE
+    # BINANCE BALANCES
     ##################################################################################################################
 
     def get_binance_balances(exchange):
@@ -90,7 +87,7 @@ def portfolio():
                         'price': f(bid_price),
                         'price_btc': f_btc(bid_price_btc),
                         'balance': f(bid_price * total),
-                        'balance_btc': f_btc((bid_price * total) / BTC_USD),
+                        'balance_btc': f_btc((bid_price * total) / btc_usd),
                         'used': used,
                         'free': free
                     }
@@ -124,7 +121,7 @@ def portfolio():
         return f_btc(int(n) / 100000000)
 
     def bitmex_to_usd(n):
-        return f((bitmex_to_btc(n) * BTC_USD))
+        return f((bitmex_to_btc(n) * btc_usd))
 
     bitmex_balances = bitmex.fetch_balance()['info'][0]
     # pprint(bitmex_balances)
@@ -149,14 +146,15 @@ def portfolio():
     # pprint(bitmex_trades_eth[0:2])
     bitmex_last_trade_eth = bitmex_trades_eth[len(bitmex_trades_eth) - 1]
 
-    # Map Portfolio
+    ##################################################################################################################
+    # PORTFOLIO MAPPING
+    ##################################################################################################################
 
     pm = {}
 
     pm['timestamp'] = str(get_time())
-    pm['btc_usd'] = f(BTC_USD)
-    pm['eth_usd'] = f(ETH_USD)
-
+    pm['btc_usd'] = f(btc_usd)
+    pm['eth_usd'] = f(eth_usd)
     pm['binance_total'] = f(binance_balances_total['total'])
     pm['binance_total_24h'] = percentage(pm['binance_total'],
                                          portfolio_24h['binance_total']) if portfolio_24h else None
@@ -176,8 +174,6 @@ def portfolio():
     pm['total_btc_1w'] = percentage(pm['total_btc'], portfolio_1w['total_btc']) if portfolio_1w else None
 
     pm['binance_count'] = binance_balances_total['count']
-    # pm['binance_assets'] = binance_balances_total['assets']
-    # pm['binance_balances'] = json.loads(binance_balances.to_json(orient="records"))
 
     pm['bitmex_margin'] = f(bitmex_to_usd(bitmex_balances['marginBalance']))
     pm['bitmex_margin_24h'] = percentage(pm['bitmex_margin'],
@@ -239,11 +235,15 @@ def portfolio():
 
     # pprint(pm)
 
+    ##################################################################################################################
+    # BINANCE OPEN ORDERS
+    ##################################################################################################################
+
     all_assets = get_json(os_get("WATCHLIST_GITHUB"))
     for item in binance_balances_total['assets']:
         if item not in all_assets:
             all_assets.append(item)
-    print(all_assets)
+    # print(all_assets)
 
     boo = []
     for asset in all_assets:
@@ -261,37 +261,27 @@ def portfolio():
 
     binance_open_orders = []
 
-    # drop table if exists portfolio_current;
-
     for o in boo:
         a = {
             'symbol': o['symbol'],
             'amount': f(o['amount']),
-            'timestamp': str(get_time())
+            'timestamp': str(get_time()),
+            'side': o['side']
         }
         if o['symbol'][-1] == 'C':
-            a['price'] = f_btc(float(o['price']))
+            price = f_btc(float(o['price']))
+            a['price'] = price
             current = f_btc(binance.fetchTicker(a['symbol'])['bid'])
             a['market'] = current
-            a['market_percentage'] = percentage(current, a['price']) * -1
+            a['market_percentage'] = round(((price - current) / current) * 100, 2)
+            # a['market_percentage'] = percentage(current, a['price']) * -1
         else:
-            a['price'] = f(o['price'])
+            price = f(o['price'])
+            a['price'] = price
             current = binance.fetchTicker(a['symbol'])['bid']
             a['market'] = f(current)
-            a['market_percentage'] = percentage(current, a['price']) * -1
-        a['side'] = o['side']
+            a['market_percentage'] = round(((price - current) / current) * 100, 2)
         binance_open_orders.append(a)
-
-    # binance_open_orders_pd = pd.DataFrame(binance_open_orders)
-    # binance_open_orders_pd = binance_open_orders_pd.sort_values('market_percentage').reset_index(drop=True)
-    # pprint(binance_open_orders_pd.head(15))
-    # print(list(binance_open_orders_pd))
-    # binance_open_orders_dict = binance_open_orders_pd.to_dict('records')
-    # pprint(binance_open_orders[0:2])
-
-    # result = binance_open_orders_pd.to_json(orient="records")
-    # parsed = json.loads(result)
-    # print(json.dumps(parsed, indent=4))
 
     binance_open_orders = sorted(binance_open_orders, key=lambda d: d['market_percentage'])
 
