@@ -1,22 +1,13 @@
 import logging
 import time
-from datetime import datetime
+from datetime import datetime, timedelta
 from pprint import pprint
 
 import ccxt
 import pandas as pd
 
-from project.server.config import os_get, db_insert_test, db_insert
-from project.server.main.utils.utils import f, get_time, transform_time_ccxt, get_json, f_btc, percentage
-
-
-def transform_interval(n):
-    if int(n) == 480:
-        return '8H'
-    if int(n) == 720:
-        return '12H'
-    if int(n) == 1:
-        return '1D'
+from project.server.config import os_get, db_insert, db_insert_many, db_fetch, db_aggregate
+from project.server.main.utils.utils import f, get_time, transform_time_ccxt, get_json, f_btc, percentage, map_portfolio
 
 
 def portfolio():
@@ -41,10 +32,17 @@ def portfolio():
     portfolio_24h = None
     portfolio_1w = None
 
-    # yesterday = datetime.now(pytz.timezone('Europe/Berlin')) - timedelta(hours=24)
-    # portfolio_24h = list(portfolioDB.find({"timestamp": {"$gte": yesterday.replace(microsecond=0).isoformat()}}).limit(1))[0]
-    # one_week = datetime.now(pytz.timezone('Europe/Berlin')) - timedelta(days=7)
-    # portfolio_1w = list(portfolioDB.find({"timestamp": {"$gte": one_week.replace(microsecond=0).isoformat()}}).limit(1))[0]
+    portfolio_24h = db_fetch("SELECT * FROM portfolio WHERE timestamp > '%s' ORDER BY timestamp DESC LIMIT 1;" % str(
+        datetime.utcnow() - timedelta(hours=24)))
+    portfolio_24h = map_portfolio(portfolio_24h)[0]
+    # pprint(map_portfolio(portfolio_24h))
+
+    portfolio_1w = db_fetch("SELECT * FROM portfolio WHERE timestamp > '%s' ORDER BY timestamp DESC LIMIT 1;" % str(
+        datetime.utcnow() - timedelta(days=7)))
+    portfolio_1w = map_portfolio(portfolio_1w)[0]
+
+    # pprint(list(portfolio_1w))
+    # pprint(map_portfolio(portfolio_1w))
 
     def get_price(exchange, curr: str) -> float:
         if curr == 'USDT':
@@ -66,23 +64,7 @@ def portfolio():
                 return None
 
     BTC_USD = binance.fetchTicker('BTC/USDT')['bid']
-    print(BTC_USD)
     ETH_USD = binance.fetchTicker('ETH/USDT')['bid']
-    print(ETH_USD)
-
-    # def get_percentage(start, end):
-    #     return round(float(end / start * 100 - 100), 2)
-    #
-    # print(get_percentage(12, 13))
-
-    # def f(n):
-    #     return round(float(n), 2)
-
-    # def r_btc(n):
-    #     return round(float(n), 6)
-    #
-    # print(f(0.1235))
-    # print(f_btc(0.000216235))
 
     ##################################################################################################################
     # BINANCE
@@ -135,7 +117,6 @@ def portfolio():
                     #     balance['balance_btc_1w'] = None
                     balances.append(balance)
 
-        # print(balances)
         df = pd.DataFrame(balances)
         return df
 
@@ -162,7 +143,6 @@ def portfolio():
     bitmex_balances = bitmex.fetch_balance()['info'][0]
     # pprint(bitmex_balances)
 
-    b_p = bitmex.fetchPositions()
     b_p_0 = bitmex.fetchPositions()[0]
     b_p_1 = bitmex.fetchPositions()[1]
     if b_p_0['symbol'] == 'XBTUSD':
@@ -238,7 +218,7 @@ def portfolio():
                                                portfolio_24h['bitmex_btc_position']) if portfolio_24h else None
     pm['bitmex_btc_position_btc'] = f_btc(bitmex_to_btc(bitmex_btc_position['unrealisedPnl']))
     pm['bitmex_btc_position_percentage'] = round(float(bitmex_btc_position['unrealisedRoePcnt']), 2) * 100
-    if (float(bitmex_btc_position['bankruptPrice']) < float(bitmex_btc_position['breakEvenPrice'])):
+    if float(bitmex_btc_position['bankruptPrice']) < float(bitmex_btc_position['breakEvenPrice']):
         pm['bitmex_btc_position_type'] = 'LONG'
     else:
         pm['bitmex_btc_position_type'] = 'SHORT'
@@ -251,7 +231,7 @@ def portfolio():
                                                portfolio_24h['bitmex_eth_position']) if portfolio_24h else None
     pm['bitmex_eth_position_btc'] = f_btc(bitmex_to_btc(bitmex_eth_position['unrealisedPnl']))
     pm['bitmex_eth_position_percentage'] = round(float(bitmex_eth_position['unrealisedRoePcnt']), 2) * 100
-    if (float(bitmex_eth_position['bankruptPrice']) < float(bitmex_eth_position['breakEvenPrice'])):
+    if float(bitmex_eth_position['bankruptPrice']) < float(bitmex_eth_position['breakEvenPrice']):
         pm['bitmex_eth_position_type'] = 'LONG'
     else:
         pm['bitmex_eth_position_type'] = 'SHORT'
@@ -267,8 +247,9 @@ def portfolio():
     pm['current_btc_1w'] = percentage(pm['current_btc'], portfolio_1w['current_btc']) if portfolio_1w else None
     pm['current_percentage'] = round(pm['current'] / pm['total'] * 100 - 100, 2)
 
-    db_insert_test('portfolio_current', pm)
-    db_insert('portfolio_current', pm)
+    # db_insert_test('portfolio_current', pm)
+    db_insert('portfolio', pm)
+    db_aggregate()
 
     pprint(pm)
 
@@ -282,17 +263,19 @@ def portfolio():
     for asset in all_assets:
         try:
             a = binance.fetchOpenOrders(asset + '/USDT')
-            if (len(a) > 0):
+            if len(a) > 0:
                 for aa in a:
                     boo.append(aa)
             b = binance.fetchOpenOrders(asset + '/BTC')
-            if (len(b) > 0):
+            if len(b) > 0:
                 for bb in b:
                     boo.append(bb)
         except:
             pass
 
     binance_open_orders = []
+
+    # drop table if exists portfolio_current;
 
     for o in boo:
         a = {}
@@ -305,16 +288,28 @@ def portfolio():
             a['market'] = current
             a['market_percentage'] = percentage(current, a['price'])
         else:
-            a['price'] = f(round(float(o['price']), 2))
+            a['price'] = f(o['price'])
             current = binance.fetchTicker(a['symbol'])['bid']
             a['market'] = f(current)
             a['market_percentage'] = percentage(current, a['price'])
         a['side'] = o['side']
         binance_open_orders.append(a)
 
-    binance_open_orders_pd = pd.DataFrame(binance_open_orders)
-    binance_open_orders_pd = binance_open_orders_pd.sort_values('market_percentage').reset_index(drop=True)
-    pprint(binance_open_orders_pd.head(15))
+    # binance_open_orders_pd = pd.DataFrame(binance_open_orders)
+    # binance_open_orders_pd = binance_open_orders_pd.sort_values('market_percentage').reset_index(drop=True)
+    # pprint(binance_open_orders_pd.head(15))
+    # print(list(binance_open_orders_pd))
+    # binance_open_orders_dict = binance_open_orders_pd.to_dict('records')
+    pprint(binance_open_orders[0:2])
+
+    # result = binance_open_orders_pd.to_json(orient="records")
+    # parsed = json.loads(result)
+    # print(json.dumps(parsed, indent=4))
+
+    binance_open_orders = sorted(binance_open_orders, key=lambda d: d['market_percentage'], reverse=True)
+
+    # db_insert_many_test("binance_orders", binance_open_orders)
+    db_insert_many("binance_orders", binance_open_orders)
 
     end = time.perf_counter()
     print("TASK: portfolio completed in " + str(f(end - start)) + "s")

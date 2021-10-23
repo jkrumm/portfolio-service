@@ -69,14 +69,28 @@ def db_fetch(sql):
     return data
 
 
+def db_aggregate():
+    db = db_connect()
+    cur = db.cursor()
+    cur.execute(
+        # "DELETE FROM portfolio WHERE ((MINUTE(timestamp) != 0 and timestamp < UTC_TIMESTAMP() - INTERVAL 1 WEEK ));"
+        "DELETE FROM portfolio WHERE ((MINUTE(timestamp) != 0 and timestamp < UTC_TIMESTAMP() - INTERVAL 1 DAY ));"
+    )
+    db.commit()
+    db.close()
+
+
 def db_insert(table, obj):
     db = db_connect()
     cur = db.cursor()
-    sql_string = "INSERT INTO %s (%s)\nVALUES %s" % (
+    # if table == "portfolio_current":
+    #     cur.execute("TRUNCATE TABLE portfolio_current")
+    sql_string = "INSERT INTO %s (%s) VALUES %s" % (
         table,
         ', '.join(obj.keys()),
         json_to_values_string(obj)
     )
+    sql_string = sql_string[:-2] + ";"
     cur.execute(sql_string)
     db.commit()
     db.close()
@@ -89,6 +103,35 @@ def db_insert_test(table, obj):
         ', '.join(obj.keys()),
         json_to_values_string(obj)
     )
+    sql_string = sql_string[:-2] + ";"
+    print(sql_string)
+    return sql_string
+
+
+def db_insert_many(table, records):
+    db = db_connect()
+    cur = db.cursor()
+    if table == "binance_orders":
+        cur.execute("TRUNCATE TABLE binance_orders")
+    sql_string = "INSERT INTO %s (%s) VALUES %s" % (
+        table,
+        ', '.join([list(x.keys()) for x in records][0]),
+        json_to_values_string_many(records)
+    )
+    sql_string = sql_string[:-2] + ";"
+    cur.execute(sql_string)
+    db.commit()
+    db.close()
+    return
+
+
+def db_insert_many_test(table, records):
+    sql_string = "INSERT INTO %s (%s) VALUES %s" % (
+        table,
+        ', '.join([list(x.keys()) for x in records][0]),
+        json_to_values_string_many(records)
+    )
+    sql_string = sql_string[:-2] + ";"
     print(sql_string)
     return sql_string
 
@@ -104,38 +147,20 @@ def json_to_values_string(obj):
     for v, val in enumerate(obj):
         if type(obj[val]) == str:
             val_list.append(str(Json(obj[val])).replace('"', ''))
-        elif obj[val] == None:
+        elif obj[val] is None:
             val_list.append("NULL")
         else:
             val_list.append(str(obj[val]))
 
     # put parenthesis around each record string
-    values_str += "(" + ', '.join(val_list) + "),\n"
+    values_str += "(" + ', '.join(val_list) + "), "
 
-    # remove the last comma and end SQL with a semicolon
-    return values_str[:-2] + ";"
+    return values_str
 
 
-def json_to_values_string_old(obj):
-    # create a nested list of the records' values
-    values = [list(x.values()) for x in obj]
-    # value string for the SQL string
+def json_to_values_string_many(records):
     values_str = ""
+    for i, obj in enumerate(records):
+        values_str += json_to_values_string(obj)
 
-    # enumerate over the records' values
-    for i, record in enumerate(values):
-
-        # declare empty list for values
-        val_list = []
-
-        # append each value to a new list of values
-        for v, val in enumerate(record):
-            if type(val) == str:
-                val = str(Json(val)).replace('"', '')
-            val_list += [str(val)]
-
-        # put parenthesis around each record string
-        values_str += "(" + ', '.join(val_list) + "),\n"
-
-    # remove the last comma and end SQL with a semicolon
-    return values_str[:-2] + ";"
+    return values_str

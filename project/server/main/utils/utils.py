@@ -43,7 +43,7 @@ def get_json(url):
 
 
 def get_time():
-    ts = datetime.datetime.now()
+    ts = datetime.datetime.utcnow()
     return ts - datetime.timedelta(minutes=ts.minute % 5,
                                    seconds=ts.second,
                                    microseconds=ts.microsecond)
@@ -61,3 +61,78 @@ def transform_time_ccxt(string):
     return ts - datetime.timedelta(minutes=ts.minute % 5,
                                    seconds=ts.second,
                                    microseconds=ts.microsecond)
+
+
+def transform_interval(n):
+    if int(n) == 480:
+        return '8H'
+    if int(n) == 720:
+        return '12H'
+    if int(n) == 1:
+        return '1D'
+
+
+def map_portfolio(records):
+    result = []
+    for i, obj in enumerate(records):
+        result.append(
+            {
+                "id": obj[0],
+                "timestamp": obj[1],
+                "btc_usd": obj[2],
+                "eth_usd": obj[3],
+                "current": obj[4],
+                "current_btc": obj[5],
+                "current_24h": obj[6],
+                "current_1w": obj[7],
+                "current_btc_24h": obj[8],
+                "current_btc_1w": obj[9],
+                "current_percentage": obj[10],
+                "total": obj[11],
+                "total_btc": obj[12],
+                "total_24h": obj[13],
+                "total_1w": obj[14],
+                "total_btc_24h": obj[15],
+                "total_btc_1w": obj[16],
+                "binance_total": obj[17],
+                "binance_total_btc": obj[18],
+                "binance_total_24h": obj[19],
+                "binance_total_1w": obj[20],
+                "binance_count": obj[21],
+                "bitmex_total": obj[22],
+                "bitmex_total_btc": obj[23],
+                "bitmex_total_24h": obj[24],
+                "bitmex_total_1w": obj[25],
+                "bitmex_margin": obj[26],
+                "bitmex_margin_24h": obj[27],
+                "bitmex_margin_1w": obj[28],
+                "bitmex_margin_btc": obj[29],
+                "bitmex_margin_percent": obj[30],
+                "bitmex_margin_leverage": obj[31],
+                "bitmex_available_margin": obj[32],
+                "bitmex_available_margin_btc": obj[33],
+                "bitmex_unrealised": obj[34],
+                "bitmex_unrealised_24h": obj[35],
+                "bitmex_unrealised_1w": obj[36],
+                "bitmex_unrealised_btc": obj[37],
+                "bitmex_unrealised_percentage": obj[38],
+                "bitmex_withdraw": obj[39],
+                "bitmex_withdraw_btc": obj[40],
+                "bitmex_btc_position": obj[41],
+                "bitmex_btc_position_btc": obj[42],
+                "bitmex_btc_position_24h": obj[43],
+                "bitmex_btc_position_percentage": obj[44],
+                "bitmex_btc_position_type": obj[45],
+                "bitmex_btc_position_leverage": obj[46],
+                "bitmex_btc_position_opening": obj[47],
+                "bitmex_btc_position_opening_date": obj[48],
+                "bitmex_eth_position": obj[49],
+                "bitmex_eth_position_btc": obj[50],
+                "bitmex_eth_position_24h": obj[51],
+                "bitmex_eth_position_percentage": obj[52],
+                "bitmex_eth_position_type": obj[53],
+                "bitmex_eth_position_leverage": obj[54],
+                "bitmex_eth_position_opening": obj[55],
+                "bitmex_eth_position_opening_date": obj[56],
+            })
+        return result

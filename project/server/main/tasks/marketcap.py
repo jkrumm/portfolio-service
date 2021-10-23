@@ -79,8 +79,8 @@ def marketcap_current():
 
     url = "https://api.nomics.com/v1/currencies/sparkline?key=" + os_get('NOMICS_KEY')
     url += "&ids=" + str(ids)[1:-1].replace(" ", "").replace("'", "")
-    url += "&end=" + datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ")
-    url += "&start=" + (datetime.datetime.now() - datetime.timedelta(days=44)).strftime("%Y-%m-%dT%H:%M:%SZ")
+    url += "&end=" + datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
+    url += "&start=" + (datetime.datetime.utcnow() - datetime.timedelta(days=42)).strftime("%Y-%m-%dT%H:%M:%SZ")
 
     sparklines_fetched = get_json(url)
 
