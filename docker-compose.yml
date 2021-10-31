@@ -17,8 +17,8 @@ networks:
     driver: bridge
 
 volumes:
-  grafana_data: {}
-  db_data: {}
+  grafana_data: { }
+  db_data: { }
 
 services:
   web:
@@ -62,7 +62,7 @@ services:
       - 3306:3306
     volumes:
       - db_data:/var/lib/mysql
-#      - ./:/docker-entrypoint-initdb.d
+    #      - ./:/docker-entrypoint-initdb.d
     networks:
       - ps-net
 
