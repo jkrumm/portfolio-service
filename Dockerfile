@@ -1,8 +1,7 @@
 # base image
 FROM python:3.9.1
 
-RUN apt-get update
-RUN apt-get -y upgrade
+RUN apt-get update && apt-get -y upgrade
 
 # set working directory
 RUN mkdir -p /usr/src/app
@@ -15,9 +14,7 @@ ADD ./requirements.txt /usr/src/app/requirements.txt
 # RUN pip install PyMySQL
 # RUN apt-get -y install mysql-server
 RUN #apt-get update && apt-get install libssl-dev
-RUN pip install --upgrade pip
-# RUN pip3 install mariadb
-RUN pip install -r requirements.txt
+RUN pip install --upgrade pip && pip install -r requirements.txt
 
 # copy project
 COPY . /usr/src/app
