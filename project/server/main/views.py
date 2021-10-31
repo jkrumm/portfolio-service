@@ -1,9 +1,7 @@
-# project/server/main/views.py
 import logging
 
 import redis
 from flask import render_template, Blueprint, jsonify, request, current_app
-from prometheus_client import Counter
 from rq import Queue, Connection
 
 from project.server.config import db_fetch, db_insert
@@ -20,13 +18,9 @@ def home():
     return render_template("main/home.html")
 
 
-c = Counter('my_failures', 'Description of counter')
-
-
 @main_blueprint.route("/tasks", methods=["POST"])
 def run_task():
     task_type = request.form["type"]
-    c.inc()  # Increment by 1
     with Connection(redis.from_url(current_app.config["REDIS_URL"])):
         q = Queue()
 

@@ -2,7 +2,7 @@ x-app: &default-app
   build:
     context: .
   depends_on:
-    - mariadb
+    - db
     - redis
   restart: ${DOCKER_RESTART_POLICY:-unless-stopped}
   stop_grace_period: 3s
@@ -18,7 +18,7 @@ networks:
 
 volumes:
   grafana_data: {}
-  mariadb_data: {}
+  db_data: {}
 
 services:
   web:
@@ -48,21 +48,21 @@ services:
     networks:
       - ps-net
 
-  mariadb:
-    image: mariadb:latest
-    container_name: ${DB_HOST}
+  db:
+    image: mysql:8.0.27
+    container_name: db
     restart: ${DOCKER_RESTART_POLICY:-unless-stopped}
     stop_grace_period: 3s
     environment:
       MYSQL_USER: ${DB_USER}
       MYSQL_PASSWORD: ${DB_PASSWORD}
-      MARIADB_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
       MYSQL_DATABASE: ${DB_DATABASE}
     ports:
       - 3306:3306
     volumes:
-      - mariadb_data:/var/lib/mysql
-      - ./:/docker-entrypoint-initdb.d
+      - db_data:/var/lib/mysql
+#      - ./:/docker-entrypoint-initdb.d
     networks:
       - ps-net
 
@@ -70,7 +70,7 @@ services:
     image: adminer:latest
     container_name: adminer
     environment:
-      ADMINER_DEFAULT_SERVER: mariadb
+      ADMINER_DEFAULT_SERVER: db
     restart: ${DOCKER_RESTART_POLICY:-unless-stopped}
     ports:
       - 7777:8080

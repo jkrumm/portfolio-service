@@ -2,7 +2,7 @@
 import logging
 import os
 
-import mysql.connector as mariadb
+import mysql.connector as mysql
 # import the new JSON method from psycopg2
 from psycopg2.extras import Json
 
@@ -47,8 +47,8 @@ class TestingConfig(BaseConfig):
 
 def db_connect():
     try:
-        db = mariadb.connect(**{
-            'host': 'mariadb',
+        db = mysql.connect(**{
+            'host': 'db',
             'port': 3306,
             'user': os_get("DB_USER"),
             'password': os_get("DB_PASSWORD"),
@@ -74,7 +74,7 @@ def db_aggregate():
     cur = db.cursor()
     cur.execute(
         # "DELETE FROM portfolio WHERE ((MINUTE(timestamp) != 0 and timestamp < UTC_TIMESTAMP() - INTERVAL 1 WEEK ));"
-        "DELETE FROM portfolio WHERE ((MINUTE(timestamp) != 0 and timestamp < UTC_TIMESTAMP() - INTERVAL 1 DAY ));"
+        "DELETE FROM db.portfolio WHERE ((MINUTE(timestamp) != 0 and timestamp < UTC_TIMESTAMP() - INTERVAL 1 DAY ));"
     )
     db.commit()
     db.close()
@@ -110,9 +110,9 @@ def db_insert_many(table, records):
     db = db_connect()
     cur = db.cursor()
     if table == "binance_orders":
-        cur.execute("TRUNCATE TABLE binance_orders")
+        cur.execute("TRUNCATE TABLE db.binance_orders")
     if table == "binance_balances":
-        cur.execute("TRUNCATE TABLE binance_balances")
+        cur.execute("TRUNCATE TABLE db.binance_balances")
     sql_string = "INSERT INTO %s (%s) VALUES %s" % (
         table,
         ', '.join([list(x.keys()) for x in records][0]),

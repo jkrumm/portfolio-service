@@ -29,12 +29,12 @@ def portfolio():
     binance.load_markets()
     bitmex.load_markets()
 
-    portfolio_24h = db_fetch("SELECT * FROM portfolio WHERE timestamp > '%s' ORDER BY timestamp DESC LIMIT 1;" % str(
+    portfolio_24h = db_fetch("SELECT * FROM db.portfolio WHERE timestamp > '%s' ORDER BY timestamp DESC LIMIT 1;" % str(
         datetime.utcnow() - timedelta(hours=24)))
     portfolio_24h = map_portfolio(portfolio_24h)[0]
     # pprint(map_portfolio(portfolio_24h))
 
-    portfolio_1w = db_fetch("SELECT * FROM portfolio WHERE timestamp > '%s' ORDER BY timestamp DESC LIMIT 1;" % str(
+    portfolio_1w = db_fetch("SELECT * FROM db.portfolio WHERE timestamp > '%s' ORDER BY timestamp DESC LIMIT 1;" % str(
         datetime.utcnow() - timedelta(days=7)))
     portfolio_1w = map_portfolio(portfolio_1w)[0]
 

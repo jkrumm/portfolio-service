@@ -1,6 +1,3 @@
-# manage.py
-
-
 import unittest
 
 import redis
