@@ -4,7 +4,7 @@ import os
 import sentry_sdk
 from flask import Flask
 from flask_bootstrap import Bootstrap
-from prometheus_flask_exporter import PrometheusMetrics
+# from prometheus_flask_exporter import PrometheusMetrics
 from sentry_sdk.integrations.flask import FlaskIntegration
 from sentry_sdk.integrations.logging import LoggingIntegration
 from sentry_sdk.integrations.rq import RqIntegration
@@ -41,7 +41,7 @@ def create_app(script_info=None):
 
     # db.init_app(app)
 
-    PrometheusMetrics(app)
+    # PrometheusMetrics(app)
 
     # set up extensions
     bootstrap.init_app(app)

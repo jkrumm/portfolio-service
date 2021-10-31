@@ -83,8 +83,6 @@ def db_aggregate():
 def db_insert(table, obj):
     db = db_connect()
     cur = db.cursor()
-    # if table == "portfolio_current":
-    #     cur.execute("TRUNCATE TABLE portfolio_current")
     sql_string = "INSERT INTO %s (%s) VALUES %s" % (
         table,
         ', '.join(obj.keys()),
