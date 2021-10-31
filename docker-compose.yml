@@ -1,30 +1,65 @@
+x-app: &default-app
+  build:
+    context: .
+  depends_on:
+    - mariadb
+    - redis
+  restart: ${DOCKER_RESTART_POLICY:-unless-stopped}
+  stop_grace_period: 3s
+  tty: true
+  networks:
+    - ps-net
+  volumes:
+    - ${DOCKER_WEB_VOLUME:-.:/usr/src/app}
+
 networks:
   ps-net:
     driver: bridge
 
 volumes:
-  grafana_data: { }
-  mariadb_data:
+  grafana_data: {}
+  mariadb_data: {}
 
 services:
+  web:
+    <<: *default-app
+    container_name: web
+    ports:
+      - 5004:5000
+    expose:
+      - 5000
+    command: python manage.py run -h 0.0.0.0
+    environment:
+      - FLASK_DEBUG=0
+      - APP_SETTINGS=project.server.config.DevelopmentConfig
+
+  worker:
+    <<: *default-app
+    container_name: worker
+    command: python manage.py run_worker
+    environment:
+      - APP_SETTINGS=project.server.config.DevelopmentConfig
+
   redis:
-    image: redis:alpine
     container_name: redis
-    restart: on-failure
+    image: redis:6.2.6-buster
+    restart: ${DOCKER_RESTART_POLICY:-unless-stopped}
+    stop_grace_period: 3s
     networks:
       - ps-net
 
   mariadb:
     image: mariadb:latest
     container_name: ${DB_HOST}
-    restart: always
+    restart: ${DOCKER_RESTART_POLICY:-unless-stopped}
+    stop_grace_period: 3s
     environment:
       MYSQL_USER: ${DB_USER}
       MYSQL_PASSWORD: ${DB_PASSWORD}
       MARIADB_ROOT_PASSWORD: ${DB_PASSWORD}
       MYSQL_DATABASE: ${DB_DATABASE}
     ports:
-      - "3306:3306"
+      - 3306:3306
     volumes:
       - mariadb_data:/var/lib/mysql
       - ./:/docker-entrypoint-initdb.d
@@ -36,50 +71,13 @@ services:
     container_name: adminer
     environment:
       ADMINER_DEFAULT_SERVER: mariadb
-    restart: always
+    restart: ${DOCKER_RESTART_POLICY:-unless-stopped}
     ports:
-      - "7777:8080"
+      - 7777:8080
     expose:
       - 8080
     volumes:
       - ./adminer.css:/var/www/html/adminer.css
-    networks:
-      - ps-net
-
-  web:
-    build:
-      context: .
-    container_name: web
-    ports:
-      - "5004:5000"
-    expose:
-      - 5000
-    command: python manage.py run -h 0.0.0.0
-    volumes:
-      - .:/usr/src/app
-    environment:
-      - FLASK_DEBUG=0
-      - APP_SETTINGS=project.server.config.DevelopmentConfig
-    depends_on:
-      - redis
-      - mariadb
-    networks:
-      - ps-net
-    restart: unless-stopped
-
-  worker:
-    build:
-      context: .
-    container_name: worker
-    command: python manage.py run_worker
-    volumes:
-      - .:/usr/src/app
-    environment:
-      - APP_SETTINGS=project.server.config.DevelopmentConfig
-    restart: unless-stopped
-    depends_on:
-      - redis
-      - mariadb
     networks:
       - ps-net
 
@@ -101,11 +99,11 @@ services:
       - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
     environment:
       - GF_SECURITY_ADMIN_USER=${ADMIN_USER:-admin}
-      - GF_SECURITY_ADMIN_PASSWORD=${ADMIN_PASSWORD}
+      - GF_SECURITY_ADMIN_PASSWORD=${ADMIN_PASSWORD:-admin}
       - GF_USERS_ALLOW_SIGN_UP=false
-    restart: unless-stopped
+    restart: ${DOCKER_RESTART_POLICY:-unless-stopped}
     ports:
-      - "3000:3000"
+      - 3000:3000
     expose:
       - 3000
     networks:
