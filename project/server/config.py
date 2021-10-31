@@ -113,6 +113,8 @@ def db_insert_many(table, records):
         cur.execute("TRUNCATE TABLE db.binance_orders")
     if table == "binance_balances":
         cur.execute("TRUNCATE TABLE db.binance_balances")
+    if table == "marketcap":
+        cur.execute("TRUNCATE TABLE db.marketcap")
     sql_string = "INSERT INTO %s (%s) VALUES %s" % (
         table,
         ', '.join([list(x.keys()) for x in records][0]),
@@ -145,6 +147,8 @@ def json_to_values_string(obj):
 
     # append each value to a new list of values
     for v, val in enumerate(obj):
+        # if isinstance(obj[val], list):
+        #     val_list.append("'" + str(Json(obj[val])).replace('"', '') + "'")
         if type(obj[val]) == str:
             val_list.append(str(Json(obj[val])).replace('"', ''))
         elif obj[val] is None:

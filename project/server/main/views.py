@@ -7,7 +7,7 @@ from rq import Queue, Connection
 from project.server.config import db_fetch, db_insert
 from project.server.main.tasks.daily import daily
 from project.server.main.tasks.db import trigger_error_queue
-from project.server.main.tasks.marketcap import marketcap_current
+from project.server.main.tasks.marketcap import marketcap
 from project.server.main.tasks.portfolio import portfolio
 
 main_blueprint = Blueprint("main", __name__, )
@@ -27,7 +27,7 @@ def run_task():
         if task_type == "portfolio":
             task = q.enqueue(portfolio)
         elif task_type == "marketcap":
-            task = q.enqueue(marketcap_current)
+            task = q.enqueue(marketcap)
         elif task_type == "daily":
             task = q.enqueue(daily)
         else:
@@ -41,9 +41,6 @@ def run_task():
         }
     }
     return jsonify(response_object), 202
-
-
-# Decorate function with metric.
 
 
 @main_blueprint.route("/tasks/<task_id>", methods=["GET"])

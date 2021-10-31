@@ -17,6 +17,13 @@ def percentage(one, two):
         return None
 
 
+def integer(val):
+    if val:
+        return int(float(val))
+    else:
+        return None
+
+
 def f(val):
     if val:
         f = float(val)

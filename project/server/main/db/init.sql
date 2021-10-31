@@ -228,4 +228,39 @@ VALUES ('2021-10-23 12:00:00', 61523.00, 4036.78, 12006.74, 0.195159, 0.05, 0.05
         0.018986, 0.09, 44.00, 'LONG', 2, 34460.92, '2021-07-07 04:00:00', 1373.93, 0.022332, 0.64, 49.00, 'LONG', 2.00,
         2294.22, '2021-07-29 12:00:00');
 
+drop table if exists marketcap;
+
+CREATE TABLE marketcap
+(
+    id                    SMALLINT       NOT NULL AUTO_INCREMENT,
+    `timestamp`           DATETIME       NOT NULL,
+    symbol                VARCHAR(13)    NOT NULL,
+    `name`                VARCHAR(40)    NOT NULL,
+    price                 DECIMAL(20, 2) NOT NULL,
+    circulating_supply    BIGINT,
+    max_supply            BIGINT,
+    marketcap             BIGINT         NOT NULL,
+    marketcap_dominance   DECIMAL(7, 2),
+    first_trade           TIMESTAMP,
+    rank_delta            SMALLINT,
+    high                  DECIMAL(20, 2),
+    high_percentage       DECIMAL(7, 2),
+    high_timestamp        TIMESTAMP,
+    1d_price_change       DECIMAL(20, 2),
+    1d_price_change_pct   DECIMAL(7, 2),
+    1d_volume             BIGINT,
+    1d_volume_change_pct  DECIMAL(7, 2),
+    7d_price_change       DECIMAL(20, 2),
+    7d_price_change_pct   DECIMAL(7, 2),
+    7d_volume             BIGINT,
+    7d_volume_change_pct  DECIMAL(7, 2),
+    30d_price_change      DECIMAL(20, 2),
+    30d_price_change_pct  DECIMAL(7, 2),
+    30d_volume            BIGINT,
+    30d_volume_change_pct DECIMAL(7, 2),
+    sparkline             JSON,
+    PRIMARY KEY (id)
+);
+
+
 
