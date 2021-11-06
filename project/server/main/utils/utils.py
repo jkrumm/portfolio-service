@@ -1,9 +1,13 @@
+import os
 import datetime
-
 import requests
 from nomics import Nomics
 
-from project.server.config import os_get
+basedir = os.path.abspath(os.path.dirname(__file__))
+
+
+def os_get(var):
+    return os.environ.get(var)
 
 
 def get_nomics():

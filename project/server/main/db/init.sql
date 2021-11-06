@@ -262,5 +262,20 @@ CREATE TABLE marketcap
     PRIMARY KEY (id)
 );
 
+drop table if exists job;
+
+CREATE TABLE job
+(
+    id          BIGINT      NOT NULL AUTO_INCREMENT,
+    `timestamp` DATETIME    NOT NULL,
+    job         VARCHAR(15) NOT NULL,
+    success     BOOLEAN     NOT NULL,
+    duration    TIME(3)     NOT NULL,
+    `error`     TINYTEXT,
+    PRIMARY KEY (id)
+);
+
+
+
 
 

@@ -5,9 +5,9 @@ from datetime import datetime, timedelta
 import ccxt
 import pandas as pd
 
-from project.server.config import os_get, db_insert, db_insert_many, db_fetch, db_aggregate
+from project.server.main.utils.db import db_insert, db_insert_many, db_fetch, db_aggregate
 from project.server.main.utils.utils import f, get_time, transform_time_ccxt, get_json, f_btc, percentage, \
-    map_portfolio
+    map_portfolio, os_get
 
 
 def portfolio():

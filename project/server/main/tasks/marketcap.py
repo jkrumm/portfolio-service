@@ -2,8 +2,8 @@ import datetime
 import logging
 import time
 
-from project.server.config import os_get, db_insert_many
-from project.server.main.utils.utils import percentage, get_json, f, get_time, transform_time, integer
+from project.server.main.utils.db import db_insert_many
+from project.server.main.utils.utils import percentage, get_json, f, get_time, transform_time, integer, os_get
 
 
 def marketcap():

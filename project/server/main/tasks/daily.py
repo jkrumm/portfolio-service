@@ -14,4 +14,5 @@
 
 def daily():
     print("TASK: daily")
+    i = 1 / 0
     return True
