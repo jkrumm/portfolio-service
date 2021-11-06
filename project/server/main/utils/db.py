@@ -135,13 +135,25 @@ def json_to_values_string_many(records):
 
 def job_success(*args):
     print(datetime.utcnow() - args[0].enqueued_at)
-    save_job_result(args[0].id, str(args[0].enqueued_at), 1, str(datetime.utcnow() - args[0].enqueued_at), None)
+    save_job_result(
+        args[0].id,
+        str(args[0].enqueued_at),
+        1,
+        str(datetime.utcnow() - args[0].enqueued_at),
+        None
+    )
 
 
 def job_failure(*args):
     error = str(args[3])
-    error = error if len(error) < 255 else "error message too long"
-    save_job_result(args[0].id, str(args[0].enqueued_at), 0, str(datetime.utcnow() - args[0].enqueued_at), error)
+    error = error if len(error) < 150 else "error message too long"
+    save_job_result(
+        args[0].id,
+        str(args[0].enqueued_at),
+        0,
+        str(datetime.utcnow() - args[0].enqueued_at),
+        error
+    )
 
 
 def save_job_result(job, timestamp, success, duration, error):

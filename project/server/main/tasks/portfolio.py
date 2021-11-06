@@ -1,13 +1,14 @@
 import logging
 import time
 from datetime import datetime, timedelta
+from pprint import pprint
 
 import ccxt
 import pandas as pd
 
-from project.server.main.utils.db import db_insert, db_insert_many, db_fetch, db_aggregate
+from project.server.main.utils.db import db_insert, db_insert_many, db_fetch, db_aggregate, db_insert_test
 from project.server.main.utils.utils import f, get_time, transform_time_ccxt, get_json, f_btc, percentage, \
-    map_portfolio, os_get
+    map_portfolio, os_get, integer
 
 
 def portfolio():
@@ -31,12 +32,18 @@ def portfolio():
 
     portfolio_24h = db_fetch("SELECT * FROM db.portfolio WHERE timestamp > '%s' ORDER BY timestamp DESC LIMIT 1;" % str(
         datetime.utcnow() - timedelta(hours=24)))
-    portfolio_24h = map_portfolio(portfolio_24h)[0]
+    portfolio_24h = map_portfolio(portfolio_24h)[0] if portfolio_24h else None
     # pprint(map_portfolio(portfolio_24h))
 
     portfolio_1w = db_fetch("SELECT * FROM db.portfolio WHERE timestamp > '%s' ORDER BY timestamp DESC LIMIT 1;" % str(
         datetime.utcnow() - timedelta(days=7)))
-    portfolio_1w = map_portfolio(portfolio_1w)[0]
+    portfolio_1w = map_portfolio(portfolio_1w)[0] if portfolio_1w else None
+
+    atari = get_json("https://api.nomics.com/v1/currencies/ticker?key=" + os_get(
+        'NOMICS_KEY') + "&ids=ATRI&interval=1d,30d,7d&convert=USD")[0]
+    atari_amount = 1760
+
+    # print(atari)
 
     # pprint(list(portfolio_1w))
     # pprint(map_portfolio(portfolio_1w))
@@ -164,14 +171,8 @@ def portfolio():
     pm['bitmex_total_24h'] = percentage(pm['bitmex_total'],
                                         portfolio_24h['bitmex_total']) if portfolio_24h else None
     pm['bitmex_total_1w'] = percentage(pm['bitmex_total'], portfolio_1w['bitmex_total']) if portfolio_1w else None
-    pm['total'] = f(pm['binance_total'] + pm['bitmex_total'])
-    pm['total_24h'] = percentage(pm['total'], portfolio_24h['total']) if portfolio_24h else None
-    pm['total_1w'] = percentage(pm['total'], portfolio_1w['total']) if portfolio_1w else None
     pm['binance_total_btc'] = f_btc(binance_balances_total['total_btc'])
     pm['bitmex_total_btc'] = f_btc(bitmex_to_btc(bitmex_balances['walletBalance']))
-    pm['total_btc'] = f_btc(pm['binance_total_btc'] + pm['bitmex_total_btc'])
-    pm['total_btc_24h'] = percentage(pm['total_btc'], portfolio_24h['total_btc']) if portfolio_24h else None
-    pm['total_btc_1w'] = percentage(pm['total_btc'], portfolio_1w['total_btc']) if portfolio_1w else None
 
     pm['binance_count'] = binance_balances_total['count']
 
@@ -221,6 +222,25 @@ def portfolio():
     pm['bitmex_eth_position_opening'] = f(bitmex_last_trade_eth['price'])
     pm['bitmex_eth_position_opening_date'] = str(transform_time_ccxt(bitmex_last_trade_eth['datetime']))
 
+    pm['atari_total'] = f(float(atari['price']) * atari_amount)
+    pm['atari_total_btc'] = f_btc((float(atari['price']) * atari_amount) / btc_usd)
+    pm['atari_usd'] = f(atari['price'])
+    pm['atari_rank'] = integer(atari['rank'])
+    pm['atari_rank_delta'] = integer(atari['rank_delta'])
+    pm['atari_1d'] = f(atari["1d"]["price_change_pct"]) * 100
+    pm['atari_1d_volume'] = f(atari["1d"]["volume_change_pct"]) * 100
+    pm['atari_7d'] = f(atari["7d"]["price_change_pct"]) * 100
+    pm['atari_7d_volume'] = f(atari["7d"]["volume_change_pct"]) * 100
+    pm['atari_30d'] = f(atari["30d"]["price_change_pct"]) * 100
+    pm['atari_30d_volume'] = f(atari["30d"]["volume_change_pct"]) * 100
+
+    pm['total'] = f(pm['binance_total'] + pm['bitmex_total'] + pm['atari_total'])
+    pm['total_24h'] = percentage(pm['total'], portfolio_24h['total']) if portfolio_24h else None
+    pm['total_1w'] = percentage(pm['total'], portfolio_1w['total']) if portfolio_1w else None
+    pm['total_btc'] = f_btc(pm['binance_total_btc'] + pm['bitmex_total_btc'] + pm['atari_total_btc'])
+    pm['total_btc_24h'] = percentage(pm['total_btc'], portfolio_24h['total_btc']) if portfolio_24h else None
+    pm['total_btc_1w'] = percentage(pm['total_btc'], portfolio_1w['total_btc']) if portfolio_1w else None
+
     pm['current'] = f(pm['total'] + pm['bitmex_unrealised'])
     pm['current_24h'] = percentage(pm['current'], portfolio_24h['current']) if portfolio_24h else None
     pm['current_1w'] = percentage(pm['current'], portfolio_1w['current']) if portfolio_1w else None
@@ -229,6 +249,7 @@ def portfolio():
     pm['current_btc_1w'] = percentage(pm['current_btc'], portfolio_1w['current_btc']) if portfolio_1w else None
     pm['current_percentage'] = round(pm['current'] / pm['total'] * 100 - 100, 2)
 
+    # print(pm)
     # db_insert_test('portfolio_current', pm)
     db_insert('portfolio', pm)
     db_aggregate()
