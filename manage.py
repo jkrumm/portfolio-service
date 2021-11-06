@@ -26,7 +26,7 @@ def run_worker():
     redis_connection = redis.from_url(redis_url)
     with Connection(redis_connection):
         worker = Worker(app.config["QUEUES"])
-        worker.work()
+        worker.work(with_scheduler=True)
 
 
 if __name__ == "__main__":

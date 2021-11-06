@@ -1,8 +1,9 @@
 import logging
+from datetime import timedelta
 
 import redis
 from flask import render_template, Blueprint, jsonify, request, current_app
-from rq import Queue, Connection
+from rq import Queue, Connection, Retry
 
 from project.server.config import db_fetch, db_insert
 from project.server.main.tasks.daily import daily
@@ -23,13 +24,12 @@ def run_task():
     task_type = request.form["type"]
     with Connection(redis.from_url(current_app.config["REDIS_URL"])):
         q = Queue()
-
         if task_type == "portfolio":
-            task = q.enqueue(portfolio)
+            task = q.enqueue(portfolio, retry=Retry(max=2, interval=[30, 60]))
         elif task_type == "marketcap":
             task = q.enqueue(marketcap)
         elif task_type == "daily":
-            task = q.enqueue(daily)
+            task = q.enqueue(daily, retry=Retry(max=2, interval=[30, 60]))
         else:
             response_object = {"status": "error", "error": "wrong task_type"}
             return jsonify(response_object), 400

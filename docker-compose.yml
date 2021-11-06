@@ -68,6 +68,8 @@ services:
   adminer:
     image: adminer:latest
     container_name: adminer
+    depends_on:
+      - db
     environment:
       ADMINER_DEFAULT_SERVER: db
     restart: ${DOCKER_RESTART_POLICY:-unless-stopped}
@@ -80,18 +82,32 @@ services:
     networks:
       - ps-net
 
-  #  dashboard:
-  #    build: ./project/dashboard
-  #    container_name: dashboard
-  #    ports:
-  #      - 9181:9181
-  #    command: rq-dashboard -H redis
-  #    depends_on:
-  #      - redis
+  dashboard:
+    image: eoranged/rq-dashboard:latest
+    container_name: dashboard
+    build: ./project/dashboard
+    command: rq-dashboard -H redis
+    restart: ${DOCKER_RESTART_POLICY:-unless-stopped}
+    stop_grace_period: 3s
+    ports:
+      - 9181:9181
+    expose:
+      - 9181
+    environment:
+      - RQ_DASHBOARD_REDIS_URL=redis://redis:6379
+      - RQ_DASHBOARD_USERNAME=${ADMIN_USER:-admin}
+      - RQ_DASHBOARD_PASSWORD=${ADMIN_PASSWORD:-admin}
+    depends_on:
+      - redis
+    networks:
+      - ps-net
 
   grafana:
     image: grafana/grafana:8.1.5
     container_name: grafana
+    depends_on:
+      - redis
+      - db
     volumes:
       - grafana_data:/var/lib/grafana
       - ./grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
@@ -101,6 +117,7 @@ services:
       - GF_SECURITY_ADMIN_PASSWORD=${ADMIN_PASSWORD:-admin}
       - GF_USERS_ALLOW_SIGN_UP=false
     restart: ${DOCKER_RESTART_POLICY:-unless-stopped}
+    stop_grace_period: 3s
     ports:
       - 3000:3000
     expose:
