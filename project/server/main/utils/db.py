@@ -36,8 +36,13 @@ def db_aggregate():
     db = db_connect()
     cur = db.cursor()
     cur.execute(
-        # "DELETE FROM portfolio WHERE ((MINUTE(timestamp) != 0 and timestamp < UTC_TIMESTAMP() - INTERVAL 1 WEEK ));"
-        "DELETE FROM db.portfolio WHERE ((MINUTE(timestamp) != 0 and timestamp < UTC_TIMESTAMP() - INTERVAL 1 DAY ));"
+        "DELETE FROM portfolio WHERE (MINUTE(timestamp) != 0 and timestamp < UTC_TIMESTAMP() - INTERVAL 1 WEEK);"
+    )
+    cur.execute(
+        "DELETE FROM portfolio WHERE ((MINUTE(timestamp) = 15 or MINUTE(timestamp) = 45) and timestamp < UTC_TIMESTAMP() - INTERVAL 1 DAY);"
+    )
+    cur.execute(
+        "DELETE FROM job WHERE (timestamp < UTC_TIMESTAMP() - INTERVAL 1 WEEK);"
     )
     db.commit()
     db.close()
@@ -134,7 +139,6 @@ def json_to_values_string_many(records):
 
 
 def job_success(*args):
-    print(datetime.utcnow() - args[0].enqueued_at)
     save_job_result(
         args[0].id,
         str(args[0].enqueued_at),

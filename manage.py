@@ -22,8 +22,7 @@ def test():
 
 @cli.command("run_worker")
 def run_worker():
-    redis_url = app.config["REDIS_URL"]
-    redis_connection = redis.from_url(redis_url)
+    redis_connection = redis.from_url(app.config["REDIS_URL"])
     with Connection(redis_connection):
         worker = Worker(app.config["QUEUES"])
         worker.work(with_scheduler=True)

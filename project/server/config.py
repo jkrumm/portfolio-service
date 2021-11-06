@@ -1,7 +1,7 @@
 class BaseConfig(object):
     """Base configuration."""
     WTF_CSRF_ENABLED = True
-    REDIS_URL = "redis://redis:6379/0"
+    REDIS_URL = "redis://redis:6379"
     QUEUES = ["default"]
     # Exchanges
     # BINANCE_KEY = os_get("BINANCE_KEY")

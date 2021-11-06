@@ -1,18 +1,23 @@
-# project/server/main/portfolio.py
-
 # send reports to telegram bot
 
-# Worker Statistics - https://python-rq.org/docs/workers/
-# If you want to check the utilization of your queues, Worker instances store a few useful information:
-#
-# from rq.worker import Worker
-# worker = Worker.find_by_key('rq:worker:name')
-#
-# worker.successful_job_count  # Number of jobs finished successfully
-# worker.failed_job_count # Number of failed jobs processed by this worker
-# worker.total_working_time  # Amount of time spent executing jobs (in seconds)
+import time
+
+import logging
+
+from project.server.main.utils.db import db_aggregate
+from project.server.main.utils.utils import f, get_worker_stats
+
 
 def daily():
-    print("TASK: daily")
-    i = 1 / 0
+    start = time.perf_counter()
+    print("TASK: daily started")
+    logging.info("TASK: daily started")
+
+    db_aggregate()
+
+    print(get_worker_stats())
+
+    end = time.perf_counter()
+    print("TASK: daily completed in " + str(f(end - start)) + "s")
+    logging.info("TASK: daily completed in " + str(f(end - start)) + "s")
     return True

@@ -1,4 +1,4 @@
-import logging
+from sentry_sdk.integrations import logging
 
 import redis
 from flask import render_template, Blueprint, jsonify, request, current_app
@@ -9,6 +9,7 @@ from project.server.main.tasks.daily import daily
 from project.server.main.tasks.db import trigger_error_queue
 from project.server.main.tasks.marketcap import marketcap
 from project.server.main.tasks.portfolio import portfolio
+from project.server.main.utils.utils import get_worker_stats
 
 main_blueprint = Blueprint("main", __name__, )
 
@@ -16,6 +17,11 @@ main_blueprint = Blueprint("main", __name__, )
 @main_blueprint.route("/", methods=["GET"])
 def home():
     return render_template("main/home.html")
+
+
+@main_blueprint.route("/worker", methods=["GET"])
+def worker():
+    return jsonify(get_worker_stats(), 200)
 
 
 @main_blueprint.route("/tasks", methods=["POST"])
@@ -74,12 +80,12 @@ def trigger_error():
     division_by_zero = 1 / 0
 
 
-@main_blueprint.route("/portfolio.json-logging", methods=["GET"])
-def test_logging():
-    logging.debug("I am ignored")
-    logging.info("I am a breadcrumb")
-    logging.error("I am an event", extra=dict(bar=43))
-    logging.exception("An exception happened")
+# @main_blueprint.route("/portfolio.json-logging", methods=["GET"])
+# def test_logging():
+#     logging.debug("I am ignored")
+#     logging.info("I am a breadcrumb")
+#     logging.error("I am an event", extra=dict(bar=43))
+#     logging.exception("An exception happened")
 
 
 @main_blueprint.route("/debug-sentry-rq", methods=["GET"])

@@ -227,12 +227,12 @@ def portfolio():
     pm['atari_usd'] = f(atari['price'])
     pm['atari_rank'] = integer(atari['rank'])
     pm['atari_rank_delta'] = integer(atari['rank_delta'])
-    pm['atari_1d'] = f(atari["1d"]["price_change_pct"]) * 100
-    pm['atari_1d_volume'] = f(atari["1d"]["volume_change_pct"]) * 100
-    pm['atari_7d'] = f(atari["7d"]["price_change_pct"]) * 100
-    pm['atari_7d_volume'] = f(atari["7d"]["volume_change_pct"]) * 100
-    pm['atari_30d'] = f(atari["30d"]["price_change_pct"]) * 100
-    pm['atari_30d_volume'] = f(atari["30d"]["volume_change_pct"]) * 100
+    pm['atari_1d'] = f(float(atari["1d"]["price_change_pct"]) * 100)
+    pm['atari_1d_volume'] = f(float(atari["1d"]["volume_change_pct"]) * 100)
+    pm['atari_7d'] = f(float(atari["7d"]["price_change_pct"]) * 100)
+    pm['atari_7d_volume'] = f(float(atari["7d"]["volume_change_pct"]) * 100)
+    pm['atari_30d'] = f(float(atari["30d"]["price_change_pct"]) * 100)
+    pm['atari_30d_volume'] = f(float(atari["30d"]["volume_change_pct"]) * 100)
 
     pm['total'] = f(pm['binance_total'] + pm['bitmex_total'] + pm['atari_total'])
     pm['total_24h'] = percentage(pm['total'], portfolio_24h['total']) if portfolio_24h else None
@@ -252,7 +252,7 @@ def portfolio():
     # print(pm)
     # db_insert_test('portfolio_current', pm)
     db_insert('portfolio', pm)
-    db_aggregate()
+    # db_aggregate()
 
     # pprint(pm)
 

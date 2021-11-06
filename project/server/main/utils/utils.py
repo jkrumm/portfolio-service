@@ -1,13 +1,33 @@
 import os
 import datetime
+
+import redis
 import requests
+from flask import current_app
 from nomics import Nomics
+from rq import Queue, Worker, Connection
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 
 def os_get(var):
     return os.environ.get(var)
+
+
+def get_worker_stats():
+    redis_connection = redis.from_url(current_app.config["REDIS_URL"])
+    with Connection(redis_connection):
+        queue = Queue()
+        workers = Worker.all(queue=queue)
+        worker = workers[0]
+        birth_date = worker.birth_date
+        return {
+            'birth_date': str(birth_date),
+            'lifetime': str(datetime.datetime.utcnow() - birth_date),
+            'successful_job_count': worker.successful_job_count,  # Number of jobs finished successfully
+            'failed_job_count': worker.failed_job_count,  # Number of failed jobs processed by this worker
+            'total_working_time': f(worker.total_working_time)  # Amount of time spent executing jobs (in seconds)
+        }
 
 
 def get_nomics():
