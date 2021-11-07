@@ -21,13 +21,14 @@ def get_worker_stats():
         workers = Worker.all(queue=queue)
         worker = workers[0]
         birth_date = worker.birth_date
-        return {
-            'birth_date': str(birth_date),
+        worker_stats = {
+            'timestamp': str(birth_date),
             'lifetime': str(datetime.datetime.utcnow() - birth_date),
-            'successful_job_count': worker.successful_job_count,  # Number of jobs finished successfully
-            'failed_job_count': worker.failed_job_count,  # Number of failed jobs processed by this worker
-            'total_working_time': f(worker.total_working_time)  # Amount of time spent executing jobs (in seconds)
+            'working_time': str(datetime.timedelta(seconds=worker.total_working_time)),
+            'successful': worker.successful_job_count,
+            'failed': worker.failed_job_count,
         }
+        return worker_stats
 
 
 def get_nomics():

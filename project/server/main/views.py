@@ -1,5 +1,3 @@
-from sentry_sdk.integrations import logging
-
 import redis
 from flask import render_template, Blueprint, jsonify, request, current_app
 from rq import Queue, Connection, Retry
@@ -22,6 +20,13 @@ def home():
 @main_blueprint.route("/worker", methods=["GET"])
 def worker():
     return jsonify(get_worker_stats(), 200)
+
+
+@main_blueprint.route("/up", methods=["GET"])
+def up():
+    redis.from_url(current_app.config["REDIS_URL"]).ping()
+    db_fetch("SELECT 1")
+    return ""
 
 
 @main_blueprint.route("/tasks", methods=["POST"])

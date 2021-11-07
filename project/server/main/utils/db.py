@@ -1,11 +1,12 @@
 import logging
+import time
 from datetime import datetime
 
 import mysql.connector as mysql
 # import the new JSON method from psycopg2
 from psycopg2.extras import Json
 
-from project.server.main.utils.utils import os_get
+from project.server.main.utils.utils import os_get, get_worker_stats
 
 
 def db_connect():
@@ -51,6 +52,8 @@ def db_aggregate():
 def db_insert(table, obj):
     db = db_connect()
     cur = db.cursor()
+    if table == "worker":
+        cur.execute("TRUNCATE TABLE db.worker")
     sql_string = "INSERT INTO %s (%s) VALUES %s" % (
         table,
         ', '.join(obj.keys()),
@@ -169,3 +172,5 @@ def save_job_result(job, timestamp, success, duration, error):
         'error': error
     }
     db_insert('job', job_result)
+    time.sleep(30)
+    db_insert('worker', get_worker_stats())

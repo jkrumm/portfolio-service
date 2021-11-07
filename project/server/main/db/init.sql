@@ -275,6 +275,20 @@ CREATE TABLE job
     PRIMARY KEY (id)
 );
 
+drop table if exists worker;
+
+CREATE TABLE worker
+(
+    id           SMALLINT  NOT NULL AUTO_INCREMENT,
+    `timestamp`  DATETIME  NOT NULL,
+    lifetime     TIME      NOT NULL,
+    working_time TIME      NOT NULL,
+    successful   MEDIUMINT NOT NULL,
+    failed       MEDIUMINT NOT NULL,
+    PRIMARY KEY (id)
+);
+
+
 
 
 

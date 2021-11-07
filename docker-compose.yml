@@ -24,6 +24,12 @@ services:
   web:
     <<: *default-app
     container_name: web
+    healthcheck:
+      test: "curl localhost:5000/up"
+      interval: "180s"
+      timeout: "3s"
+      start_period: "5s"
+      retries: 3
     ports:
       - 5004:5000
     expose:
