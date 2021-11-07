@@ -174,5 +174,4 @@ def save_job_result(job, timestamp, success, duration, error):
         'error': error
     }
     db_insert('job', job_result)
-    time.sleep(30)
     db_insert('worker', get_worker_stats())

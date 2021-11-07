@@ -18,7 +18,7 @@ def create_app(script_info=None):
         event_level=logging.ERROR  # Send errors as events
     )
     sentry_sdk.init(
-        environment="production",
+        environment=os.environ.get('FLASK_ENV'),
         dsn=os.environ.get('SENTRY'),
         integrations=[FlaskIntegration(), RqIntegration()],
         attach_stacktrace=True,
