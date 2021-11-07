@@ -1,3 +1,5 @@
+import logging
+
 import redis
 from flask import render_template, Blueprint, jsonify, request, current_app
 from rq import Queue, Connection, Retry
@@ -33,10 +35,10 @@ def up():
 
 @main_blueprint.route("/tasks", methods=["POST"])
 def run_task():
-    if request.headers.get('Authorization') != os_get('SECRET_KEY'):
+    auth = request.headers.get('Authorization')
+    if auth is None or str(auth) != str(os_get('API_SECRET_KEY')):
         return 'Unauthorized', 401
     task_type = request.form["type"]
-    print(request.headers.get('Authorization'))
     with Connection(redis.from_url(current_app.config["REDIS_URL"])):
         q = Queue()
         if task_type == "portfolio":
@@ -68,7 +70,8 @@ def run_task():
 
 @main_blueprint.route("/tasks/<task_id>", methods=["GET"])
 def get_status(task_id):
-    if request.headers.get('Authorization') != os_get('SECRET_KEY'):
+    auth = request.headers.get('Authorization')
+    if auth is None or str(auth) != str(os_get('API_SECRET_KEY')):
         return 'Unauthorized', 401
     with Connection(redis.from_url(current_app.config["REDIS_URL"])):
         q = Queue()
@@ -104,7 +107,8 @@ def trigger_error():
 
 @main_blueprint.route("/debug-sentry-rq", methods=["GET"])
 def trigger_error_rq():
-    if request.headers.get('Authorization') != os_get('SECRET_KEY'):
+    auth = request.headers.get('Authorization')
+    if auth is None or str(auth) != str(os_get('API_SECRET_KEY')):
         return 'Unauthorized', 401
     with Connection(redis.from_url(current_app.config["REDIS_URL"])):
         q = Queue()
@@ -120,7 +124,8 @@ def trigger_error_rq():
 
 @main_blueprint.route("/test_db", methods=["GET"])
 def test_records():
-    if request.headers.get('Authorization') != os_get('SECRET_KEY'):
+    auth = request.headers.get('Authorization')
+    if auth is None or str(auth) != str(os_get('API_SECRET_KEY')):
         return 'Unauthorized', 401
     test_db = db_fetch("SELECT * FROM db.test")
     return jsonify(test_db), 200
@@ -128,7 +133,8 @@ def test_records():
 
 @main_blueprint.route("/test_db_insert", methods=["GET"])
 def test_db_insert():
-    if request.headers.get('Authorization') != os_get('SECRET_KEY'):
+    auth = request.headers.get('Authorization')
+    if auth is None or str(auth) != str(os_get('API_SECRET_KEY')):
         return 'Unauthorized', 401
     test_db = db_insert("test", {"val": "99"})
     return jsonify(test_db), 200

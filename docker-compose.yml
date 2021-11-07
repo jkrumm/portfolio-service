@@ -1,4 +1,11 @@
-x-app: &default-app
+x-default: &default
+  restart: ${DOCKER_RESTART_POLICY:-unless-stopped}
+  stop_grace_period: 3s
+  networks:
+    - ps-net
+
+x-flask: &flask
+  <<: *default
   build:
     context: .
   depends_on:
@@ -22,7 +29,7 @@ volumes:
 
 services:
   web:
-    <<: *default-app
+    <<: *flask
     container_name: web
     healthcheck:
       test: "curl localhost:5000/up"
@@ -31,84 +38,74 @@ services:
       start_period: "5s"
       retries: 3
     ports:
-      - 5004:5000
+      - 5000:5000
     expose:
       - 5000
-    command: python manage.py run -h 0.0.0.0
+    command: ${WEB_COMMAND:-gunicorn --bind 0.0.0.0:5000 manage:app}
     environment:
       - FLASK_DEBUG=0
       - APP_SETTINGS=project.server.config.DevelopmentConfig
 
   worker:
-    <<: *default-app
+    <<: *flask
     container_name: worker
     command: python manage.py run_worker
     environment:
       - APP_SETTINGS=project.server.config.DevelopmentConfig
 
   redis:
+    <<: *default
     container_name: redis
     image: redis:6.2.6-buster
-    restart: ${DOCKER_RESTART_POLICY:-unless-stopped}
-    stop_grace_period: 3s
-    networks:
-      - ps-net
 
   db:
+    <<: *default
     image: mysql:8.0.27
     container_name: db
-    restart: ${DOCKER_RESTART_POLICY:-unless-stopped}
-    stop_grace_period: 3s
     environment:
-      MYSQL_USER: ${DB_USER}
-      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_USER: ${DB_USER:-user}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-user}
       MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_DATABASE: ${DB_DATABASE:-db}
     ports:
       - 3306:3306
     volumes:
       - db_data:/var/lib/mysql
-    networks:
-      - ps-net
 
   adminer:
+    <<: *default
     image: adminer:latest
     container_name: adminer
     depends_on:
       - db
     environment:
       ADMINER_DEFAULT_SERVER: db
-    restart: ${DOCKER_RESTART_POLICY:-unless-stopped}
     ports:
       - 7777:8080
     expose:
       - 8080
     volumes:
       - ./adminer.css:/var/www/html/adminer.css
-    networks:
-      - ps-net
 
-  dashboard:
-    image: eoranged/rq-dashboard:latest
-    container_name: dashboard
-    build: ./project/dashboard
-    command: rq-dashboard -H redis
-    restart: ${DOCKER_RESTART_POLICY:-unless-stopped}
-    stop_grace_period: 3s
-    ports:
-      - 9181:9181
-    expose:
-      - 9181
-    environment:
-      - RQ_DASHBOARD_REDIS_URL=redis://redis:6379
-      - RQ_DASHBOARD_USERNAME=${ADMIN_USER:-admin}
-      - RQ_DASHBOARD_PASSWORD=${ADMIN_PASSWORD:-admin}
-    depends_on:
-      - redis
-    networks:
-      - ps-net
+  #  dashboard:
+  #    <<: *default
+  #    image: eoranged/rq-dashboard:latest
+  #    container_name: dashboard
+  #    build: ./project/dashboard
+  #    command: rq-dashboard -H redis
+  #    ports:
+  #      - 9181:9181
+  #    expose:
+  #      - 9181
+  #    environment:
+  #      - RQ_DASHBOARD_REDIS_URL=redis://redis:6379
+  #      - RQ_DASHBOARD_USERNAME=${ADMIN_USER:-admin}
+  #      - RQ_DASHBOARD_PASSWORD=${ADMIN_PASSWORD:-admin}
+  #    depends_on:
+  #      - redis
 
   grafana:
+    <<: *default
     image: grafana/grafana:8.1.5
     container_name: grafana
     depends_on:
@@ -122,11 +119,7 @@ services:
       - GF_SECURITY_ADMIN_USER=${ADMIN_USER:-admin}
       - GF_SECURITY_ADMIN_PASSWORD=${ADMIN_PASSWORD:-admin}
       - GF_USERS_ALLOW_SIGN_UP=false
-    restart: ${DOCKER_RESTART_POLICY:-unless-stopped}
-    stop_grace_period: 3s
     ports:
       - 3000:3000
     expose:
       - 3000
-    networks:
-      - ps-net

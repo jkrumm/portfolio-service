@@ -18,12 +18,10 @@ def create_app(script_info=None):
         event_level=logging.ERROR  # Send errors as events
     )
     sentry_sdk.init(
+        environment="production",
         dsn=os.environ.get('SENTRY'),
         integrations=[FlaskIntegration(), RqIntegration()],
-
-        # Set traces_sample_rate to 1.0 to capture 100%
-        # of transactions for performance monitoring.
-        # We recommend adjusting this value in production.
+        attach_stacktrace=True,
         traces_sample_rate=1.0
     )
 

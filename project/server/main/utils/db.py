@@ -154,6 +154,8 @@ def job_success(*args):
 def job_failure(*args):
     error = str(args[3])
     error = error if len(error) < 150 else "error message too long"
+    print("Failed Job: " + str(error))
+    logging.error("Failed Job: " + str(error))
     save_job_result(
         args[0].id,
         str(args[0].enqueued_at),
