@@ -7,7 +7,7 @@ from project.server.main.tasks.daily import daily
 from project.server.main.tasks.db import trigger_error_queue
 from project.server.main.tasks.marketcap import marketcap
 from project.server.main.tasks.portfolio import portfolio
-from project.server.main.utils.utils import get_worker_stats
+from project.server.main.utils.utils import get_worker_stats, os_get
 
 main_blueprint = Blueprint("main", __name__, )
 
@@ -19,6 +19,8 @@ def home():
 
 @main_blueprint.route("/worker", methods=["GET"])
 def worker():
+    if request.headers.get('Authorization') != os_get('SECRET_KEY'):
+        return 'Unauthorized', 401
     return jsonify(get_worker_stats(), 200)
 
 
@@ -31,7 +33,10 @@ def up():
 
 @main_blueprint.route("/tasks", methods=["POST"])
 def run_task():
+    if request.headers.get('Authorization') != os_get('SECRET_KEY'):
+        return 'Unauthorized', 401
     task_type = request.form["type"]
+    print(request.headers.get('Authorization'))
     with Connection(redis.from_url(current_app.config["REDIS_URL"])):
         q = Queue()
         if task_type == "portfolio":
@@ -63,6 +68,8 @@ def run_task():
 
 @main_blueprint.route("/tasks/<task_id>", methods=["GET"])
 def get_status(task_id):
+    if request.headers.get('Authorization') != os_get('SECRET_KEY'):
+        return 'Unauthorized', 401
     with Connection(redis.from_url(current_app.config["REDIS_URL"])):
         q = Queue()
         task = q.fetch_job(task_id)
@@ -82,6 +89,8 @@ def get_status(task_id):
 
 @main_blueprint.route("/debug-sentry", methods=["GET"])
 def trigger_error():
+    if request.headers.get('Authorization') != os_get('SECRET_KEY'):
+        return 'Unauthorized', 401
     division_by_zero = 1 / 0
 
 
@@ -95,6 +104,8 @@ def trigger_error():
 
 @main_blueprint.route("/debug-sentry-rq", methods=["GET"])
 def trigger_error_rq():
+    if request.headers.get('Authorization') != os_get('SECRET_KEY'):
+        return 'Unauthorized', 401
     with Connection(redis.from_url(current_app.config["REDIS_URL"])):
         q = Queue()
         task = q.enqueue(trigger_error_queue)
@@ -109,11 +120,15 @@ def trigger_error_rq():
 
 @main_blueprint.route("/test_db", methods=["GET"])
 def test_records():
+    if request.headers.get('Authorization') != os_get('SECRET_KEY'):
+        return 'Unauthorized', 401
     test_db = db_fetch("SELECT * FROM db.test")
     return jsonify(test_db), 200
 
 
 @main_blueprint.route("/test_db_insert", methods=["GET"])
 def test_db_insert():
+    if request.headers.get('Authorization') != os_get('SECRET_KEY'):
+        return 'Unauthorized', 401
     test_db = db_insert("test", {"val": "99"})
     return jsonify(test_db), 200
