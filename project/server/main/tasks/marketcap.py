@@ -3,7 +3,7 @@ import logging
 import time
 
 from project.server.main.utils.db import db_insert_many
-from project.server.main.utils.utils import percentage, get_json, f, get_time, transform_time, integer, os_get
+from project.server.main.utils.utils import percentage, get_json, f, get_time, transform_time, os_get, mil
 
 
 def marketcap():
@@ -30,30 +30,27 @@ def marketcap():
             "symbol": i.get('currency'),
             "name": i.get('name'),
             "price": f(i.get('price')),
-            "circulating_supply": integer(i.get('circulating_supply')),
-            "max_supply": integer(i.get('max_supply')),
-            "marketcap": integer(i.get('market_cap')),
+            "marketcap": mil(i.get('market_cap')),
             "marketcap_dominance": f(float(i.get('market_cap_dominance')) * 100) if i.get(
                 'market_cap_dominance') else None,
-            "first_trade": str(transform_time(i.get('first_trade')) if i.get('first_trade') else None),
             "rank_delta": i.get('rank_delta'),
             "high": f(i.get('high')),
             "high_percentage": f(percentage(i.get('price'), i.get('high')) * 100),
             "high_timestamp": str(transform_time(i.get('high_timestamp')) if i.get('high_timestamp') else None),
-            "1d_volume": integer(i.get('1d').get('volume')) if i.get('1d') else None,
+            "1d_volume": mil(i.get('1d').get('volume')) if i.get('1d') else None,
             "1d_price_change": f(i.get('1d').get('price_change')) if i.get('1d') else None,
             "1d_price_change_pct": f(float(i.get('1d').get('price_change_pct')) * 100) if i.get('1d') and i.get(
                 '1d').get('price_change_pct') else None,
             "1d_volume_change_pct": f(float(i.get('1d').get('volume_change_pct')) * 100) if i.get('1d') and i.get(
                 '1d').get('volume_change_pct') else None,
-            "7d_volume": integer(i.get('7d').get('volume')) if i.get('7d') else None,
+            "7d_volume": mil(i.get('7d').get('volume')) if i.get('7d') else None,
             "7d_volume_change_pct": f(float(i.get('7d').get('volume_change_pct')) * 100) if i.get('7d') and i.get(
                 '7d').get('volume_change_pct') else None,
             "7d_price_change": f(i.get('7d').get('price_change')) if i.get('7d') and i.get('7d').get(
                 'price_change') else None,
             "7d_price_change_pct": f(float(i.get('7d').get('price_change_pct')) * 100) if i.get('7d') and i.get(
                 '7d').get('price_change_pct') else None,
-            "30d_volume": integer(i.get('30d').get('volume')) if i.get('30d') else None,
+            "30d_volume": mil(i.get('30d').get('volume')) if i.get('30d') else None,
             "30d_volume_change_pct": f(float(i.get('7d').get('price_change_pct')) * 100) if i.get('30d') and i.get(
                 '30d').get('price_change_pct') else None,
             "30d_price_change": f(i.get('30d').get('price_change')) if i.get('30d') and i.get('30d').get(

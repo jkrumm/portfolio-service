@@ -125,10 +125,15 @@ def portfolio():
     ##################################################################################################################
 
     def bitmex_to_btc(n):
-        return f_btc(int(n) / 100000000)
+        if n:
+            return f_btc(int(n) / 100000000)
+        else:
+            return None
 
     def bitmex_to_usd(n):
-        return f((bitmex_to_btc(n) * btc_usd))
+        if n and bitmex_to_btc(n) is not None:
+            return f((bitmex_to_btc(n) * btc_usd))
+        return None
 
     bitmex_balances = bitmex.fetch_balance()['info'][0]
     # pprint(bitmex_balances)
@@ -201,10 +206,13 @@ def portfolio():
                                                portfolio_24h['bitmex_btc_position']) if portfolio_24h else None
     pm['bitmex_btc_position_btc'] = f_btc(bitmex_to_btc(bitmex_btc_position['unrealisedPnl']))
     pm['bitmex_btc_position_percentage'] = round(float(bitmex_btc_position['unrealisedRoePcnt']), 2) * 100
-    if float(bitmex_btc_position['bankruptPrice']) < float(bitmex_btc_position['breakEvenPrice']):
-        pm['bitmex_btc_position_type'] = 'LONG'
-    else:
-        pm['bitmex_btc_position_type'] = 'SHORT'
+
+    if (bitmex_btc_position['bankruptPrice'] is not None) and (bitmex_btc_position['breakEvenPrice'] is not None):
+        if float(bitmex_btc_position['bankruptPrice']) < float(bitmex_btc_position['breakEvenPrice']):
+            pm['bitmex_btc_position_type'] = 'LONG'
+        else:
+            pm['bitmex_btc_position_type'] = 'SHORT'
+
     pm['bitmex_btc_position_leverage'] = f(bitmex_btc_position['leverage'])
     pm['bitmex_btc_position_opening'] = f(bitmex_last_trade_btc['price'])
     pm['bitmex_btc_position_opening_date'] = str(transform_time_ccxt(bitmex_last_trade_btc['datetime']))
@@ -214,10 +222,13 @@ def portfolio():
                                                portfolio_24h['bitmex_eth_position']) if portfolio_24h else None
     pm['bitmex_eth_position_btc'] = f_btc(bitmex_to_btc(bitmex_eth_position['unrealisedPnl']))
     pm['bitmex_eth_position_percentage'] = round(float(bitmex_eth_position['unrealisedRoePcnt']), 2) * 100
-    if float(bitmex_eth_position['bankruptPrice']) < float(bitmex_eth_position['breakEvenPrice']):
-        pm['bitmex_eth_position_type'] = 'LONG'
-    else:
-        pm['bitmex_eth_position_type'] = 'SHORT'
+
+    if (bitmex_eth_position['bankruptPrice'] is not None) and (bitmex_eth_position['breakEvenPrice'] is not None):
+        if float(bitmex_eth_position['bankruptPrice']) < float(bitmex_eth_position['breakEvenPrice']):
+            pm['bitmex_eth_position_type'] = 'LONG'
+        else:
+            pm['bitmex_eth_position_type'] = 'SHORT'
+
     pm['bitmex_eth_position_leverage'] = f(bitmex_eth_position['leverage'])
     pm['bitmex_eth_position_opening'] = f(bitmex_last_trade_eth['price'])
     pm['bitmex_eth_position_opening_date'] = str(transform_time_ccxt(bitmex_last_trade_eth['datetime']))
@@ -241,10 +252,11 @@ def portfolio():
     pm['total_btc_24h'] = percentage(pm['total_btc'], portfolio_24h['total_btc']) if portfolio_24h else None
     pm['total_btc_1w'] = percentage(pm['total_btc'], portfolio_1w['total_btc']) if portfolio_1w else None
 
-    pm['current'] = f(pm['total'] + pm['bitmex_unrealised'])
+    pm['current'] = f(pm['total'] + pm['bitmex_unrealised']) if pm['bitmex_unrealised'] is not None else f(pm['total'])
     pm['current_24h'] = percentage(pm['current'], portfolio_24h['current']) if portfolio_24h else None
     pm['current_1w'] = percentage(pm['current'], portfolio_1w['current']) if portfolio_1w else None
-    pm['current_btc'] = f_btc(pm['total_btc'] + pm['bitmex_unrealised_btc'])
+    pm['current_btc'] = f_btc(pm['total_btc'] + pm['bitmex_unrealised_btc']) \
+        if pm['bitmex_unrealised_btc'] is not None else f(pm['total_btc'])
     pm['current_btc_24h'] = percentage(pm['current_btc'], portfolio_24h['current_btc']) if portfolio_24h else None
     pm['current_btc_1w'] = percentage(pm['current_btc'], portfolio_1w['current_btc']) if portfolio_1w else None
     pm['current_percentage'] = round(pm['current'] / pm['total'] * 100 - 100, 2)

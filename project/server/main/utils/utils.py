@@ -49,6 +49,17 @@ def integer(val):
         return None
 
 
+def mil(val):
+    if val:
+        res = integer(float(val) / 1000000)
+        if res > 9223372036854775800:
+            return None
+        else:
+            return res
+    else:
+        return None
+
+
 def f(val):
     if val:
         f = float(val)
