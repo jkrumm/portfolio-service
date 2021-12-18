@@ -1,14 +1,8 @@
 import logging
 import time
 from datetime import datetime, timedelta
-from pprint import pprint
-
-import ccxt
-import pandas as pd
-
-from project.server.main.utils.db import db_insert, db_insert_many, db_fetch, db_aggregate, db_insert_test
-from project.server.main.utils.utils import f, get_time, transform_time_ccxt, get_json, f_btc, percentage, \
-    map_portfolio, os_get, integer
+from project.server.main.utils.db import db_insert, db_fetch
+from project.server.main.utils.utils import f, get_time, map_portfolio
 
 
 def pnl():

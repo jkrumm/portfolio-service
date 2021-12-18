@@ -47,7 +47,7 @@ def run_task():
                              retry=Retry(max=2, interval=[50, 100]),
                              on_success=job_success,
                              on_failure=job_failure)
-        if task_type == "pnl":
+        elif task_type == "pnl":
             task = q.enqueue(pnl, job_id="pnl",
                              retry=Retry(max=2, interval=[50, 100]),
                              on_success=job_success,
