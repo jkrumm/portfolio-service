@@ -33,7 +33,7 @@ CREATE TABLE binance_balances
 );
 
 
-drop table if exists portfolio;
+# drop table if exists portfolio;
 
 CREATE TABLE portfolio
 (
@@ -76,8 +76,8 @@ CREATE TABLE portfolio
     bitmex_unrealised_1w             DECIMAL(7, 2),
     bitmex_unrealised_btc            DECIMAL(14, 6),
     bitmex_unrealised_percentage     DECIMAL(7, 2),
-    bitmex_withdraw                  DECIMAL(20, 2) NOT NULL,
-    bitmex_withdraw_btc              DECIMAL(14, 6) NOT NULL,
+    bitmex_withdraw                  DECIMAL(20, 2),
+    bitmex_withdraw_btc              DECIMAL(14, 6),
     bitmex_btc_position              DOUBLE(20, 2),
     bitmex_btc_position_btc          DECIMAL(14, 6),
     bitmex_btc_position_24h          DECIMAL(7, 2),
@@ -111,8 +111,7 @@ CREATE TABLE portfolio
 CREATE UNIQUE INDEX portfolio_ix_id ON portfolio (id);
 
 
-CREATE UNIQUE INDEX portfolio_ix_id ON portfolio (id);
-
+drop table if exists test;
 
 create table test
 (
@@ -120,6 +119,7 @@ create table test
         primary key,
     val varchar(100) null
 );
+
 drop table if exists binance_orders;
 
 CREATE TABLE binance_orders
@@ -151,13 +151,6 @@ CREATE TABLE binance_balances
     free            DECIMAL(25, 6) NOT NULL,
     used_percentage DECIMAL(7, 2)  NOT NULL,
     PRIMARY KEY (id)
-);
-
-create table test
-(
-    id  int auto_increment
-        primary key,
-    val varchar(100) null
 );
 
 # INSERT INTO portfolio (timestamp, btc_usd, eth_usd, current, current_btc, current_24h, current_1w, current_btc_24h,
@@ -237,10 +230,3 @@ CREATE TABLE worker
     failed       MEDIUMINT NOT NULL,
     PRIMARY KEY (id)
 );
-
-
-
-
-
-
-

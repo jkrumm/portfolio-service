@@ -2540,7 +2540,7 @@
 		"replaceSpace": "_",
 		"color": "transparent",
 		"sideSelections": true,
-		"isDirty": true,
+		"isDirty": false,
 		"storedin": {
 			"major": 4,
 			"minor": 1,
@@ -2569,7 +2569,7 @@
 			"quotation": "if_needed"
 		},
 		"filePath": "/Users/johanneskrumm/SourceRoot/portfolio-service/project/server/main/db/ps-model.dmm",
-		"lastSaved": "Sun Dec 05 2021 10:30:07 GMT+0100 (Mitteleuropäische Normalzeit)",
+		"lastSaved": "Sun Dec 05 2021 14:40:00 GMT+0100 (Mitteleuropäische Normalzeit)",
 		"cardinalityIsDisplayed": false,
 		"writeFileParam": false
 	},

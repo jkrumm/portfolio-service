@@ -81,11 +81,11 @@ def db_insert_many(table, records):
     db = db_connect()
     cur = db.cursor()
     if table == "binance_orders":
-        cur.execute("TRUNCATE TABLE db.binance_orders")
+        cur.execute("TRUNCATE TABLE binance_orders")
     if table == "binance_balances":
-        cur.execute("TRUNCATE TABLE db.binance_balances")
+        cur.execute("TRUNCATE TABLE binance_balances")
     if table == "marketcap":
-        cur.execute("TRUNCATE TABLE db.marketcap")
+        cur.execute("TRUNCATE TABLE marketcap")
     sql_string = "INSERT INTO %s (%s) VALUES %s" % (
         table,
         ', '.join([list(x.keys()) for x in records][0]),

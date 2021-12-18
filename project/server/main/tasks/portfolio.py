@@ -138,14 +138,23 @@ def portfolio():
     bitmex_balances = bitmex.fetch_balance()['info'][0]
     # pprint(bitmex_balances)
 
-    b_p_0 = bitmex.fetchPositions()[0]
-    b_p_1 = bitmex.fetchPositions()[1]
-    if b_p_0['symbol'] == 'XBTUSD':
-        bitmex_btc_position = b_p_0
-        bitmex_eth_position = b_p_1
-    else:
-        bitmex_eth_position = b_p_0
-        bitmex_btc_position = b_p_1
+    bitmex_positions = bitmex.fetchPositions()
+    bitmex_btc_position = None
+    bitmex_eth_position = None
+
+    if len(bitmex_positions) is 1:
+        if bitmex_positions[0]['symbol'] == 'XBTUSD':
+            bitmex_btc_position = bitmex_positions[0]
+        else:
+            bitmex_eth_position = bitmex_positions[1]
+
+    if len(bitmex_positions) is 2:
+        if bitmex_positions[0]['symbol'] == 'XBTUSD':
+            bitmex_btc_position = bitmex_positions[0]
+            bitmex_eth_position = bitmex_positions[1]
+        else:
+            bitmex_eth_position = bitmex_positions[0]
+            bitmex_btc_position = bitmex_positions[1]
 
     bitmex_trades_btc = bitmex.fetch_my_trades(symbol='BTC/USD',
                                                since=bitmex.parse8601(datetime.today() - pd.DateOffset(months=3)),
@@ -201,36 +210,43 @@ def portfolio():
     pm['bitmex_withdraw'] = f(bitmex_to_usd(bitmex_balances['unrealisedPnl']))
     pm['bitmex_withdraw_btc'] = f_btc(bitmex_to_btc(bitmex_balances['withdrawableMargin']))
 
-    pm['bitmex_btc_position'] = f(bitmex_to_usd(bitmex_btc_position['unrealisedPnl']))
-    pm['bitmex_btc_position_24h'] = percentage(pm['bitmex_btc_position'],
-                                               portfolio_24h['bitmex_btc_position']) if portfolio_24h else None
-    pm['bitmex_btc_position_btc'] = f_btc(bitmex_to_btc(bitmex_btc_position['unrealisedPnl']))
-    pm['bitmex_btc_position_percentage'] = round(float(bitmex_btc_position['unrealisedRoePcnt']), 2) * 100
+    pm['bitmex_btc_position'] = f(bitmex_to_usd(bitmex_btc_position['unrealisedPnl'])) if bitmex_btc_position else None
+    pm['bitmex_btc_position_24h'] = percentage(pm['bitmex_btc_position'], portfolio_24h[
+        'bitmex_btc_position']) if portfolio_24h and bitmex_btc_position else None
+    pm['bitmex_btc_position_btc'] = f_btc(
+        bitmex_to_btc(bitmex_btc_position['unrealisedPnl'])) if bitmex_btc_position else None
+    pm['bitmex_btc_position_percentage'] = round(float(bitmex_btc_position['unrealisedRoePcnt']),
+                                                 2) * 100 if bitmex_btc_position else None
 
-    if (bitmex_btc_position['bankruptPrice'] is not None) and (bitmex_btc_position['breakEvenPrice'] is not None):
+    if bitmex_btc_position and (bitmex_btc_position['bankruptPrice'] is not None) and (
+            bitmex_btc_position['breakEvenPrice'] is not None):
         if float(bitmex_btc_position['bankruptPrice']) < float(bitmex_btc_position['breakEvenPrice']):
             pm['bitmex_btc_position_type'] = 'LONG'
         else:
             pm['bitmex_btc_position_type'] = 'SHORT'
 
-    pm['bitmex_btc_position_leverage'] = f(bitmex_btc_position['leverage'])
-    pm['bitmex_btc_position_opening'] = f(bitmex_last_trade_btc['price'])
+    pm['bitmex_btc_position_leverage'] = f(bitmex_btc_position['leverage']) if bitmex_btc_position else None
+    pm['bitmex_btc_position_opening'] = f(bitmex_last_trade_btc['price']) if bitmex_btc_position else None
     pm['bitmex_btc_position_opening_date'] = str(transform_time_ccxt(bitmex_last_trade_btc['datetime']))
 
-    pm['bitmex_eth_position'] = f(bitmex_to_usd(bitmex_eth_position['unrealisedPnl']))
+    pm['bitmex_eth_position'] = f(bitmex_to_usd(bitmex_eth_position['unrealisedPnl'])) if bitmex_eth_position else None
     pm['bitmex_eth_position_24h'] = percentage(pm['bitmex_eth_position'],
-                                               portfolio_24h['bitmex_eth_position']) if portfolio_24h else None
-    pm['bitmex_eth_position_btc'] = f_btc(bitmex_to_btc(bitmex_eth_position['unrealisedPnl']))
-    pm['bitmex_eth_position_percentage'] = round(float(bitmex_eth_position['unrealisedRoePcnt']), 2) * 100
+                                               portfolio_24h[
+                                                   'bitmex_eth_position']) if portfolio_24h and bitmex_eth_position else None
+    pm['bitmex_eth_position_btc'] = f_btc(
+        bitmex_to_btc(bitmex_eth_position['unrealisedPnl'])) if bitmex_eth_position else None
+    pm['bitmex_eth_position_percentage'] = round(float(bitmex_eth_position['unrealisedRoePcnt']),
+                                                 2) * 100 if bitmex_eth_position else None
 
-    if (bitmex_eth_position['bankruptPrice'] is not None) and (bitmex_eth_position['breakEvenPrice'] is not None):
+    if bitmex_eth_position and (bitmex_eth_position['bankruptPrice'] is not None) and (
+            bitmex_eth_position['breakEvenPrice'] is not None):
         if float(bitmex_eth_position['bankruptPrice']) < float(bitmex_eth_position['breakEvenPrice']):
             pm['bitmex_eth_position_type'] = 'LONG'
         else:
             pm['bitmex_eth_position_type'] = 'SHORT'
 
-    pm['bitmex_eth_position_leverage'] = f(bitmex_eth_position['leverage'])
-    pm['bitmex_eth_position_opening'] = f(bitmex_last_trade_eth['price'])
+    pm['bitmex_eth_position_leverage'] = f(bitmex_eth_position['leverage']) if bitmex_eth_position else None
+    pm['bitmex_eth_position_opening'] = f(bitmex_last_trade_eth['price']) if bitmex_eth_position else None
     pm['bitmex_eth_position_opening_date'] = str(transform_time_ccxt(bitmex_last_trade_eth['datetime']))
 
     pm['atari_total'] = f(float(atari['price']) * atari_amount)
