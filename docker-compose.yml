@@ -106,7 +106,7 @@ services:
 
   grafana:
     <<: *default
-    image: grafana/grafana:8.1.5
+    image: grafana/grafana:main-ubuntu
     container_name: grafana
     depends_on:
       - redis
