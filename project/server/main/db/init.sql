@@ -230,3 +230,28 @@ CREATE TABLE worker
     failed       MEDIUMINT NOT NULL,
     PRIMARY KEY (id)
 );
+
+drop table if exists pnl;
+
+CREATE TABLE pnl
+(
+    id                MEDIUMINT      NOT NULL AUTO_INCREMENT,
+    `timestamp`       DATETIME       NOT NULL,
+    `current`         DECIMAL(20, 2) NOT NULL,
+    current_btc       DECIMAL(14, 6) NOT NULL,
+    current_24h       DECIMAL(7, 2),
+    current_btc_24h   DECIMAL(7, 2),
+    binance_total     DECIMAL(20, 2) NOT NULL,
+    binance_total_btc DECIMAL(14, 6) NOT NULL,
+    binance_total_24h DECIMAL(7, 2),
+    bitmex_total      DECIMAL(20, 2) NOT NULL,
+    bitmex_total_btc  DECIMAL(14, 6) NOT NULL,
+    bitmex_total_24h  DECIMAL(7, 2),
+    pnl               DECIMAL(10, 2),
+    pnl_binance       DECIMAL(10, 2),
+    pnl_bitmex        DECIMAL(10, 2),
+    pnl_cum           DECIMAL(7, 2),
+    PRIMARY KEY (id)
+);
+
+CREATE UNIQUE INDEX pnl_ix_id ON pnl (id);

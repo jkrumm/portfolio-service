@@ -144,9 +144,9 @@ def json_to_values_string_many(records):
 def job_success(*args):
     save_job_result(
         args[0].id,
-        str(args[0].enqueued_at),
+        str(args[0].started_at),
         1,
-        str(datetime.utcnow() - args[0].enqueued_at),
+        str(datetime.utcnow() - args[0].started_at),
         None
     )
 

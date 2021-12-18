@@ -4,6 +4,7 @@ import redis
 from flask import render_template, Blueprint, jsonify, request, current_app
 from rq import Queue, Connection, Retry
 
+from project.server.main.tasks.pnl import pnl
 from project.server.main.utils.db import db_fetch, db_insert, job_success, job_failure
 from project.server.main.tasks.daily import daily
 from project.server.main.tasks.db import trigger_error_queue
@@ -43,7 +44,12 @@ def run_task():
         q = Queue()
         if task_type == "portfolio":
             task = q.enqueue(portfolio, job_id="portfolio",
-                             retry=Retry(max=2, interval=[30, 60]),
+                             retry=Retry(max=2, interval=[50, 100]),
+                             on_success=job_success,
+                             on_failure=job_failure)
+        if task_type == "pnl":
+            task = q.enqueue(pnl, job_id="pnl",
+                             retry=Retry(max=2, interval=[50, 100]),
                              on_success=job_success,
                              on_failure=job_failure)
         elif task_type == "marketcap":
@@ -52,7 +58,7 @@ def run_task():
                              on_failure=job_failure)
         elif task_type == "daily":
             task = q.enqueue(daily, job_id="daily",
-                             retry=Retry(max=2, interval=[30, 60]),
+                             retry=Retry(max=2, interval=[50, 100]),
                              on_success=job_success,
                              on_failure=job_failure)
         else:
