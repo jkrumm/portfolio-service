@@ -7,6 +7,8 @@ from flask import current_app
 from nomics import Nomics
 from rq import Queue, Worker, Connection
 
+from project.server.main.utils.formatter import strfdelta
+
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 
@@ -23,8 +25,8 @@ def get_worker_stats():
         birth_date = worker.birth_date
         worker_stats = {
             'timestamp': str(birth_date),
-            'lifetime': str(datetime.datetime.utcnow() - birth_date),
-            'working_time': str(datetime.timedelta(seconds=worker.total_working_time)),
+            'lifetime': strfdelta(datetime.datetime.utcnow() - birth_date, '{W}w {D}d {H}:{M:02}:{S:02}'),
+            'working_time': strfdelta(datetime.timedelta(seconds=worker.total_working_time), '{H}:{M:02}:{S:02}'),
             'successful': worker.successful_job_count,
             'failed': worker.failed_job_count,
         }

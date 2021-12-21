@@ -26,6 +26,341 @@
   "liveNow": false,
   "panels": [
     {
+      "datasource": {
+        "type": "datasource",
+        "uid": "grafana"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "text",
+            "mode": "fixed"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 4,
+        "x": 0,
+        "y": 0
+      },
+      "id": 46,
+      "options": {
+        "colorMode": "none",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "value"
+      },
+      "pluginVersion": "8.4.0-45809pre",
+      "targets": [
+        {
+          "datasource": {
+            "type": "mysql",
+            "uid": "FYR7BDTnk"
+          },
+          "format": "table",
+          "group": [],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT TIMESTAMPDIFF(DAY , NOW(), timestamp)*-1 as metric FROM portfolio ORDER BY timestamp ASC LIMIT 1;",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "id"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "table": "job",
+          "timeColumn": "timestamp",
+          "timeColumnType": "timestamp",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "title": "Days Running",
+      "type": "stat"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "text",
+            "mode": "fixed"
+          },
+          "mappings": [],
+          "max": 1000,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "#EAB839",
+                "value": 600
+              },
+              {
+                "color": "red",
+                "value": 900
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 4,
+        "x": 4,
+        "y": 0
+      },
+      "id": 23,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.4.0-45809pre",
+      "targets": [
+        {
+          "datasource": {
+            "type": "mysql",
+            "uid": "FYR7BDTnk"
+          },
+          "format": "table",
+          "group": [],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT COUNT(id) as metric FROM portfolio;",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "id"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "table": "job",
+          "timeColumn": "timestamp",
+          "timeColumnType": "timestamp",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "title": "Portfolio Entries",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-sentry-datasource",
+        "uid": "jHjrqvT7z"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "#EAB839",
+                "value": 1
+              },
+              {
+                "color": "#EF843C",
+                "value": 2
+              },
+              {
+                "color": "#E24D42",
+                "value": 3
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 4,
+        "x": 8,
+        "y": 0
+      },
+      "id": 30,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "value"
+      },
+      "pluginVersion": "8.4.0-45809pre",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-sentry-datasource",
+            "uid": "jHjrqvT7z"
+          },
+          "environments": [],
+          "projectIds": [
+            "5984692"
+          ],
+          "queryType": "statsV2",
+          "refId": "A",
+          "statsCategory": [
+            "error"
+          ],
+          "statsFields": [
+            "sum(quantity)"
+          ]
+        }
+      ],
+      "title": "Sentry Errors",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-sentry-datasource",
+        "uid": "jHjrqvT7z"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "#EAB839",
+                "value": 150
+              },
+              {
+                "color": "#EF843C",
+                "value": 175
+              },
+              {
+                "color": "#E24D42",
+                "value": 200
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 4,
+        "x": 12,
+        "y": 0
+      },
+      "id": 31,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "value"
+      },
+      "pluginVersion": "8.4.0-45809pre",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-sentry-datasource",
+            "uid": "jHjrqvT7z"
+          },
+          "environments": [],
+          "projectIds": [
+            "5984692"
+          ],
+          "queryType": "statsV2",
+          "refId": "A",
+          "statsCategory": [
+            "transaction"
+          ],
+          "statsFields": [
+            "sum(quantity)"
+          ]
+        }
+      ],
+      "title": "Sentry Transactions",
+      "type": "stat"
+    },
+    {
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -58,7 +393,7 @@
         "h": 3,
         "w": 24,
         "x": 0,
-        "y": 0
+        "y": 3
       },
       "id": 6,
       "options": {
@@ -117,6 +452,10 @@
       "type": "state-timeline"
     },
     {
+      "datasource": {
+        "type": "datasource",
+        "uid": "grafana"
+      },
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -143,15 +482,15 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 4,
+        "h": 2,
         "w": 4,
         "x": 0,
-        "y": 3
+        "y": 6
       },
       "id": 10,
       "options": {
         "colorMode": "none",
-        "graphMode": "area",
+        "graphMode": "none",
         "justifyMode": "center",
         "orientation": "auto",
         "reduceOptions": {
@@ -163,250 +502,6 @@
         },
         "text": {},
         "textMode": "value"
-      },
-      "pluginVersion": "8.4.0-45809pre",
-      "targets": [
-        {
-          "datasource": {
-            "type": "mysql",
-            "uid": "FYR7BDTnk"
-          },
-          "format": "time_series",
-          "group": [],
-          "metricColumn": "none",
-          "rawQuery": false,
-          "rawSql": "SELECT\n  timestamp AS \"time\",\n  id\nFROM job\nWHERE\n  $__timeFilter(timestamp)\nORDER BY timestamp",
-          "refId": "A",
-          "select": [
-            [
-              {
-                "params": [
-                  "id"
-                ],
-                "type": "column"
-              }
-            ]
-          ],
-          "table": "job",
-          "timeColumn": "timestamp",
-          "timeColumnType": "timestamp",
-          "where": [
-            {
-              "name": "$__timeFilter",
-              "params": [],
-              "type": "macro"
-            }
-          ]
-        }
-      ],
-      "type": "stat"
-    },
-    {
-      "description": "",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "fixedColor": "red",
-            "mode": "continuous-RdYlGr"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          },
-          "unit": "short"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 2,
-        "w": 4,
-        "x": 4,
-        "y": 3
-      },
-      "id": 11,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "center",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "text": {},
-        "textMode": "value"
-      },
-      "pluginVersion": "8.4.0-45809pre",
-      "targets": [
-        {
-          "datasource": {
-            "type": "mysql",
-            "uid": "FYR7BDTnk"
-          },
-          "format": "time_series",
-          "group": [],
-          "metricColumn": "none",
-          "rawQuery": true,
-          "rawSql": "SELECT timestamp AS \"time\", failed FROM worker",
-          "refId": "A",
-          "select": [
-            [
-              {
-                "params": [
-                  "failed"
-                ],
-                "type": "column"
-              }
-            ]
-          ],
-          "table": "worker",
-          "timeColumn": "timestamp",
-          "timeColumnType": "datetime",
-          "where": [
-            {
-              "name": "$__timeFilter",
-              "params": [],
-              "type": "macro"
-            }
-          ]
-        }
-      ],
-      "type": "stat"
-    },
-    {
-      "description": "",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "fixedColor": "green",
-            "mode": "fixed"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "short"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 2,
-        "w": 4,
-        "x": 8,
-        "y": 3
-      },
-      "id": 12,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "center",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "text": {},
-        "textMode": "value"
-      },
-      "pluginVersion": "8.4.0-45809pre",
-      "targets": [
-        {
-          "datasource": {
-            "type": "mysql",
-            "uid": "FYR7BDTnk"
-          },
-          "format": "time_series",
-          "group": [],
-          "metricColumn": "none",
-          "rawQuery": true,
-          "rawSql": "SELECT\n  timestamp AS \"time\",\n  successful\nFROM worker",
-          "refId": "A",
-          "select": [
-            [
-              {
-                "params": [
-                  "successful"
-                ],
-                "type": "column"
-              }
-            ]
-          ],
-          "table": "worker",
-          "timeColumn": "timestamp",
-          "timeColumnType": "datetime",
-          "where": [
-            {
-              "name": "$__timeFilter",
-              "params": [],
-              "type": "macro"
-            }
-          ]
-        }
-      ],
-      "type": "stat"
-    },
-    {
-      "fieldConfig": {
-        "defaults": {
-          "custom": {
-            "align": "right",
-            "displayMode": "auto"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 19,
-        "w": 12,
-        "x": 12,
-        "y": 3
-      },
-      "id": 17,
-      "options": {
-        "footer": {
-          "fields": "",
-          "reducer": [
-            "sum"
-          ],
-          "show": false
-        },
-        "showHeader": true
       },
       "pluginVersion": "8.4.0-45809pre",
       "targets": [
@@ -419,7 +514,7 @@
           "group": [],
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "SELECT TIMESTAMPDIFF(MINUTE, NOW(), timestamp)*-1 as MinutesAgo, job as Job, success as Success, TIME_TO_SEC(duration) as Duration, error as Error FROM job ORDER BY id DESC LIMIT 18;",
+          "rawSql": "SELECT COUNT(id) as count FROM job WHERE success = 1;",
           "refId": "A",
           "select": [
             [
@@ -443,16 +538,20 @@
           ]
         }
       ],
-      "type": "table"
+      "type": "stat"
     },
     {
+      "datasource": {
+        "type": "datasource",
+        "uid": "grafana"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
             "mode": "thresholds"
           },
           "mappings": [],
-          "max": 45,
+          "max": 40,
           "min": 20,
           "thresholds": {
             "mode": "absolute",
@@ -463,11 +562,11 @@
               },
               {
                 "color": "#EAB839",
-                "value": 35
+                "value": 30
               },
               {
                 "color": "red",
-                "value": 40
+                "value": 35
               }
             ]
           }
@@ -475,10 +574,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 3,
+        "h": 4,
         "w": 4,
         "x": 4,
-        "y": 5
+        "y": 6
       },
       "id": 24,
       "options": {
@@ -538,7 +637,7 @@
             "mode": "thresholds"
           },
           "mappings": [],
-          "max": 20,
+          "max": 10,
           "min": 0,
           "thresholds": {
             "mode": "absolute",
@@ -549,11 +648,11 @@
               },
               {
                 "color": "#EAB839",
-                "value": 10
+                "value": 6
               },
               {
                 "color": "red",
-                "value": 15
+                "value": 8
               }
             ]
           }
@@ -561,10 +660,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 3,
+        "h": 4,
         "w": 4,
         "x": 8,
-        "y": 5
+        "y": 6
       },
       "id": 25,
       "options": {
@@ -621,6 +720,255 @@
       "fieldConfig": {
         "defaults": {
           "custom": {
+            "align": "right",
+            "displayMode": "auto"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 19,
+        "w": 12,
+        "x": 12,
+        "y": 6
+      },
+      "id": 17,
+      "options": {
+        "footer": {
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true
+      },
+      "pluginVersion": "8.4.0-45809pre",
+      "targets": [
+        {
+          "datasource": {
+            "type": "mysql",
+            "uid": "FYR7BDTnk"
+          },
+          "format": "table",
+          "group": [],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT TIMESTAMPDIFF(MINUTE, NOW(), timestamp)*-1 as MinutesAgo, job as Job, success as Success, TIME_TO_SEC(duration) as Duration, error as Error FROM job ORDER BY id DESC LIMIT 18;",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "id"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "table": "job",
+          "timeColumn": "timestamp",
+          "timeColumnType": "timestamp",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "datasource",
+        "uid": "grafana"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "red",
+            "mode": "continuous-RdYlGr"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 2,
+        "x": 0,
+        "y": 8
+      },
+      "id": 11,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "value"
+      },
+      "pluginVersion": "8.4.0-45809pre",
+      "targets": [
+        {
+          "datasource": {
+            "type": "mysql",
+            "uid": "FYR7BDTnk"
+          },
+          "format": "table",
+          "group": [],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT COUNT(id) as count FROM job WHERE success = 0;",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "failed"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "table": "worker",
+          "timeColumn": "timestamp",
+          "timeColumnType": "datetime",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "green",
+            "mode": "fixed"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 2,
+        "x": 2,
+        "y": 8
+      },
+      "id": 12,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "value"
+      },
+      "pluginVersion": "8.4.0-45809pre",
+      "targets": [
+        {
+          "datasource": {
+            "type": "mysql",
+            "uid": "FYR7BDTnk"
+          },
+          "format": "table",
+          "group": [],
+          "hide": false,
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT COUNT(id) as count FROM job WHERE success = 1;",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "id"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "table": "job",
+          "timeColumn": "timestamp",
+          "timeColumnType": "timestamp",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
             "align": "auto",
             "displayMode": "auto"
           },
@@ -642,10 +990,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 4,
+        "h": 5,
         "w": 4,
         "x": 0,
-        "y": 7
+        "y": 10
       },
       "id": 4,
       "options": {
@@ -656,7 +1004,7 @@
           ],
           "show": false
         },
-        "showHeader": true
+        "showHeader": false
       },
       "pluginVersion": "8.4.0-45809pre",
       "targets": [
@@ -718,7 +1066,8 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "continuous-GrYlRd"
+            "mode": "continuous-GrYlRd",
+            "seriesBy": "last"
           },
           "custom": {
             "axisGridShow": false,
@@ -770,7 +1119,7 @@
         "h": 3,
         "w": 4,
         "x": 4,
-        "y": 8
+        "y": 10
       },
       "id": 35,
       "options": {
@@ -876,7 +1225,7 @@
         "h": 3,
         "w": 4,
         "x": 8,
-        "y": 8
+        "y": 10
       },
       "id": 36,
       "options": {
@@ -927,6 +1276,712 @@
       "type": "timeseries"
     },
     {
+      "datasource": {
+        "type": "mysql",
+        "uid": "FYR7BDTnk"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "text",
+            "mode": "fixed"
+          },
+          "decimals": 0,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 1,
+        "x": 4,
+        "y": 13
+      },
+      "id": 38,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "mean"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "value"
+      },
+      "pluginVersion": "8.4.0-45809pre",
+      "targets": [
+        {
+          "datasource": {
+            "type": "mysql",
+            "uid": "FYR7BDTnk"
+          },
+          "format": "table",
+          "group": [],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT TIME_TO_SEC(duration) as metric FROM job WHERE job = \"portfolio\";",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "table": "marketcap",
+          "timeColumn": "timestamp",
+          "timeColumnType": "timestamp",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "title": "AVG",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "mysql",
+        "uid": "FYR7BDTnk"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "text",
+            "mode": "fixed"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 1,
+        "x": 5,
+        "y": 13
+      },
+      "id": 39,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "min"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "value"
+      },
+      "pluginVersion": "8.4.0-45809pre",
+      "targets": [
+        {
+          "datasource": {
+            "type": "mysql",
+            "uid": "FYR7BDTnk"
+          },
+          "format": "table",
+          "group": [],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT TIME_TO_SEC(duration) as metric FROM job WHERE job = \"portfolio\";",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "table": "marketcap",
+          "timeColumn": "timestamp",
+          "timeColumnType": "timestamp",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "title": "MIN",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "mysql",
+        "uid": "FYR7BDTnk"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "text",
+            "mode": "fixed"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 1,
+        "x": 6,
+        "y": 13
+      },
+      "id": 40,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "max"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "value"
+      },
+      "pluginVersion": "8.4.0-45809pre",
+      "targets": [
+        {
+          "datasource": {
+            "type": "mysql",
+            "uid": "FYR7BDTnk"
+          },
+          "format": "table",
+          "group": [],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT TIME_TO_SEC(duration) as metric FROM job WHERE job = \"portfolio\";",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "table": "marketcap",
+          "timeColumn": "timestamp",
+          "timeColumnType": "timestamp",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "title": "MAX",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "mysql",
+        "uid": "FYR7BDTnk"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "text",
+            "mode": "fixed"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 1,
+        "x": 7,
+        "y": 13
+      },
+      "id": 41,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "max"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "value"
+      },
+      "pluginVersion": "8.4.0-45809pre",
+      "targets": [
+        {
+          "datasource": {
+            "type": "mysql",
+            "uid": "FYR7BDTnk"
+          },
+          "format": "table",
+          "group": [],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT COUNT(id) as metric FROM job WHERE job = \"portfolio\" AND success = 0;",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "table": "marketcap",
+          "timeColumn": "timestamp",
+          "timeColumnType": "timestamp",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "title": "FAIL",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "mysql",
+        "uid": "FYR7BDTnk"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "text",
+            "mode": "fixed"
+          },
+          "decimals": 0,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 1,
+        "x": 8,
+        "y": 13
+      },
+      "id": 42,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "mean"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "value"
+      },
+      "pluginVersion": "8.4.0-45809pre",
+      "targets": [
+        {
+          "datasource": {
+            "type": "mysql",
+            "uid": "FYR7BDTnk"
+          },
+          "format": "table",
+          "group": [],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT TIME_TO_SEC(duration) as metric FROM job WHERE job = \"marketcap\";",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "table": "marketcap",
+          "timeColumn": "timestamp",
+          "timeColumnType": "timestamp",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "title": "AVG",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "mysql",
+        "uid": "FYR7BDTnk"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "text",
+            "mode": "fixed"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 1,
+        "x": 9,
+        "y": 13
+      },
+      "id": 43,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "min"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "value"
+      },
+      "pluginVersion": "8.4.0-45809pre",
+      "targets": [
+        {
+          "datasource": {
+            "type": "mysql",
+            "uid": "FYR7BDTnk"
+          },
+          "format": "table",
+          "group": [],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT TIME_TO_SEC(duration) as metric FROM job WHERE job = \"marketcap\";",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "table": "marketcap",
+          "timeColumn": "timestamp",
+          "timeColumnType": "timestamp",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "title": "MIN",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "mysql",
+        "uid": "FYR7BDTnk"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "text",
+            "mode": "fixed"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 1,
+        "x": 10,
+        "y": 13
+      },
+      "id": 44,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "max"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "value"
+      },
+      "pluginVersion": "8.4.0-45809pre",
+      "targets": [
+        {
+          "datasource": {
+            "type": "mysql",
+            "uid": "FYR7BDTnk"
+          },
+          "format": "table",
+          "group": [],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT TIME_TO_SEC(duration) as metric FROM job WHERE job = \"marketcap\";",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "table": "marketcap",
+          "timeColumn": "timestamp",
+          "timeColumnType": "timestamp",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "title": "MAX",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "mysql",
+        "uid": "FYR7BDTnk"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "text",
+            "mode": "fixed"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 1,
+        "x": 11,
+        "y": 13
+      },
+      "id": 45,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "max"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "value"
+      },
+      "pluginVersion": "8.4.0-45809pre",
+      "targets": [
+        {
+          "datasource": {
+            "type": "mysql",
+            "uid": "FYR7BDTnk"
+          },
+          "format": "table",
+          "group": [],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT COUNT(id) as metric FROM job WHERE job = \"marketcap\" AND success = 0;",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "table": "marketcap",
+          "timeColumn": "timestamp",
+          "timeColumnType": "timestamp",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "title": "FAIL",
+      "type": "stat"
+    },
+    {
       "fieldConfig": {
         "defaults": {
           "custom": {
@@ -954,7 +2009,7 @@
         "h": 4,
         "w": 12,
         "x": 0,
-        "y": 11
+        "y": 15
       },
       "id": 19,
       "options": {
@@ -1014,6 +2069,7 @@
           "custom": {
             "axisLabel": "",
             "axisPlacement": "auto",
+            "axisSoftMax": 30,
             "barAlignment": 0,
             "drawStyle": "line",
             "fillOpacity": 0,
@@ -1040,6 +2096,7 @@
             }
           },
           "mappings": [],
+          "min": 0,
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -1057,10 +2114,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 10,
+        "h": 11,
         "w": 12,
         "x": 0,
-        "y": 15
+        "y": 19
       },
       "id": 21,
       "options": {
@@ -1143,6 +2200,10 @@
       "type": "timeseries"
     },
     {
+      "datasource": {
+        "type": "datasource",
+        "uid": "grafana"
+      },
       "fieldConfig": {
         "defaults": {
           "custom": {
@@ -1167,10 +2228,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 6,
+        "h": 5,
         "w": 12,
         "x": 12,
-        "y": 22
+        "y": 25
       },
       "id": 32,
       "options": {
@@ -1194,7 +2255,7 @@
           "group": [],
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "SELECT TIMESTAMPDIFF(MINUTE, NOW(), timestamp)*-1 as MinutesAgo, job as Job, success as Success, TIME_TO_SEC(duration) as Duration, error as Error FROM job ORDER BY id DESC LIMIT 5;",
+          "rawSql": "SELECT TIMESTAMPDIFF(MINUTE, NOW(), timestamp)*-1 as MinutesAgo, job as Job, success as Success, TIME_TO_SEC(duration) as Duration, error as Error FROM job WHERE job = \"daily\" OR job = \"pnl\" ORDER BY id DESC LIMIT 5;",
           "refId": "A",
           "select": [
             [
@@ -1219,248 +2280,6 @@
         }
       ],
       "type": "table"
-    },
-    {
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "max": 1000,
-          "min": 0,
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "#EAB839",
-                "value": 600
-              },
-              {
-                "color": "red",
-                "value": 900
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 3,
-        "w": 4,
-        "x": 0,
-        "y": 25
-      },
-      "id": 23,
-      "options": {
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showThresholdLabels": false,
-        "showThresholdMarkers": true
-      },
-      "pluginVersion": "8.4.0-45809pre",
-      "targets": [
-        {
-          "datasource": {
-            "type": "mysql",
-            "uid": "FYR7BDTnk"
-          },
-          "format": "table",
-          "group": [],
-          "metricColumn": "none",
-          "rawQuery": true,
-          "rawSql": "SELECT COUNT(id) as metric FROM portfolio;",
-          "refId": "A",
-          "select": [
-            [
-              {
-                "params": [
-                  "id"
-                ],
-                "type": "column"
-              }
-            ]
-          ],
-          "table": "job",
-          "timeColumn": "timestamp",
-          "timeColumnType": "timestamp",
-          "where": [
-            {
-              "name": "$__timeFilter",
-              "params": [],
-              "type": "macro"
-            }
-          ]
-        }
-      ],
-      "title": "Portfolio Entries",
-      "type": "gauge"
-    },
-    {
-      "datasource": {
-        "type": "grafana-sentry-datasource",
-        "uid": "jHjrqvT7z"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "#EAB839",
-                "value": 1
-              },
-              {
-                "color": "#EF843C",
-                "value": 2
-              },
-              {
-                "color": "#E24D42",
-                "value": 3
-              }
-            ]
-          },
-          "unit": "short"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 3,
-        "w": 4,
-        "x": 4,
-        "y": 25
-      },
-      "id": 30,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "textMode": "value"
-      },
-      "pluginVersion": "8.4.0-45809pre",
-      "targets": [
-        {
-          "datasource": {
-            "type": "grafana-sentry-datasource",
-            "uid": "jHjrqvT7z"
-          },
-          "environments": [],
-          "projectIds": [
-            "5984692"
-          ],
-          "queryType": "statsV2",
-          "refId": "A",
-          "statsCategory": [
-            "error"
-          ],
-          "statsFields": [
-            "sum(quantity)"
-          ]
-        }
-      ],
-      "title": "Sentry Errors",
-      "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "grafana-sentry-datasource",
-        "uid": "jHjrqvT7z"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "#EAB839",
-                "value": 150
-              },
-              {
-                "color": "#EF843C",
-                "value": 175
-              },
-              {
-                "color": "#E24D42",
-                "value": 200
-              }
-            ]
-          },
-          "unit": "short"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 3,
-        "w": 4,
-        "x": 8,
-        "y": 25
-      },
-      "id": 31,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "textMode": "value"
-      },
-      "pluginVersion": "8.4.0-45809pre",
-      "targets": [
-        {
-          "datasource": {
-            "type": "grafana-sentry-datasource",
-            "uid": "jHjrqvT7z"
-          },
-          "environments": [],
-          "projectIds": [
-            "5984692"
-          ],
-          "queryType": "statsV2",
-          "refId": "A",
-          "statsCategory": [
-            "transaction"
-          ],
-          "statsFields": [
-            "sum(quantity)"
-          ]
-        }
-      ],
-      "title": "Sentry Transactions",
-      "type": "stat"
     }
   ],
   "refresh": "5s",
@@ -1478,6 +2297,6 @@
   "timezone": "",
   "title": "Monitoring",
   "uid": "Ib-qLvTnk",
-  "version": 37,
+  "version": 52,
   "weekStart": ""
 }
