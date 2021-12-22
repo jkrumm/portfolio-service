@@ -40,7 +40,7 @@ def db_aggregate():
         "DELETE FROM portfolio WHERE (MINUTE(timestamp) != 0 and timestamp < UTC_TIMESTAMP() - INTERVAL 1 WEEK);"
     )
     cur.execute(
-        "DELETE FROM portfolio WHERE ((MINUTE(timestamp) = 15 or MINUTE(timestamp) = 45) and timestamp < UTC_TIMESTAMP() - INTERVAL 1 DAY);"
+        "DELETE FROM portfolio WHERE ((MINUTE(timestamp) not in (0, 15, 30, 45)) and timestamp < UTC_TIMESTAMP() - INTERVAL 1 DAY);"
     )
     cur.execute(
         "DELETE FROM job WHERE (timestamp < UTC_TIMESTAMP() - INTERVAL 1 WEEK);"
