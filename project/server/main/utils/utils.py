@@ -24,8 +24,9 @@ def get_worker_stats():
         worker = workers[0]
         birth_date = worker.birth_date
         worker_stats = {
-            'timestamp': str(birth_date),
-            'lifetime': strfdelta(datetime.datetime.utcnow() - birth_date, '{W}w {D}d {H}:{M:02}:{S:02}'),
+            'timestamp': str(birth_date) if birth_date else None,
+            'lifetime': strfdelta(datetime.datetime.utcnow() - birth_date,
+                                  '{W}w {D}d {H}:{M:02}:{S:02}') if birth_date else None,
             'working_time': strfdelta(datetime.timedelta(seconds=worker.total_working_time), '{H}:{M:02}:{S:02}'),
             'successful': worker.successful_job_count,
             'failed': worker.failed_job_count,

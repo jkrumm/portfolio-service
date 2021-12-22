@@ -7,6 +7,7 @@ from flask_bootstrap import Bootstrap
 from sentry_sdk.integrations.flask import FlaskIntegration
 from sentry_sdk.integrations.logging import LoggingIntegration
 from sentry_sdk.integrations.rq import RqIntegration
+from sentry_sdk.integrations.redis import RedisIntegration
 
 bootstrap = Bootstrap()
 
@@ -20,7 +21,8 @@ def create_app(script_info=None):
     sentry_sdk.init(
         environment=os.environ.get('FLASK_ENV'),
         dsn=os.environ.get('SENTRY'),
-        integrations=[FlaskIntegration(), RqIntegration()],
+        integrations=[FlaskIntegration(), RqIntegration(), RedisIntegration(), sentry_logging],
+        request_bodies="always",
         attach_stacktrace=True,
         traces_sample_rate=1.0
     )

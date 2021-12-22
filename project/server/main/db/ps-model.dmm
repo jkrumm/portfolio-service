@@ -2424,8 +2424,8 @@
 				{
 					"id": "506a8ba1-7ed9-4b7e-9000-e033723d18ca",
 					"name": "lifetime",
-					"datatype": "TIME",
-					"param": "",
+					"datatype": "VARCHAR",
+					"param": "20",
 					"pk": false,
 					"nn": true,
 					"comment": "",
@@ -2443,8 +2443,8 @@
 				{
 					"id": "e46845fb-b4ad-4bb0-8e34-f9f7bd756681",
 					"name": "working_time",
-					"datatype": "TIME",
-					"param": "",
+					"datatype": "VARCHAR",
+					"param": "20",
 					"pk": false,
 					"nn": true,
 					"comment": "",
@@ -3026,7 +3026,7 @@
 		"replaceSpace": "_",
 		"color": "transparent",
 		"sideSelections": true,
-		"isDirty": false,
+		"isDirty": true,
 		"storedin": {
 			"major": 4,
 			"minor": 1,
@@ -3055,7 +3055,7 @@
 			"quotation": "if_needed"
 		},
 		"filePath": "/Users/johanneskrumm/SourceRoot/portfolio-service/project/server/main/db/ps-model.dmm",
-		"lastSaved": "Sat Dec 18 2021 20:35:38 GMT+0100 (Mitteleuropäische Normalzeit)",
+		"lastSaved": "Sat Dec 18 2021 23:02:02 GMT+0100 (Mitteleuropäische Normalzeit)",
 		"cardinalityIsDisplayed": false,
 		"writeFileParam": false
 	},

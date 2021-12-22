@@ -15,7 +15,9 @@ def daily():
 
     db_aggregate()
 
-    print(get_worker_stats())
+    worker_stats = get_worker_stats()
+    print(worker_stats)
+    logging.info(worker_stats)
 
     end = time.perf_counter()
     print("TASK: daily completed in " + str(f(end - start)) + "s")
