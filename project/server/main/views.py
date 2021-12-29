@@ -5,6 +5,7 @@ from flask import render_template, Blueprint, jsonify, request, current_app
 from rq import Queue, Connection, Retry
 from sentry_sdk import configure_scope
 
+from project.server.main.tasks.cbbi import cbbi
 from project.server.main.tasks.pnl import pnl
 from project.server.main.utils.db import db_fetch, db_insert, job_success, job_failure
 from project.server.main.tasks.daily import daily
@@ -62,6 +63,11 @@ def run_task():
                              on_failure=job_failure)
         elif task_type == "daily":
             task = q.enqueue(daily, job_id="daily",
+                             retry=Retry(max=2, interval=[50, 100]),
+                             on_success=job_success,
+                             on_failure=job_failure)
+        elif task_type == "cbbi":
+            task = q.enqueue(cbbi, job_id="cbbi",
                              retry=Retry(max=2, interval=[50, 100]),
                              on_success=job_success,
                              on_failure=job_failure)

@@ -3008,6 +3008,165 @@
 			"charset": "",
 			"rowformat": "na",
 			"estimatedSize": ""
+		},
+		"b8706463-0822-4cf0-b6ef-fb5cce7d342c": {
+			"id": "b8706463-0822-4cf0-b6ef-fb5cce7d342c",
+			"visible": true,
+			"name": "cbbi",
+			"desc": "",
+			"estimatedSize": "",
+			"cols": [
+				{
+					"id": "76779cc9-98ef-4600-ac34-021671d4f9f1",
+					"name": "id",
+					"datatype": "MEDIUMINT",
+					"param": "",
+					"pk": true,
+					"nn": true,
+					"comment": "",
+					"defaultvalue": "",
+					"data": "",
+					"autoinc": true
+				},
+				{
+					"id": "6da88659-a3e3-4fcf-abbb-951ee85be688",
+					"name": "timestamp",
+					"datatype": "DATE",
+					"param": "",
+					"pk": false,
+					"nn": false,
+					"comment": "",
+					"defaultvalue": "",
+					"data": "",
+					"autoinc": false,
+					"collation": null,
+					"charset": null,
+					"binary": false,
+					"zerofill": false,
+					"unsigned": false,
+					"enum": "",
+					"after": ""
+				},
+				{
+					"id": "506a8ba1-7ed9-4b7e-9000-e033723d18ca",
+					"name": "price",
+					"datatype": "DECIMAL",
+					"param": "20,2",
+					"pk": false,
+					"nn": false,
+					"comment": "",
+					"defaultvalue": "",
+					"data": "",
+					"autoinc": false,
+					"collation": null,
+					"charset": null,
+					"binary": false,
+					"zerofill": false,
+					"unsigned": false,
+					"enum": "",
+					"after": ""
+				},
+				{
+					"id": "e46845fb-b4ad-4bb0-8e34-f9f7bd756681",
+					"name": "confidence",
+					"datatype": "DECIMAL",
+					"param": "5,2",
+					"pk": false,
+					"nn": false,
+					"comment": "",
+					"defaultvalue": "",
+					"data": "",
+					"autoinc": false,
+					"collation": null,
+					"charset": null,
+					"binary": false,
+					"zerofill": false,
+					"unsigned": false,
+					"enum": "",
+					"after": ""
+				},
+				{
+					"id": "9dbd9c1f-4c67-4025-a371-81c971487013",
+					"name": "puell",
+					"datatype": "DECIMAL",
+					"param": "5,2",
+					"pk": false,
+					"nn": false,
+					"comment": "",
+					"defaultvalue": "",
+					"data": "",
+					"autoinc": false,
+					"collation": null,
+					"charset": null,
+					"binary": false,
+					"zerofill": false,
+					"unsigned": false,
+					"enum": "",
+					"after": ""
+				},
+				{
+					"id": "85a2bd51-8a47-49be-8e1b-2f4fdc2e7c8b",
+					"name": "mvrv",
+					"datatype": "DECIMAL",
+					"param": "5,2",
+					"pk": false,
+					"nn": false,
+					"comment": "",
+					"defaultvalue": "",
+					"data": "",
+					"autoinc": false,
+					"collation": null,
+					"charset": null,
+					"binary": false,
+					"zerofill": false,
+					"unsigned": false,
+					"enum": "",
+					"after": ""
+				},
+				{
+					"id": "1e818a32-6af8-44c8-b078-b66b8c25e91e",
+					"name": "rhodl",
+					"datatype": "DECIMAL",
+					"param": "5,2",
+					"pk": false,
+					"nn": false,
+					"comment": "",
+					"defaultvalue": "",
+					"data": "",
+					"autoinc": false,
+					"collation": null,
+					"charset": null,
+					"binary": false,
+					"zerofill": false,
+					"unsigned": false,
+					"enum": "",
+					"after": ""
+				}
+			],
+			"relations": [],
+			"lines": [],
+			"keys": [
+				{
+					"id": "645b075c-6c1a-4211-8804-0b95a9cb0491",
+					"name": "Primary key",
+					"isPk": true,
+					"using": "na",
+					"cols": [
+						{
+							"id": "802c9e8e-ccae-48e0-b59f-050cdd5aa32e",
+							"colid": "76779cc9-98ef-4600-ac34-021671d4f9f1"
+						}
+					]
+				}
+			],
+			"indexes": [],
+			"embeddable": false,
+			"generate": true,
+			"generateCustomCode": true,
+			"tabletype": "na",
+			"collation": "",
+			"charset": "",
+			"rowformat": "na"
 		}
 	},
 	"relations": {},
@@ -3055,7 +3214,7 @@
 			"quotation": "if_needed"
 		},
 		"filePath": "/Users/johanneskrumm/SourceRoot/portfolio-service/project/server/main/db/ps-model.dmm",
-		"lastSaved": "Sat Dec 18 2021 23:02:02 GMT+0100 (Mitteleuropäische Normalzeit)",
+		"lastSaved": "Wed Dec 22 2021 12:07:47 GMT+0100 (Mitteleuropäische Normalzeit)",
 		"cardinalityIsDisplayed": false,
 		"writeFileParam": false
 	},
@@ -3149,6 +3308,17 @@
 					"background": "#03a9f4",
 					"resized": false,
 					"autoExpand": true
+				},
+				"b8706463-0822-4cf0-b6ef-fb5cce7d342c": {
+					"referencedItemId": "b8706463-0822-4cf0-b6ef-fb5cce7d342c",
+					"x": 99,
+					"y": 1024,
+					"gHeight": 160,
+					"gWidth": 305,
+					"color": "#ffffff",
+					"background": "#03a9f4",
+					"resized": true,
+					"autoExpand": true
 				}
 			},
 			"scroll": {
@@ -3164,6 +3334,7 @@
 		"95963d65-e5b2-49e2-b470-a5c23dbb8302",
 		"325b761b-831c-49fc-b9d9-deee43c39d48",
 		"6d2e395c-8097-4116-a899-70291dcff2c6",
-		"3c48e34e-0a7b-4165-b786-8d3ccebb93c4"
+		"3c48e34e-0a7b-4165-b786-8d3ccebb93c4",
+		"b8706463-0822-4cf0-b6ef-fb5cce7d342c"
 	]
 }

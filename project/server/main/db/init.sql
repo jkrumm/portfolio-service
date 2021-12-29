@@ -231,7 +231,7 @@ CREATE TABLE worker
     PRIMARY KEY (id)
 );
 
-drop table if exists pnl;
+# drop table if exists pnl;
 
 CREATE TABLE pnl
 (
@@ -255,3 +255,18 @@ CREATE TABLE pnl
 );
 
 CREATE UNIQUE INDEX pnl_ix_id ON pnl (id);
+
+drop table if exists cbbi;
+
+CREATE TABLE cbbi
+(
+    id          MEDIUMINT NOT NULL AUTO_INCREMENT,
+    `timestamp` DATE,
+    price       DECIMAL(20, 2),
+    confidence  DECIMAL(5, 2),
+    puell       DECIMAL(5, 2),
+    mvrv        DECIMAL(5, 2),
+    rhodl       DECIMAL(5, 2),
+    PRIMARY KEY (id)
+);
+CREATE UNIQUE INDEX cbbi_ix_id ON cbbi (id);
