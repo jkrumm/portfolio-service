@@ -270,3 +270,17 @@ CREATE TABLE cbbi
     PRIMARY KEY (id)
 );
 CREATE UNIQUE INDEX cbbi_ix_id ON cbbi (id);
+
+drop table if exists fng;
+
+CREATE TABLE fng
+(
+    id                   MEDIUMINT NOT NULL AUTO_INCREMENT,
+    `timestamp`          DATE,
+    `value`              SMALLINT,
+    value_classification VARCHAR(50),
+    PRIMARY KEY (id)
+);
+
+CREATE UNIQUE INDEX fng_ix_id ON fng (id);
+

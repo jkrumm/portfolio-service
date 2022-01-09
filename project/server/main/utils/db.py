@@ -88,6 +88,8 @@ def db_insert_many(table, records):
         cur.execute("TRUNCATE TABLE marketcap")
     if table == "cbbi":
         cur.execute("TRUNCATE TABLE cbbi")
+    if table == "fng":
+        cur.execute("TRUNCATE TABLE fng")
     sql_string = "INSERT INTO %s (%s) VALUES %s" % (
         table,
         ', '.join([list(x.keys()) for x in records][0]),

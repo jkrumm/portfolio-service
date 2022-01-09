@@ -3167,6 +3167,108 @@
 			"collation": "",
 			"charset": "",
 			"rowformat": "na"
+		},
+		"75932fd8-5781-4fed-a1a5-481330397018": {
+			"id": "75932fd8-5781-4fed-a1a5-481330397018",
+			"visible": true,
+			"name": "fng",
+			"desc": "",
+			"estimatedSize": "",
+			"cols": [
+				{
+					"id": "76779cc9-98ef-4600-ac34-021671d4f9f1",
+					"name": "id",
+					"datatype": "MEDIUMINT",
+					"param": "",
+					"pk": true,
+					"nn": true,
+					"comment": "",
+					"defaultvalue": "",
+					"data": "",
+					"autoinc": true
+				},
+				{
+					"id": "6da88659-a3e3-4fcf-abbb-951ee85be688",
+					"name": "timestamp",
+					"datatype": "DATE",
+					"param": "",
+					"pk": false,
+					"nn": false,
+					"comment": "",
+					"defaultvalue": "",
+					"data": "",
+					"autoinc": false,
+					"collation": null,
+					"charset": null,
+					"binary": false,
+					"zerofill": false,
+					"unsigned": false,
+					"enum": "",
+					"after": ""
+				},
+				{
+					"id": "506a8ba1-7ed9-4b7e-9000-e033723d18ca",
+					"name": "value",
+					"datatype": "SMALLINT",
+					"param": "",
+					"pk": false,
+					"nn": false,
+					"comment": "",
+					"defaultvalue": "",
+					"data": "",
+					"autoinc": false,
+					"collation": null,
+					"charset": null,
+					"binary": false,
+					"zerofill": false,
+					"unsigned": false,
+					"enum": "",
+					"after": ""
+				},
+				{
+					"id": "e46845fb-b4ad-4bb0-8e34-f9f7bd756681",
+					"name": "value_classification",
+					"datatype": "VARCHAR",
+					"param": "50",
+					"pk": false,
+					"nn": false,
+					"comment": "",
+					"defaultvalue": "",
+					"data": "",
+					"autoinc": false,
+					"collation": null,
+					"charset": null,
+					"binary": false,
+					"zerofill": false,
+					"unsigned": false,
+					"enum": "",
+					"after": ""
+				}
+			],
+			"relations": [],
+			"lines": [],
+			"keys": [
+				{
+					"id": "577c4a85-8017-4821-98e3-0dbdb589aba8",
+					"name": "Primary key",
+					"isPk": true,
+					"using": "na",
+					"cols": [
+						{
+							"id": "802c9e8e-ccae-48e0-b59f-050cdd5aa32e",
+							"colid": "76779cc9-98ef-4600-ac34-021671d4f9f1"
+						}
+					]
+				}
+			],
+			"indexes": [],
+			"embeddable": false,
+			"generate": true,
+			"generateCustomCode": true,
+			"tabletype": "na",
+			"collation": "",
+			"charset": "",
+			"rowformat": "na"
 		}
 	},
 	"relations": {},
@@ -3214,7 +3316,7 @@
 			"quotation": "if_needed"
 		},
 		"filePath": "/Users/johanneskrumm/SourceRoot/portfolio-service/project/server/main/db/ps-model.dmm",
-		"lastSaved": "Wed Dec 22 2021 12:07:47 GMT+0100 (Mitteleuropäische Normalzeit)",
+		"lastSaved": "Sun Jan 09 2022 20:41:17 GMT+0100 (Mitteleuropäische Normalzeit)",
 		"cardinalityIsDisplayed": false,
 		"writeFileParam": false
 	},
@@ -3319,6 +3421,17 @@
 					"background": "#03a9f4",
 					"resized": true,
 					"autoExpand": true
+				},
+				"75932fd8-5781-4fed-a1a5-481330397018": {
+					"referencedItemId": "75932fd8-5781-4fed-a1a5-481330397018",
+					"x": 99,
+					"y": 1208,
+					"gHeight": 106,
+					"gWidth": 303,
+					"color": "#ffffff",
+					"background": "#03a9f4",
+					"resized": true,
+					"autoExpand": true
 				}
 			},
 			"scroll": {
@@ -3335,6 +3448,7 @@
 		"325b761b-831c-49fc-b9d9-deee43c39d48",
 		"6d2e395c-8097-4116-a899-70291dcff2c6",
 		"3c48e34e-0a7b-4165-b786-8d3ccebb93c4",
-		"b8706463-0822-4cf0-b6ef-fb5cce7d342c"
+		"b8706463-0822-4cf0-b6ef-fb5cce7d342c",
+		"75932fd8-5781-4fed-a1a5-481330397018"
 	]
 }

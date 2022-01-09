@@ -77,7 +77,7 @@
         "text": {},
         "textMode": "value"
       },
-      "pluginVersion": "8.4.0-45809pre",
+      "pluginVersion": "8.4.0-46160pre",
       "targets": [
         {
           "datasource": {
@@ -166,7 +166,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.0-45809pre",
+      "pluginVersion": "8.4.0-46160pre",
       "targets": [
         {
           "datasource": {
@@ -206,6 +206,194 @@
     },
     {
       "datasource": {
+        "type": "datasource",
+        "uid": "grafana"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "text",
+            "mode": "fixed"
+          },
+          "mappings": [],
+          "max": 1000,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "#EAB839",
+                "value": 600
+              },
+              {
+                "color": "red",
+                "value": 900
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 4,
+        "x": 8,
+        "y": 0
+      },
+      "id": 47,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.4.0-46160pre",
+      "targets": [
+        {
+          "datasource": {
+            "type": "mysql",
+            "uid": "FYR7BDTnk"
+          },
+          "format": "table",
+          "group": [],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT COUNT(id) as metric FROM portfolio WHERE timestamp < (UTC_TIMESTAMP - INTERVAL 1 DAY);",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "id"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "table": "job",
+          "timeColumn": "timestamp",
+          "timeColumnType": "timestamp",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "title": "Portfolio Entries - 1D",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "datasource",
+        "uid": "grafana"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "text",
+            "mode": "fixed"
+          },
+          "mappings": [],
+          "max": 1000,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "#EAB839",
+                "value": 600
+              },
+              {
+                "color": "red",
+                "value": 900
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 4,
+        "x": 12,
+        "y": 0
+      },
+      "id": 48,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.4.0-46160pre",
+      "targets": [
+        {
+          "datasource": {
+            "type": "mysql",
+            "uid": "FYR7BDTnk"
+          },
+          "format": "table",
+          "group": [],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT COUNT(id) as metric FROM portfolio WHERE timestamp < (UTC_TIMESTAMP - INTERVAL 1 WEEK);",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "id"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "table": "job",
+          "timeColumn": "timestamp",
+          "timeColumnType": "timestamp",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "title": "Portfolio Entries - 1W",
+      "type": "stat"
+    },
+    {
+      "datasource": {
         "type": "grafana-sentry-datasource",
         "uid": "jHjrqvT7z"
       },
@@ -240,7 +428,7 @@
       "gridPos": {
         "h": 3,
         "w": 4,
-        "x": 8,
+        "x": 16,
         "y": 0
       },
       "id": 30,
@@ -258,7 +446,7 @@
         },
         "textMode": "value"
       },
-      "pluginVersion": "8.4.0-45809pre",
+      "pluginVersion": "8.4.0-46160pre",
       "targets": [
         {
           "datasource": {
@@ -318,7 +506,7 @@
       "gridPos": {
         "h": 3,
         "w": 4,
-        "x": 12,
+        "x": 20,
         "y": 0
       },
       "id": 31,
@@ -336,7 +524,7 @@
         },
         "textMode": "value"
       },
-      "pluginVersion": "8.4.0-45809pre",
+      "pluginVersion": "8.4.0-46160pre",
       "targets": [
         {
           "datasource": {
@@ -503,7 +691,7 @@
         "text": {},
         "textMode": "value"
       },
-      "pluginVersion": "8.4.0-45809pre",
+      "pluginVersion": "8.4.0-46160pre",
       "targets": [
         {
           "datasource": {
@@ -592,7 +780,7 @@
         "showThresholdLabels": false,
         "showThresholdMarkers": true
       },
-      "pluginVersion": "8.4.0-45809pre",
+      "pluginVersion": "8.4.0-46160pre",
       "targets": [
         {
           "datasource": {
@@ -678,7 +866,7 @@
         "showThresholdLabels": false,
         "showThresholdMarkers": true
       },
-      "pluginVersion": "8.4.0-45809pre",
+      "pluginVersion": "8.4.0-46160pre",
       "targets": [
         {
           "datasource": {
@@ -757,7 +945,7 @@
         },
         "showHeader": true
       },
-      "pluginVersion": "8.4.0-45809pre",
+      "pluginVersion": "8.4.0-46160pre",
       "targets": [
         {
           "datasource": {
@@ -842,7 +1030,7 @@
         "text": {},
         "textMode": "value"
       },
-      "pluginVersion": "8.4.0-45809pre",
+      "pluginVersion": "8.4.0-46160pre",
       "targets": [
         {
           "datasource": {
@@ -927,7 +1115,7 @@
         "text": {},
         "textMode": "value"
       },
-      "pluginVersion": "8.4.0-45809pre",
+      "pluginVersion": "8.4.0-46160pre",
       "targets": [
         {
           "datasource": {
@@ -1006,7 +1194,7 @@
         },
         "showHeader": false
       },
-      "pluginVersion": "8.4.0-45809pre",
+      "pluginVersion": "8.4.0-46160pre",
       "targets": [
         {
           "datasource": {
@@ -1326,7 +1514,7 @@
         "text": {},
         "textMode": "value"
       },
-      "pluginVersion": "8.4.0-45809pre",
+      "pluginVersion": "8.4.0-46160pre",
       "targets": [
         {
           "datasource": {
@@ -1414,7 +1602,7 @@
         "text": {},
         "textMode": "value"
       },
-      "pluginVersion": "8.4.0-45809pre",
+      "pluginVersion": "8.4.0-46160pre",
       "targets": [
         {
           "datasource": {
@@ -1502,7 +1690,7 @@
         "text": {},
         "textMode": "value"
       },
-      "pluginVersion": "8.4.0-45809pre",
+      "pluginVersion": "8.4.0-46160pre",
       "targets": [
         {
           "datasource": {
@@ -1590,7 +1778,7 @@
         "text": {},
         "textMode": "value"
       },
-      "pluginVersion": "8.4.0-45809pre",
+      "pluginVersion": "8.4.0-46160pre",
       "targets": [
         {
           "datasource": {
@@ -1679,7 +1867,7 @@
         "text": {},
         "textMode": "value"
       },
-      "pluginVersion": "8.4.0-45809pre",
+      "pluginVersion": "8.4.0-46160pre",
       "targets": [
         {
           "datasource": {
@@ -1767,7 +1955,7 @@
         "text": {},
         "textMode": "value"
       },
-      "pluginVersion": "8.4.0-45809pre",
+      "pluginVersion": "8.4.0-46160pre",
       "targets": [
         {
           "datasource": {
@@ -1855,7 +2043,7 @@
         "text": {},
         "textMode": "value"
       },
-      "pluginVersion": "8.4.0-45809pre",
+      "pluginVersion": "8.4.0-46160pre",
       "targets": [
         {
           "datasource": {
@@ -1943,7 +2131,7 @@
         "text": {},
         "textMode": "value"
       },
-      "pluginVersion": "8.4.0-45809pre",
+      "pluginVersion": "8.4.0-46160pre",
       "targets": [
         {
           "datasource": {
@@ -2022,7 +2210,7 @@
         },
         "showHeader": true
       },
-      "pluginVersion": "8.4.0-45809pre",
+      "pluginVersion": "8.4.0-46160pre",
       "targets": [
         {
           "datasource": {
@@ -2244,7 +2432,7 @@
         },
         "showHeader": false
       },
-      "pluginVersion": "8.4.0-45809pre",
+      "pluginVersion": "8.4.0-46160pre",
       "targets": [
         {
           "datasource": {
@@ -2282,7 +2470,7 @@
       "type": "table"
     }
   ],
-  "refresh": "5s",
+  "refresh": "1m",
   "schemaVersion": 34,
   "style": "dark",
   "tags": [],
@@ -2290,13 +2478,13 @@
     "list": []
   },
   "time": {
-    "from": "now-3h",
+    "from": "now-7d",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "",
   "title": "Monitoring",
   "uid": "Ib-qLvTnk",
-  "version": 52,
+  "version": 58,
   "weekStart": ""
 }
