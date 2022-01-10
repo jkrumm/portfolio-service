@@ -5,6 +5,9 @@ datasources:
     type: mysql
     url: db:3306
     database: db
+    basicAuth: true
+    isDefault: true
+    editable: true
     user: admin
     secureJsonData:
       password: ${DB_PASSWORD}
