@@ -342,12 +342,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
-              },
-              {
                 "color": "#E24D42",
-                "value": -7
+                "value": null
               },
               {
                 "color": "#EF843C",
@@ -442,7 +438,7 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "continuous-RdYlGr"
+            "mode": "thresholds"
           },
           "decimals": 2,
           "mappings": [],
@@ -450,12 +446,32 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "#E24D42",
                 "value": null
               },
               {
-                "color": "red",
-                "value": 80
+                "color": "#EF843C",
+                "value": -7
+              },
+              {
+                "color": "#EAB839",
+                "value": -5
+              },
+              {
+                "color": "light-green",
+                "value": 0
+              },
+              {
+                "color": "green",
+                "value": 5
+              },
+              {
+                "color": "semi-dark-green",
+                "value": 7
+              },
+              {
+                "color": "dark-green",
+                "value": 10
               }
             ]
           },
@@ -692,7 +708,7 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "continuous-RdYlGr"
+            "mode": "thresholds"
           },
           "decimals": 2,
           "mappings": [],
@@ -700,12 +716,32 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "#E24D42",
                 "value": null
               },
               {
-                "color": "red",
-                "value": 80
+                "color": "#EF843C",
+                "value": -5
+              },
+              {
+                "color": "#EAB839",
+                "value": -3
+              },
+              {
+                "color": "light-green",
+                "value": 0
+              },
+              {
+                "color": "green",
+                "value": 3
+              },
+              {
+                "color": "semi-dark-green",
+                "value": 5
+              },
+              {
+                "color": "dark-green",
+                "value": 7
               }
             ]
           },
@@ -776,7 +812,7 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "continuous-RdYlGr"
+            "mode": "thresholds"
           },
           "decimals": 2,
           "mappings": [],
@@ -784,12 +820,32 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "#E24D42",
                 "value": null
               },
               {
-                "color": "red",
-                "value": 80
+                "color": "#EF843C",
+                "value": -7
+              },
+              {
+                "color": "#EAB839",
+                "value": -5
+              },
+              {
+                "color": "light-green",
+                "value": 0
+              },
+              {
+                "color": "green",
+                "value": 5
+              },
+              {
+                "color": "semi-dark-green",
+                "value": 7
+              },
+              {
+                "color": "dark-green",
+                "value": 10
               }
             ]
           },
@@ -1026,7 +1082,7 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "continuous-RdYlGr"
+            "mode": "thresholds"
           },
           "decimals": 2,
           "mappings": [],
@@ -1034,12 +1090,32 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "#E24D42",
                 "value": null
               },
               {
-                "color": "red",
-                "value": 80
+                "color": "#EF843C",
+                "value": -5
+              },
+              {
+                "color": "#EAB839",
+                "value": -3
+              },
+              {
+                "color": "light-green",
+                "value": 0
+              },
+              {
+                "color": "green",
+                "value": 3
+              },
+              {
+                "color": "semi-dark-green",
+                "value": 5
+              },
+              {
+                "color": "dark-green",
+                "value": 7
               }
             ]
           },
@@ -1110,7 +1186,7 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "continuous-RdYlGr"
+            "mode": "thresholds"
           },
           "decimals": 2,
           "mappings": [],
@@ -1118,12 +1194,32 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "#E24D42",
                 "value": null
               },
               {
-                "color": "red",
-                "value": 80
+                "color": "#EF843C",
+                "value": -7
+              },
+              {
+                "color": "#EAB839",
+                "value": -5
+              },
+              {
+                "color": "light-green",
+                "value": 0
+              },
+              {
+                "color": "green",
+                "value": 5
+              },
+              {
+                "color": "semi-dark-green",
+                "value": 7
+              },
+              {
+                "color": "dark-green",
+                "value": 10
               }
             ]
           },
@@ -1360,7 +1456,7 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "continuous-RdYlGr"
+            "mode": "thresholds"
           },
           "decimals": 2,
           "mappings": [],
@@ -1368,12 +1464,32 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "#E24D42",
                 "value": null
               },
               {
-                "color": "red",
-                "value": 80
+                "color": "#EF843C",
+                "value": -5
+              },
+              {
+                "color": "#EAB839",
+                "value": -3
+              },
+              {
+                "color": "light-green",
+                "value": 0
+              },
+              {
+                "color": "green",
+                "value": 3
+              },
+              {
+                "color": "semi-dark-green",
+                "value": 5
+              },
+              {
+                "color": "dark-green",
+                "value": 7
               }
             ]
           },
@@ -1444,7 +1560,7 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "continuous-RdYlGr"
+            "mode": "thresholds"
           },
           "decimals": 2,
           "mappings": [],
@@ -1452,12 +1568,32 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "#E24D42",
                 "value": null
               },
               {
-                "color": "red",
-                "value": 80
+                "color": "#EF843C",
+                "value": -7
+              },
+              {
+                "color": "#EAB839",
+                "value": -5
+              },
+              {
+                "color": "light-green",
+                "value": 0
+              },
+              {
+                "color": "green",
+                "value": 5
+              },
+              {
+                "color": "semi-dark-green",
+                "value": 7
+              },
+              {
+                "color": "dark-green",
+                "value": 10
               }
             ]
           },
@@ -1503,7 +1639,7 @@
             [
               {
                 "params": [
-                  "bitmex_total_1w"
+                  "atari_7d"
                 ],
                 "type": "column"
               }
@@ -1521,7 +1657,7 @@
           ]
         }
       ],
-      "title": "1W - BN",
+      "title": "1W - A",
       "type": "stat"
     },
     {
@@ -2946,11 +3082,30 @@
       "type": "table"
     },
     {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 51
+      },
+      "id": 57,
+      "panels": [],
+      "title": "Marketcap",
+      "type": "row"
+    },
+    {
       "fieldConfig": {
         "defaults": {
+          "color": {
+            "fixedColor": "text",
+            "mode": "fixed"
+          },
           "custom": {
             "align": "auto",
-            "displayMode": "auto"
+            "displayMode": "json-view",
+            "filterable": true,
+            "minWidth": 100
           },
           "mappings": [],
           "thresholds": {
@@ -2959,10 +3114,6 @@
               {
                 "color": "green",
                 "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
               }
             ]
           }
@@ -2970,10 +3121,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 11,
-        "w": 13,
+        "h": 21,
+        "w": 24,
         "x": 0,
-        "y": 51
+        "y": 52
       },
       "id": 55,
       "options": {
@@ -2984,7 +3135,8 @@
           ],
           "show": false
         },
-        "showHeader": true
+        "showHeader": true,
+        "sortBy": []
       },
       "pluginVersion": "8.4.0-46160pre",
       "targets": [
@@ -2997,7 +3149,7 @@
           "group": [],
           "metricColumn": "symbol",
           "rawQuery": true,
-          "rawSql": "SELECT symbol as Symbol, side as Side, amount as Amount, price as Price, market as Market, market_percentage as MP FROM binance_orders ORDER BY market_percentage;",
+          "rawSql": "SELECT id as \"Rank\", rank_delta as Delta, symbol as Symbol, name as Name, price as Price, marketcap as Marketcap, marketcap_dominance as Dominace, 1d_price_change_pct as 1D, 7d_price_change_pct as 1W, 30d_price_change_pct as 1M, 7d_volume_change_pct as \"1W vol\", 30d_volume_change_pct as \"1M vol\" FROM marketcap ORDER BY id;",
           "refId": "A",
           "select": [
             [
@@ -3021,6 +3173,7 @@
           ]
         }
       ],
+      "title": "Marketcap",
       "type": "table"
     }
   ],
@@ -3039,6 +3192,6 @@
   "timezone": "",
   "title": "Portfolio",
   "uid": "JRkcfvT7k",
-  "version": 73,
+  "version": 82,
   "weekStart": "monday"
 }
