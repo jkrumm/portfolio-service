@@ -13,6 +13,7 @@ from project.server.main.tasks.daily import daily
 from project.server.main.tasks.db import trigger_error_queue
 from project.server.main.tasks.marketcap import marketcap
 from project.server.main.tasks.portfolio import portfolio
+from project.server.main.utils.notifications import pushover
 from project.server.main.utils.utils import get_worker_stats, os_get
 
 main_blueprint = Blueprint("main", __name__, )
@@ -160,3 +161,12 @@ def test_db_insert():
         return 'Unauthorized', 401
     test_db = db_insert("test", {"val": "99"})
     return jsonify(test_db), 200
+
+
+@main_blueprint.route("/pushover", methods=["GET"])
+def send_pushover():
+    auth = request.headers.get('Authorization')
+    if auth is None or str(auth) != str(os_get('API_SECRET_KEY')):
+        return 'Unauthorized', 401
+    pushover('Title', 'message', '1')
+    return 'success', 200

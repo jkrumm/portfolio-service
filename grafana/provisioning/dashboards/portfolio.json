@@ -33,6 +33,440 @@
         "x": 0,
         "y": 0
       },
+      "id": 60,
+      "panels": [],
+      "title": "Market",
+      "type": "row"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "text",
+            "mode": "continuous-RdYlGr"
+          },
+          "decimals": 1,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "currencyUSD"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 0,
+        "y": 1
+      },
+      "id": 66,
+      "options": {
+        "colorMode": "none",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "value"
+      },
+      "pluginVersion": "8.4.0-46160pre",
+      "targets": [
+        {
+          "datasource": {
+            "type": "mysql",
+            "uid": "NG2hbM17z"
+          },
+          "format": "table",
+          "group": [],
+          "metricColumn": "none",
+          "rawQuery": false,
+          "rawSql": "SELECT\n  timestamp AS \"time\",\n  total AS \"btc_usd\"\nFROM portfolio\nWHERE\n  $__timeFilter(timestamp)\nORDER BY timestamp",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "total"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "btc_usd"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "portfolio",
+          "timeColumn": "timestamp",
+          "timeColumnType": "datetime",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "title": "Total",
+      "type": "stat"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "text",
+            "mode": "continuous-RdYlGr"
+          },
+          "decimals": 1,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "currencyUSD"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 4,
+        "y": 1
+      },
+      "id": 62,
+      "options": {
+        "colorMode": "none",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "value"
+      },
+      "pluginVersion": "8.4.0-46160pre",
+      "targets": [
+        {
+          "datasource": {
+            "type": "mysql",
+            "uid": "NG2hbM17z"
+          },
+          "format": "table",
+          "group": [],
+          "metricColumn": "none",
+          "rawQuery": false,
+          "rawSql": "SELECT\n  timestamp AS \"time\",\n  btc_usd AS \"btc_usd\"\nFROM portfolio\nWHERE\n  $__timeFilter(timestamp)\nORDER BY timestamp",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "btc_usd"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "btc_usd"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "portfolio",
+          "timeColumn": "timestamp",
+          "timeColumnType": "datetime",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "title": "BTC",
+      "type": "stat"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "text",
+            "mode": "continuous-RdYlGr"
+          },
+          "decimals": 1,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "currencyUSD"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 8,
+        "y": 1
+      },
+      "id": 65,
+      "options": {
+        "colorMode": "none",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "value"
+      },
+      "pluginVersion": "8.4.0-46160pre",
+      "targets": [
+        {
+          "datasource": {
+            "type": "mysql",
+            "uid": "NG2hbM17z"
+          },
+          "format": "table",
+          "group": [],
+          "metricColumn": "none",
+          "rawQuery": false,
+          "rawSql": "SELECT\n  timestamp AS \"time\",\n  eth_usd AS \"btc_usd\"\nFROM portfolio\nWHERE\n  $__timeFilter(timestamp)\nORDER BY timestamp",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "eth_usd"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "btc_usd"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "portfolio",
+          "timeColumn": "timestamp",
+          "timeColumnType": "datetime",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "title": "ETH",
+      "type": "stat"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-GrYlRd"
+          },
+          "decimals": 0,
+          "mappings": [],
+          "max": 0,
+          "min": 100,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 2,
+        "x": 12,
+        "y": 1
+      },
+      "id": 58,
+      "options": {
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^metric$/",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": false
+      },
+      "pluginVersion": "8.4.0-46160pre",
+      "targets": [
+        {
+          "datasource": {
+            "type": "mysql",
+            "uid": "NG2hbM17z"
+          },
+          "format": "table",
+          "group": [],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT value as metric FROM fng ORDER BY timestamp DESC LIMIT 1;",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "confidence"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "table": "cbbi",
+          "timeColumn": "timestamp",
+          "timeColumnType": "date",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "title": "Fear & Greed",
+      "type": "gauge"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-RdYlGr"
+          },
+          "decimals": 0,
+          "mappings": [],
+          "max": 0,
+          "min": 100,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 2,
+        "x": 14,
+        "y": 1
+      },
+      "id": 41,
+      "options": {
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^metric$/",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": false
+      },
+      "pluginVersion": "8.4.0-46160pre",
+      "targets": [
+        {
+          "datasource": {
+            "type": "mysql",
+            "uid": "NG2hbM17z"
+          },
+          "format": "table",
+          "group": [],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT confidence as metric FROM cbbi ORDER BY timestamp DESC LIMIT 1;",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "confidence"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "table": "cbbi",
+          "timeColumn": "timestamp",
+          "timeColumnType": "date",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "title": "CBBI",
+      "type": "gauge"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 6
+      },
       "id": 26,
       "panels": [],
       "title": "Portfolio",
@@ -92,7 +526,7 @@
         "h": 12,
         "w": 16,
         "x": 0,
-        "y": 1
+        "y": 7
       },
       "id": 5,
       "options": {
@@ -110,7 +544,7 @@
         {
           "datasource": {
             "type": "mysql",
-            "uid": "FYR7BDTnk"
+            "uid": "NG2hbM17z"
           },
           "format": "time_series",
           "group": [
@@ -191,7 +625,7 @@
         "h": 3,
         "w": 2,
         "x": 16,
-        "y": 1
+        "y": 7
       },
       "id": 7,
       "options": {
@@ -213,7 +647,7 @@
         {
           "datasource": {
             "type": "mysql",
-            "uid": "FYR7BDTnk"
+            "uid": "NG2hbM17z"
           },
           "format": "time_series",
           "group": [],
@@ -275,7 +709,7 @@
         "h": 3,
         "w": 2,
         "x": 18,
-        "y": 1
+        "y": 7
       },
       "id": 31,
       "options": {
@@ -297,7 +731,7 @@
         {
           "datasource": {
             "type": "mysql",
-            "uid": "FYR7BDTnk"
+            "uid": "NG2hbM17z"
           },
           "format": "table",
           "group": [],
@@ -379,7 +813,7 @@
         "h": 3,
         "w": 2,
         "x": 20,
-        "y": 1
+        "y": 7
       },
       "id": 34,
       "options": {
@@ -401,7 +835,7 @@
         {
           "datasource": {
             "type": "mysql",
-            "uid": "FYR7BDTnk"
+            "uid": "NG2hbM17z"
           },
           "format": "time_series",
           "group": [],
@@ -483,7 +917,7 @@
         "h": 3,
         "w": 2,
         "x": 22,
-        "y": 1
+        "y": 7
       },
       "id": 30,
       "options": {
@@ -505,7 +939,7 @@
         {
           "datasource": {
             "type": "mysql",
-            "uid": "FYR7BDTnk"
+            "uid": "NG2hbM17z"
           },
           "format": "table",
           "group": [],
@@ -565,7 +999,7 @@
         "h": 3,
         "w": 2,
         "x": 16,
-        "y": 4
+        "y": 10
       },
       "id": 32,
       "options": {
@@ -587,7 +1021,7 @@
         {
           "datasource": {
             "type": "mysql",
-            "uid": "FYR7BDTnk"
+            "uid": "NG2hbM17z"
           },
           "format": "time_series",
           "group": [],
@@ -649,7 +1083,7 @@
         "h": 3,
         "w": 2,
         "x": 18,
-        "y": 4
+        "y": 10
       },
       "id": 33,
       "options": {
@@ -671,7 +1105,7 @@
         {
           "datasource": {
             "type": "mysql",
-            "uid": "FYR7BDTnk"
+            "uid": "NG2hbM17z"
           },
           "format": "table",
           "group": [],
@@ -753,7 +1187,7 @@
         "h": 3,
         "w": 2,
         "x": 20,
-        "y": 4
+        "y": 10
       },
       "id": 16,
       "options": {
@@ -775,7 +1209,7 @@
         {
           "datasource": {
             "type": "mysql",
-            "uid": "FYR7BDTnk"
+            "uid": "NG2hbM17z"
           },
           "format": "time_series",
           "group": [],
@@ -857,7 +1291,7 @@
         "h": 3,
         "w": 2,
         "x": 22,
-        "y": 4
+        "y": 10
       },
       "id": 35,
       "options": {
@@ -879,7 +1313,7 @@
         {
           "datasource": {
             "type": "mysql",
-            "uid": "FYR7BDTnk"
+            "uid": "NG2hbM17z"
           },
           "format": "time_series",
           "group": [],
@@ -939,7 +1373,7 @@
         "h": 3,
         "w": 2,
         "x": 16,
-        "y": 7
+        "y": 13
       },
       "id": 42,
       "options": {
@@ -961,7 +1395,7 @@
         {
           "datasource": {
             "type": "mysql",
-            "uid": "FYR7BDTnk"
+            "uid": "NG2hbM17z"
           },
           "format": "time_series",
           "group": [],
@@ -1023,7 +1457,7 @@
         "h": 3,
         "w": 2,
         "x": 18,
-        "y": 7
+        "y": 13
       },
       "id": 43,
       "options": {
@@ -1045,7 +1479,7 @@
         {
           "datasource": {
             "type": "mysql",
-            "uid": "FYR7BDTnk"
+            "uid": "NG2hbM17z"
           },
           "format": "table",
           "group": [],
@@ -1127,7 +1561,7 @@
         "h": 3,
         "w": 2,
         "x": 20,
-        "y": 7
+        "y": 13
       },
       "id": 44,
       "options": {
@@ -1149,7 +1583,7 @@
         {
           "datasource": {
             "type": "mysql",
-            "uid": "FYR7BDTnk"
+            "uid": "NG2hbM17z"
           },
           "format": "time_series",
           "group": [],
@@ -1231,7 +1665,7 @@
         "h": 3,
         "w": 2,
         "x": 22,
-        "y": 7
+        "y": 13
       },
       "id": 45,
       "options": {
@@ -1253,7 +1687,7 @@
         {
           "datasource": {
             "type": "mysql",
-            "uid": "FYR7BDTnk"
+            "uid": "NG2hbM17z"
           },
           "format": "time_series",
           "group": [],
@@ -1313,7 +1747,7 @@
         "h": 3,
         "w": 2,
         "x": 16,
-        "y": 10
+        "y": 16
       },
       "id": 46,
       "options": {
@@ -1335,7 +1769,7 @@
         {
           "datasource": {
             "type": "mysql",
-            "uid": "FYR7BDTnk"
+            "uid": "NG2hbM17z"
           },
           "format": "time_series",
           "group": [],
@@ -1397,7 +1831,7 @@
         "h": 3,
         "w": 2,
         "x": 18,
-        "y": 10
+        "y": 16
       },
       "id": 47,
       "options": {
@@ -1419,7 +1853,7 @@
         {
           "datasource": {
             "type": "mysql",
-            "uid": "FYR7BDTnk"
+            "uid": "NG2hbM17z"
           },
           "format": "table",
           "group": [],
@@ -1501,7 +1935,7 @@
         "h": 3,
         "w": 2,
         "x": 20,
-        "y": 10
+        "y": 16
       },
       "id": 48,
       "options": {
@@ -1523,7 +1957,7 @@
         {
           "datasource": {
             "type": "mysql",
-            "uid": "FYR7BDTnk"
+            "uid": "NG2hbM17z"
           },
           "format": "time_series",
           "group": [],
@@ -1605,7 +2039,7 @@
         "h": 3,
         "w": 2,
         "x": 22,
-        "y": 10
+        "y": 16
       },
       "id": 49,
       "options": {
@@ -1627,7 +2061,7 @@
         {
           "datasource": {
             "type": "mysql",
-            "uid": "FYR7BDTnk"
+            "uid": "NG2hbM17z"
           },
           "format": "time_series",
           "group": [],
@@ -1681,7 +2115,7 @@
         "h": 6,
         "w": 16,
         "x": 0,
-        "y": 13
+        "y": 19
       },
       "hiddenSeries": false,
       "id": 51,
@@ -1718,7 +2152,7 @@
         {
           "datasource": {
             "type": "mysql",
-            "uid": "FYR7BDTnk"
+            "uid": "NG2hbM17z"
           },
           "format": "time_series",
           "group": [
@@ -1859,7 +2293,7 @@
         "h": 6,
         "w": 8,
         "x": 16,
-        "y": 13
+        "y": 19
       },
       "hiddenSeries": false,
       "id": 52,
@@ -1896,7 +2330,7 @@
         {
           "datasource": {
             "type": "mysql",
-            "uid": "FYR7BDTnk"
+            "uid": "NG2hbM17z"
           },
           "format": "time_series",
           "group": [
@@ -2116,7 +2550,7 @@
         "h": 6,
         "w": 16,
         "x": 0,
-        "y": 19
+        "y": 25
       },
       "id": 28,
       "options": {
@@ -2134,7 +2568,7 @@
         {
           "datasource": {
             "type": "mysql",
-            "uid": "FYR7BDTnk"
+            "uid": "NG2hbM17z"
           },
           "format": "time_series",
           "group": [
@@ -2228,7 +2662,7 @@
         "h": 6,
         "w": 3,
         "x": 16,
-        "y": 19
+        "y": 25
       },
       "id": 20,
       "options": {
@@ -2257,7 +2691,7 @@
         {
           "datasource": {
             "type": "mysql",
-            "uid": "FYR7BDTnk"
+            "uid": "NG2hbM17z"
           },
           "format": "time_series",
           "group": [],
@@ -2311,7 +2745,7 @@
         "h": 6,
         "w": 3,
         "x": 19,
-        "y": 19
+        "y": 25
       },
       "id": 4,
       "options": {
@@ -2340,7 +2774,7 @@
         {
           "datasource": {
             "type": "mysql",
-            "uid": "FYR7BDTnk"
+            "uid": "NG2hbM17z"
           },
           "format": "time_series",
           "group": [],
@@ -2406,86 +2840,6 @@
       ],
       "title": "Alocation",
       "type": "piechart"
-    },
-    {
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "continuous-RdYlGr"
-          },
-          "decimals": 0,
-          "mappings": [],
-          "max": 0,
-          "min": 100,
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          },
-          "unit": "percent"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 6,
-        "w": 2,
-        "x": 22,
-        "y": 19
-      },
-      "id": 41,
-      "options": {
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "/^metric$/",
-          "values": false
-        },
-        "showThresholdLabels": false,
-        "showThresholdMarkers": false
-      },
-      "pluginVersion": "8.4.0-46160pre",
-      "targets": [
-        {
-          "datasource": {
-            "type": "mysql",
-            "uid": "FYR7BDTnk"
-          },
-          "format": "table",
-          "group": [],
-          "metricColumn": "none",
-          "rawQuery": true,
-          "rawSql": "SELECT confidence as metric FROM cbbi ORDER BY timestamp DESC LIMIT 1;",
-          "refId": "A",
-          "select": [
-            [
-              {
-                "params": [
-                  "confidence"
-                ],
-                "type": "column"
-              }
-            ]
-          ],
-          "table": "cbbi",
-          "timeColumn": "timestamp",
-          "timeColumnType": "date",
-          "where": [
-            {
-              "name": "$__timeFilter",
-              "params": [],
-              "type": "macro"
-            }
-          ]
-        }
-      ],
-      "title": "CBBI",
-      "type": "gauge"
     },
     {
       "fieldConfig": {
@@ -2594,7 +2948,7 @@
         "h": 6,
         "w": 16,
         "x": 0,
-        "y": 25
+        "y": 31
       },
       "id": 29,
       "options": {
@@ -2612,7 +2966,7 @@
         {
           "datasource": {
             "type": "mysql",
-            "uid": "FYR7BDTnk"
+            "uid": "NG2hbM17z"
           },
           "format": "time_series",
           "group": [
@@ -2740,7 +3094,7 @@
         "h": 6,
         "w": 8,
         "x": 16,
-        "y": 25
+        "y": 31
       },
       "id": 54,
       "options": {
@@ -2758,7 +3112,7 @@
         {
           "datasource": {
             "type": "mysql",
-            "uid": "FYR7BDTnk"
+            "uid": "NG2hbM17z"
           },
           "format": "time_series",
           "group": [
@@ -2817,7 +3171,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 31
+        "y": 37
       },
       "id": 24,
       "panels": [],
@@ -2869,7 +3223,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 32
+        "y": 38
       },
       "id": 22,
       "options": {
@@ -2892,7 +3246,7 @@
         {
           "datasource": {
             "type": "mysql",
-            "uid": "FYR7BDTnk"
+            "uid": "NG2hbM17z"
           },
           "format": "table",
           "group": [],
@@ -2953,7 +3307,7 @@
         "h": 11,
         "w": 13,
         "x": 0,
-        "y": 40
+        "y": 46
       },
       "id": 50,
       "options": {
@@ -2971,7 +3325,7 @@
         {
           "datasource": {
             "type": "mysql",
-            "uid": "FYR7BDTnk"
+            "uid": "NG2hbM17z"
           },
           "format": "table",
           "group": [],
@@ -3031,7 +3385,7 @@
         "h": 11,
         "w": 11,
         "x": 13,
-        "y": 40
+        "y": 46
       },
       "id": 53,
       "options": {
@@ -3049,7 +3403,7 @@
         {
           "datasource": {
             "type": "mysql",
-            "uid": "FYR7BDTnk"
+            "uid": "NG2hbM17z"
           },
           "format": "table",
           "group": [],
@@ -3087,7 +3441,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 51
+        "y": 57
       },
       "id": 57,
       "panels": [],
@@ -3124,7 +3478,7 @@
         "h": 21,
         "w": 24,
         "x": 0,
-        "y": 52
+        "y": 58
       },
       "id": 55,
       "options": {
@@ -3143,7 +3497,7 @@
         {
           "datasource": {
             "type": "mysql",
-            "uid": "FYR7BDTnk"
+            "uid": "NG2hbM17z"
           },
           "format": "table",
           "group": [],
@@ -3192,6 +3546,6 @@
   "timezone": "",
   "title": "Portfolio",
   "uid": "JRkcfvT7k",
-  "version": 82,
+  "version": 99,
   "weekStart": "monday"
 }

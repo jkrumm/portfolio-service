@@ -14,25 +14,6 @@ CREATE TABLE binance_orders
 );
 
 
-drop table if exists binance_balances;
-
-CREATE TABLE binance_balances
-(
-    id              SMALLINT       NOT NULL AUTO_INCREMENT,
-    `timestamp`     DATETIME       NOT NULL,
-    currency        VARCHAR(6)     NOT NULL,
-    amount          DECIMAL(25, 6) NOT NULL,
-    price           DECIMAL(20, 2) NOT NULL,
-    price_btc       DECIMAL(14, 6) NOT NULL,
-    balance         DECIMAL(20, 2) NOT NULL,
-    balance_btc     DECIMAL(14, 6) NOT NULL,
-    used            DECIMAL(25, 6) NOT NULL,
-    free            DECIMAL(25, 6) NOT NULL,
-    used_percentage DECIMAL(7, 2)  NOT NULL,
-    PRIMARY KEY (id)
-);
-
-
 # drop table if exists portfolio;
 
 CREATE TABLE portfolio
@@ -144,7 +125,7 @@ CREATE TABLE binance_balances
     currency        VARCHAR(6)     NOT NULL,
     amount          DECIMAL(25, 6) NOT NULL,
     price           DECIMAL(20, 2) NOT NULL,
-    price_btc       DECIMAL(14, 6) NOT NULL,
+    price_btc       DECIMAL(14, 6),
     balance         DECIMAL(20, 2) NOT NULL,
     balance_btc     DECIMAL(14, 6) NOT NULL,
     used            DECIMAL(25, 6) NOT NULL,
@@ -152,6 +133,7 @@ CREATE TABLE binance_balances
     used_percentage DECIMAL(7, 2)  NOT NULL,
     PRIMARY KEY (id)
 );
+
 
 # INSERT INTO portfolio (timestamp, btc_usd, eth_usd, current, current_btc, current_24h, current_1w, current_btc_24h,
 #                        current_btc_1w, current_percentage, total, total_btc, total_24h, total_1w, total_btc_24h,

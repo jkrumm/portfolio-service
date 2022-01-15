@@ -6,6 +6,7 @@ import mysql.connector as mysql
 # import the new JSON method from psycopg2
 from psycopg2.extras import Json
 
+from project.server.main.utils.notifications import pushover
 from project.server.main.utils.utils import os_get, get_worker_stats
 
 
@@ -167,6 +168,8 @@ def job_failure(*args):
         str(datetime.utcnow() - args[0].started_at),
         error
     )
+    pushover_msg = args[0].id + " | " + error
+    pushover('Job Failure', pushover_msg, '-1')
 
 
 def save_job_result(job, timestamp, success, duration, error):

@@ -25,9 +25,11 @@ def portfolio():
     bitmex = ccxt.bitmex({
         "apiKey": os_get("BITMEX_KEY"),
         "secret": os_get("BITMEX_SECRET"),
+        'options': {
+            'api-expires': 86400,  # 1 day for the sake of experiment
+        },
         'enableRateLimit': True,
     })
-    binance.load_markets()
     bitmex.load_markets()
 
     portfolio_24h = db_fetch("SELECT * FROM db.portfolio WHERE timestamp > '%s' ORDER BY timestamp ASC LIMIT 1;" % str(
