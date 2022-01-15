@@ -55,6 +55,8 @@ def db_insert(table, obj):
     cur = db.cursor()
     if table == "worker":
         cur.execute("TRUNCATE TABLE db.worker")
+    if table == "global":
+        cur.execute("TRUNCATE TABLE db.global")
     sql_string = "INSERT INTO %s (%s) VALUES %s" % (
         table,
         ', '.join(obj.keys()),

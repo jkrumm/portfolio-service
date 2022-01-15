@@ -266,3 +266,24 @@ CREATE TABLE fng
 
 CREATE UNIQUE INDEX fng_ix_id ON fng (id);
 
+drop table if exists `global`;
+
+CREATE TABLE `global`
+(
+    id                     BIGINT        NOT NULL AUTO_INCREMENT,
+    `timestamp`            DATETIME      NOT NULL,
+    btc_dominance          DECIMAL(4, 2) NOT NULL,
+    eth_dominance          DECIMAL(4, 2) NOT NULL,
+    total_market_cap       BIGINT        NOT NULL,
+    total_volume_24h       BIGINT        NOT NULL,
+    altcoin_volume_24h     BIGINT        NOT NULL,
+    altcoin_market_cap     BIGINT        NOT NULL,
+    defi_volume_24h        BIGINT        NOT NULL,
+    defi_market_cap        BIGINT        NOT NULL,
+    stablecoin_volume_24h  BIGINT        NOT NULL,
+    stablecoin_market_cap  BIGINT        NOT NULL,
+    derivatives_volume_24h BIGINT        NOT NULL,
+    PRIMARY KEY (id)
+);
+
+

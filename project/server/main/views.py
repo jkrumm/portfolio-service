@@ -12,6 +12,7 @@ from project.server.main.utils.db import db_fetch, db_insert, job_success, job_f
 from project.server.main.tasks.daily import daily
 from project.server.main.tasks.db import trigger_error_queue
 from project.server.main.tasks.marketcap import marketcap
+from project.server.main.tasks.global_metrics import global_metrics
 from project.server.main.tasks.portfolio import portfolio
 from project.server.main.utils.notifications import pushover
 from project.server.main.utils.utils import get_worker_stats, os_get
@@ -61,6 +62,12 @@ def run_task():
                              on_failure=job_failure)
         elif task_type == "marketcap":
             task = q.enqueue(marketcap, job_id="marketcap",
+                             retry=Retry(max=2, interval=[50, 100]),
+                             on_success=job_success,
+                             on_failure=job_failure)
+        elif task_type == "global":
+            task = q.enqueue(global_metrics, job_id="global",
+                             retry=Retry(max=2, interval=[50, 100]),
                              on_success=job_success,
                              on_failure=job_failure)
         elif task_type == "daily":
