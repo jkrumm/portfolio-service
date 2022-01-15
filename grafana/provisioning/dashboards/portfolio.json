@@ -61,7 +61,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 5,
+        "h": 6,
         "w": 4,
         "x": 0,
         "y": 1
@@ -148,7 +148,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 5,
+        "h": 6,
         "w": 4,
         "x": 4,
         "y": 1
@@ -235,7 +235,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 5,
+        "h": 6,
         "w": 4,
         "x": 8,
         "y": 1
@@ -303,6 +303,188 @@
       "fieldConfig": {
         "defaults": {
           "color": {
+            "fixedColor": "text",
+            "mode": "thresholds"
+          },
+          "decimals": 0,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "currencyUSD"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 2,
+        "x": 12,
+        "y": 1
+      },
+      "id": 67,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "value"
+      },
+      "pluginVersion": "8.4.0-46160pre",
+      "targets": [
+        {
+          "datasource": {
+            "type": "mysql",
+            "uid": "NG2hbM17z"
+          },
+          "format": "table",
+          "group": [],
+          "metricColumn": "none",
+          "rawQuery": false,
+          "rawSql": "SELECT\n  timestamp AS \"time\",\n  pnl AS \"btc_usd\"\nFROM pnl\nWHERE\n  $__timeFilter(timestamp)\nORDER BY timestamp",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "pnl"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "btc_usd"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "pnl",
+          "timeColumn": "timestamp",
+          "timeColumnType": "datetime",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "title": "Y. PNL",
+      "type": "stat"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "text",
+            "mode": "thresholds"
+          },
+          "decimals": 2,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 2,
+        "x": 14,
+        "y": 1
+      },
+      "id": 68,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "value"
+      },
+      "pluginVersion": "8.4.0-46160pre",
+      "targets": [
+        {
+          "datasource": {
+            "type": "mysql",
+            "uid": "NG2hbM17z"
+          },
+          "format": "table",
+          "group": [],
+          "metricColumn": "none",
+          "rawQuery": false,
+          "rawSql": "SELECT\n  timestamp AS \"time\",\n  current_24h AS \"btc_usd\"\nFROM pnl\nWHERE\n  $__timeFilter(timestamp)\nORDER BY timestamp",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "current_24h"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "btc_usd"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "pnl",
+          "timeColumn": "timestamp",
+          "timeColumnType": "datetime",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "title": "Y. PNL %",
+      "type": "stat"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
             "mode": "continuous-GrYlRd"
           },
           "decimals": 0,
@@ -326,7 +508,7 @@
         "h": 3,
         "w": 2,
         "x": 12,
-        "y": 1
+        "y": 4
       },
       "id": 58,
       "options": {
@@ -406,7 +588,7 @@
         "h": 3,
         "w": 2,
         "x": 14,
-        "y": 1
+        "y": 4
       },
       "id": 41,
       "options": {
@@ -465,7 +647,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 6
+        "y": 7
       },
       "id": 26,
       "panels": [],
@@ -505,16 +687,71 @@
               "mode": "none"
             },
             "thresholdsStyle": {
-              "mode": "off"
+              "mode": "line"
             }
           },
-          "mappings": [],
+          "mappings": [
+            {
+              "options": {
+                "max": {
+                  "color": "blue",
+                  "index": 0,
+                  "text": "test"
+                }
+              },
+              "type": "value"
+            }
+          ],
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
                 "color": "red",
                 "value": null
+              },
+              {
+                "color": "#ccccdb1a",
+                "value": 7000
+              },
+              {
+                "color": "#ccccdb33",
+                "value": 8000
+              },
+              {
+                "color": "#ccccdb1a",
+                "value": 9000
+              },
+              {
+                "color": "#ccccdb33",
+                "value": 10000
+              },
+              {
+                "color": "#ccccdb1a",
+                "value": 11000
+              },
+              {
+                "color": "#ccccdb1a",
+                "value": 12000
+              },
+              {
+                "color": "#ccccdb1a",
+                "value": 13000
+              },
+              {
+                "color": "#ccccdb1a",
+                "value": 14000
+              },
+              {
+                "color": "#ccccdb33",
+                "value": 15000
+              },
+              {
+                "color": "#ccccdb1a",
+                "value": 16000
+              },
+              {
+                "color": "#ccccdb1a",
+                "value": 17000
               }
             ]
           },
@@ -526,7 +763,7 @@
         "h": 12,
         "w": 16,
         "x": 0,
-        "y": 7
+        "y": 8
       },
       "id": 5,
       "options": {
@@ -625,7 +862,7 @@
         "h": 3,
         "w": 2,
         "x": 16,
-        "y": 7
+        "y": 8
       },
       "id": 7,
       "options": {
@@ -709,7 +946,7 @@
         "h": 3,
         "w": 2,
         "x": 18,
-        "y": 7
+        "y": 8
       },
       "id": 31,
       "options": {
@@ -813,7 +1050,7 @@
         "h": 3,
         "w": 2,
         "x": 20,
-        "y": 7
+        "y": 8
       },
       "id": 34,
       "options": {
@@ -917,7 +1154,7 @@
         "h": 3,
         "w": 2,
         "x": 22,
-        "y": 7
+        "y": 8
       },
       "id": 30,
       "options": {
@@ -999,7 +1236,7 @@
         "h": 3,
         "w": 2,
         "x": 16,
-        "y": 10
+        "y": 11
       },
       "id": 32,
       "options": {
@@ -1083,7 +1320,7 @@
         "h": 3,
         "w": 2,
         "x": 18,
-        "y": 10
+        "y": 11
       },
       "id": 33,
       "options": {
@@ -1187,7 +1424,7 @@
         "h": 3,
         "w": 2,
         "x": 20,
-        "y": 10
+        "y": 11
       },
       "id": 16,
       "options": {
@@ -1291,7 +1528,7 @@
         "h": 3,
         "w": 2,
         "x": 22,
-        "y": 10
+        "y": 11
       },
       "id": 35,
       "options": {
@@ -1373,7 +1610,7 @@
         "h": 3,
         "w": 2,
         "x": 16,
-        "y": 13
+        "y": 14
       },
       "id": 42,
       "options": {
@@ -1457,7 +1694,7 @@
         "h": 3,
         "w": 2,
         "x": 18,
-        "y": 13
+        "y": 14
       },
       "id": 43,
       "options": {
@@ -1561,7 +1798,7 @@
         "h": 3,
         "w": 2,
         "x": 20,
-        "y": 13
+        "y": 14
       },
       "id": 44,
       "options": {
@@ -1665,7 +1902,7 @@
         "h": 3,
         "w": 2,
         "x": 22,
-        "y": 13
+        "y": 14
       },
       "id": 45,
       "options": {
@@ -1747,7 +1984,7 @@
         "h": 3,
         "w": 2,
         "x": 16,
-        "y": 16
+        "y": 17
       },
       "id": 46,
       "options": {
@@ -1831,7 +2068,7 @@
         "h": 3,
         "w": 2,
         "x": 18,
-        "y": 16
+        "y": 17
       },
       "id": 47,
       "options": {
@@ -1935,7 +2172,7 @@
         "h": 3,
         "w": 2,
         "x": 20,
-        "y": 16
+        "y": 17
       },
       "id": 48,
       "options": {
@@ -2039,7 +2276,7 @@
         "h": 3,
         "w": 2,
         "x": 22,
-        "y": 16
+        "y": 17
       },
       "id": 49,
       "options": {
@@ -2115,7 +2352,7 @@
         "h": 6,
         "w": 16,
         "x": 0,
-        "y": 19
+        "y": 20
       },
       "hiddenSeries": false,
       "id": 51,
@@ -2293,7 +2530,7 @@
         "h": 6,
         "w": 8,
         "x": 16,
-        "y": 19
+        "y": 20
       },
       "hiddenSeries": false,
       "id": 52,
@@ -2550,7 +2787,7 @@
         "h": 6,
         "w": 16,
         "x": 0,
-        "y": 25
+        "y": 26
       },
       "id": 28,
       "options": {
@@ -2662,7 +2899,7 @@
         "h": 6,
         "w": 3,
         "x": 16,
-        "y": 25
+        "y": 26
       },
       "id": 20,
       "options": {
@@ -2745,7 +2982,7 @@
         "h": 6,
         "w": 3,
         "x": 19,
-        "y": 25
+        "y": 26
       },
       "id": 4,
       "options": {
@@ -2948,7 +3185,7 @@
         "h": 6,
         "w": 16,
         "x": 0,
-        "y": 31
+        "y": 32
       },
       "id": 29,
       "options": {
@@ -3094,7 +3331,7 @@
         "h": 6,
         "w": 8,
         "x": 16,
-        "y": 31
+        "y": 32
       },
       "id": 54,
       "options": {
@@ -3171,7 +3408,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 37
+        "y": 38
       },
       "id": 24,
       "panels": [],
@@ -3223,7 +3460,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 38
+        "y": 39
       },
       "id": 22,
       "options": {
@@ -3307,7 +3544,7 @@
         "h": 11,
         "w": 13,
         "x": 0,
-        "y": 46
+        "y": 47
       },
       "id": 50,
       "options": {
@@ -3385,7 +3622,7 @@
         "h": 11,
         "w": 11,
         "x": 13,
-        "y": 46
+        "y": 47
       },
       "id": 53,
       "options": {
@@ -3441,7 +3678,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 57
+        "y": 58
       },
       "id": 57,
       "panels": [],
@@ -3478,7 +3715,7 @@
         "h": 21,
         "w": 24,
         "x": 0,
-        "y": 58
+        "y": 59
       },
       "id": 55,
       "options": {
@@ -3546,6 +3783,6 @@
   "timezone": "",
   "title": "Portfolio",
   "uid": "JRkcfvT7k",
-  "version": 99,
+  "version": 104,
   "weekStart": "monday"
 }

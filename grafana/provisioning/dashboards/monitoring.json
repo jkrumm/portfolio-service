@@ -26,10 +26,6 @@
   "liveNow": false,
   "panels": [
     {
-      "datasource": {
-        "type": "datasource",
-        "uid": "grafana"
-      },
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -82,7 +78,7 @@
         {
           "datasource": {
             "type": "mysql",
-            "uid": "FYR7BDTnk"
+            "uid": "NG2hbM17z"
           },
           "format": "table",
           "group": [],
@@ -171,7 +167,7 @@
         {
           "datasource": {
             "type": "mysql",
-            "uid": "FYR7BDTnk"
+            "uid": "NG2hbM17z"
           },
           "format": "table",
           "group": [],
@@ -205,10 +201,6 @@
       "type": "stat"
     },
     {
-      "datasource": {
-        "type": "datasource",
-        "uid": "grafana"
-      },
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -265,7 +257,7 @@
         {
           "datasource": {
             "type": "mysql",
-            "uid": "FYR7BDTnk"
+            "uid": "NG2hbM17z"
           },
           "format": "table",
           "group": [],
@@ -299,10 +291,6 @@
       "type": "stat"
     },
     {
-      "datasource": {
-        "type": "datasource",
-        "uid": "grafana"
-      },
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -359,7 +347,7 @@
         {
           "datasource": {
             "type": "mysql",
-            "uid": "FYR7BDTnk"
+            "uid": "NG2hbM17z"
           },
           "format": "table",
           "group": [],
@@ -601,7 +589,7 @@
         {
           "datasource": {
             "type": "mysql",
-            "uid": "FYR7BDTnk"
+            "uid": "NG2hbM17z"
           },
           "format": "time_series",
           "group": [],
@@ -640,10 +628,6 @@
       "type": "state-timeline"
     },
     {
-      "datasource": {
-        "type": "datasource",
-        "uid": "grafana"
-      },
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -696,7 +680,7 @@
         {
           "datasource": {
             "type": "mysql",
-            "uid": "FYR7BDTnk"
+            "uid": "NG2hbM17z"
           },
           "format": "table",
           "group": [],
@@ -729,10 +713,6 @@
       "type": "stat"
     },
     {
-      "datasource": {
-        "type": "datasource",
-        "uid": "grafana"
-      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -785,7 +765,7 @@
         {
           "datasource": {
             "type": "mysql",
-            "uid": "FYR7BDTnk"
+            "uid": "NG2hbM17z"
           },
           "format": "table",
           "group": [],
@@ -871,7 +851,7 @@
         {
           "datasource": {
             "type": "mysql",
-            "uid": "FYR7BDTnk"
+            "uid": "NG2hbM17z"
           },
           "format": "table",
           "group": [],
@@ -926,10 +906,47 @@
             ]
           }
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Duration"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 113
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "MinutesAgo"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 138
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Job"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 136
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
-        "h": 19,
+        "h": 12,
         "w": 12,
         "x": 12,
         "y": 6
@@ -943,20 +960,21 @@
           ],
           "show": false
         },
-        "showHeader": true
+        "showHeader": true,
+        "sortBy": []
       },
       "pluginVersion": "8.4.0-46160pre",
       "targets": [
         {
           "datasource": {
             "type": "mysql",
-            "uid": "FYR7BDTnk"
+            "uid": "NG2hbM17z"
           },
           "format": "table",
           "group": [],
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "SELECT TIMESTAMPDIFF(MINUTE, NOW(), timestamp)*-1 as MinutesAgo, job as Job, success as Success, TIME_TO_SEC(duration) as Duration, error as Error FROM job ORDER BY id DESC LIMIT 18;",
+          "rawSql": "SELECT TIMESTAMPDIFF(MINUTE, NOW(), timestamp)*-1 as MinutesAgo, job as Job, TIME_TO_SEC(duration) as Duration, error as Error FROM job WHERE Success = 0 ORDER BY id DESC LIMIT 10;",
           "refId": "A",
           "select": [
             [
@@ -980,13 +998,10 @@
           ]
         }
       ],
+      "title": "Errors",
       "type": "table"
     },
     {
-      "datasource": {
-        "type": "datasource",
-        "uid": "grafana"
-      },
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -1035,7 +1050,7 @@
         {
           "datasource": {
             "type": "mysql",
-            "uid": "FYR7BDTnk"
+            "uid": "NG2hbM17z"
           },
           "format": "table",
           "group": [],
@@ -1047,15 +1062,15 @@
             [
               {
                 "params": [
-                  "failed"
+                  "id"
                 ],
                 "type": "column"
               }
             ]
           ],
-          "table": "worker",
+          "table": "job",
           "timeColumn": "timestamp",
-          "timeColumnType": "datetime",
+          "timeColumnType": "timestamp",
           "where": [
             {
               "name": "$__timeFilter",
@@ -1120,7 +1135,7 @@
         {
           "datasource": {
             "type": "mysql",
-            "uid": "FYR7BDTnk"
+            "uid": "NG2hbM17z"
           },
           "format": "table",
           "group": [],
@@ -1199,7 +1214,7 @@
         {
           "datasource": {
             "type": "mysql",
-            "uid": "FYR7BDTnk"
+            "uid": "NG2hbM17z"
           },
           "format": "table",
           "group": [
@@ -1324,7 +1339,7 @@
         {
           "datasource": {
             "type": "mysql",
-            "uid": "FYR7BDTnk"
+            "uid": "NG2hbM17z"
           },
           "format": "time_series",
           "group": [],
@@ -1430,7 +1445,7 @@
         {
           "datasource": {
             "type": "mysql",
-            "uid": "FYR7BDTnk"
+            "uid": "NG2hbM17z"
           },
           "format": "time_series",
           "group": [],
@@ -1464,10 +1479,6 @@
       "type": "timeseries"
     },
     {
-      "datasource": {
-        "type": "mysql",
-        "uid": "FYR7BDTnk"
-      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1519,7 +1530,7 @@
         {
           "datasource": {
             "type": "mysql",
-            "uid": "FYR7BDTnk"
+            "uid": "NG2hbM17z"
           },
           "format": "table",
           "group": [],
@@ -1553,10 +1564,6 @@
       "type": "stat"
     },
     {
-      "datasource": {
-        "type": "mysql",
-        "uid": "FYR7BDTnk"
-      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1607,7 +1614,7 @@
         {
           "datasource": {
             "type": "mysql",
-            "uid": "FYR7BDTnk"
+            "uid": "NG2hbM17z"
           },
           "format": "table",
           "group": [],
@@ -1641,10 +1648,6 @@
       "type": "stat"
     },
     {
-      "datasource": {
-        "type": "mysql",
-        "uid": "FYR7BDTnk"
-      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1695,7 +1698,7 @@
         {
           "datasource": {
             "type": "mysql",
-            "uid": "FYR7BDTnk"
+            "uid": "NG2hbM17z"
           },
           "format": "table",
           "group": [],
@@ -1729,10 +1732,6 @@
       "type": "stat"
     },
     {
-      "datasource": {
-        "type": "mysql",
-        "uid": "FYR7BDTnk"
-      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1783,7 +1782,7 @@
         {
           "datasource": {
             "type": "mysql",
-            "uid": "FYR7BDTnk"
+            "uid": "NG2hbM17z"
           },
           "format": "table",
           "group": [],
@@ -1817,10 +1816,6 @@
       "type": "stat"
     },
     {
-      "datasource": {
-        "type": "mysql",
-        "uid": "FYR7BDTnk"
-      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1872,7 +1867,7 @@
         {
           "datasource": {
             "type": "mysql",
-            "uid": "FYR7BDTnk"
+            "uid": "NG2hbM17z"
           },
           "format": "table",
           "group": [],
@@ -1906,10 +1901,6 @@
       "type": "stat"
     },
     {
-      "datasource": {
-        "type": "mysql",
-        "uid": "FYR7BDTnk"
-      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1960,7 +1951,7 @@
         {
           "datasource": {
             "type": "mysql",
-            "uid": "FYR7BDTnk"
+            "uid": "NG2hbM17z"
           },
           "format": "table",
           "group": [],
@@ -1994,10 +1985,6 @@
       "type": "stat"
     },
     {
-      "datasource": {
-        "type": "mysql",
-        "uid": "FYR7BDTnk"
-      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2048,7 +2035,7 @@
         {
           "datasource": {
             "type": "mysql",
-            "uid": "FYR7BDTnk"
+            "uid": "NG2hbM17z"
           },
           "format": "table",
           "group": [],
@@ -2082,10 +2069,6 @@
       "type": "stat"
     },
     {
-      "datasource": {
-        "type": "mysql",
-        "uid": "FYR7BDTnk"
-      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2136,7 +2119,7 @@
         {
           "datasource": {
             "type": "mysql",
-            "uid": "FYR7BDTnk"
+            "uid": "NG2hbM17z"
           },
           "format": "table",
           "group": [],
@@ -2215,7 +2198,7 @@
         {
           "datasource": {
             "type": "mysql",
-            "uid": "FYR7BDTnk"
+            "uid": "NG2hbM17z"
           },
           "format": "table",
           "group": [],
@@ -2246,6 +2229,135 @@
         }
       ],
       "title": "Worker",
+      "type": "table"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "right",
+            "displayMode": "auto"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Hours Ago"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 139
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Job"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 139
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Success"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 114
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Duration"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 113
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 12,
+        "x": 12,
+        "y": 18
+      },
+      "id": 32,
+      "options": {
+        "footer": {
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": []
+      },
+      "pluginVersion": "8.4.0-46160pre",
+      "targets": [
+        {
+          "datasource": {
+            "type": "mysql",
+            "uid": "NG2hbM17z"
+          },
+          "format": "table",
+          "group": [],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT TIMESTAMPDIFF(HOUR, NOW(), timestamp)*-1 as \"Hours Ago\", job as Job, success as Success, TIME_TO_SEC(duration) as Duration, error as Error FROM job WHERE job = \"daily\" OR job = \"pnl\" OR job = \"fng\" OR job = \"cbbi\" ORDER BY id DESC LIMIT 10;",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "id"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "table": "job",
+          "timeColumn": "timestamp",
+          "timeColumnType": "timestamp",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "title": "Daily",
       "type": "table"
     },
     {
@@ -2322,7 +2434,7 @@
         {
           "datasource": {
             "type": "mysql",
-            "uid": "FYR7BDTnk"
+            "uid": "NG2hbM17z"
           },
           "format": "time_series",
           "group": [],
@@ -2354,7 +2466,7 @@
         {
           "datasource": {
             "type": "mysql",
-            "uid": "FYR7BDTnk"
+            "uid": "NG2hbM17z"
           },
           "format": "time_series",
           "group": [],
@@ -2386,91 +2498,9 @@
         }
       ],
       "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "datasource",
-        "uid": "grafana"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "custom": {
-            "align": "right",
-            "displayMode": "auto"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 5,
-        "w": 12,
-        "x": 12,
-        "y": 25
-      },
-      "id": 32,
-      "options": {
-        "footer": {
-          "fields": "",
-          "reducer": [
-            "sum"
-          ],
-          "show": false
-        },
-        "showHeader": false
-      },
-      "pluginVersion": "8.4.0-46160pre",
-      "targets": [
-        {
-          "datasource": {
-            "type": "mysql",
-            "uid": "FYR7BDTnk"
-          },
-          "format": "table",
-          "group": [],
-          "metricColumn": "none",
-          "rawQuery": true,
-          "rawSql": "SELECT TIMESTAMPDIFF(MINUTE, NOW(), timestamp)*-1 as MinutesAgo, job as Job, success as Success, TIME_TO_SEC(duration) as Duration, error as Error FROM job WHERE job = \"daily\" OR job = \"pnl\" ORDER BY id DESC LIMIT 5;",
-          "refId": "A",
-          "select": [
-            [
-              {
-                "params": [
-                  "id"
-                ],
-                "type": "column"
-              }
-            ]
-          ],
-          "table": "job",
-          "timeColumn": "timestamp",
-          "timeColumnType": "timestamp",
-          "where": [
-            {
-              "name": "$__timeFilter",
-              "params": [],
-              "type": "macro"
-            }
-          ]
-        }
-      ],
-      "type": "table"
     }
   ],
-  "refresh": "1m",
+  "refresh": "5s",
   "schemaVersion": 34,
   "style": "dark",
   "tags": [],
@@ -2485,6 +2515,6 @@
   "timezone": "",
   "title": "Monitoring",
   "uid": "Ib-qLvTnk",
-  "version": 58,
+  "version": 64,
   "weekStart": ""
 }
