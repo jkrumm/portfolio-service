@@ -1,5 +1,4 @@
 import logging
-import time
 from datetime import datetime
 
 import mysql.connector as mysql
@@ -171,7 +170,7 @@ def job_failure(*args):
         error
     )
     pushover_msg = args[0].id + " | " + error
-    pushover('Job Failure', pushover_msg, '-1')
+    pushover('Job Failure', pushover_msg, '-1', '0')
 
 
 def save_job_result(job, timestamp, success, duration, error):

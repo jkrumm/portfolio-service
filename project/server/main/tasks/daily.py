@@ -1,5 +1,3 @@
-# send reports to telegram bot
-
 import time
 
 import logging

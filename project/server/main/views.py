@@ -6,6 +6,7 @@ from rq import Queue, Connection, Retry
 from sentry_sdk import configure_scope
 
 from project.server.main.tasks.cbbi import cbbi
+from project.server.main.tasks.daily_push import daily_push
 from project.server.main.tasks.fng import fng
 from project.server.main.tasks.pnl import pnl
 from project.server.main.utils.db import db_fetch, db_insert, job_success, job_failure
@@ -73,6 +74,11 @@ def run_task():
         elif task_type == "daily":
             task = q.enqueue(daily, job_id="daily",
                              retry=Retry(max=2, interval=[50, 100]),
+                             on_success=job_success,
+                             on_failure=job_failure)
+        elif task_type == "daily_push":
+            task = q.enqueue(daily_push, job_id="daily_push",
+                             # retry=Retry(max=2, interval=[50, 100]),
                              on_success=job_success,
                              on_failure=job_failure)
         elif task_type == "cbbi":
@@ -175,5 +181,5 @@ def send_pushover():
     auth = request.headers.get('Authorization')
     if auth is None or str(auth) != str(os_get('API_SECRET_KEY')):
         return 'Unauthorized', 401
-    pushover('Title', 'message', '1')
+    pushover('Title', 'message', '1', '0')
     return 'success', 200
