@@ -79,7 +79,7 @@ def run_task():
                              on_failure=job_failure)
         elif task_type == "daily_push":
             task = q.enqueue(daily_push, job_id="daily_push",
-                             # retry=Retry(max=2, interval=[50, 100]),
+                             retry=Retry(max=2, interval=[50, 100]),
                              on_success=job_success,
                              on_failure=job_failure)
         elif task_type == "ucts":
