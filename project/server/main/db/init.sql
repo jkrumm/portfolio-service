@@ -291,7 +291,7 @@ drop table if exists ucts;
 CREATE TABLE ucts
 (
     id           SMALLINT   NOT NULL AUTO_INCREMENT,
-    `timestamp`  DATE       NOT NULL,
+    `timestamp`  DATETIME   NOT NULL,
     btc_2h_side  VARCHAR(4) NOT NULL,
     btc_2h_date  DATE       NOT NULL,
     btc_4h_side  VARCHAR(4) NOT NULL,

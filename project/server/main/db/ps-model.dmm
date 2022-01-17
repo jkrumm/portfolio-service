@@ -3285,7 +3285,7 @@
 				{
 					"id": "6da88659-a3e3-4fcf-abbb-951ee85be688",
 					"name": "timestamp",
-					"datatype": "DATE",
+					"datatype": "DATETIME",
 					"param": "",
 					"pk": false,
 					"nn": true,
@@ -3724,7 +3724,7 @@
 		"replaceSpace": "_",
 		"color": "transparent",
 		"sideSelections": true,
-		"isDirty": false,
+		"isDirty": true,
 		"storedin": {
 			"major": 4,
 			"minor": 1,
@@ -3753,7 +3753,7 @@
 			"quotation": "if_needed"
 		},
 		"filePath": "/Users/johanneskrumm/SourceRoot/portfolio-service/project/server/main/db/ps-model.dmm",
-		"lastSaved": "17.1.2022",
+		"lastSaved": "Mon Jan 17 2022 13:57:11 GMT+0100 (Mitteleuropäische Normalzeit)",
 		"cardinalityIsDisplayed": false,
 		"writeFileParam": false
 	},

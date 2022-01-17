@@ -24,7 +24,7 @@ def create_app(script_info=None):
         integrations=[FlaskIntegration(), RqIntegration(), RedisIntegration(), sentry_logging],
         request_bodies="always",
         attach_stacktrace=True,
-        traces_sample_rate=0
+        traces_sample_rate=0.7
     )
 
     # instantiate the app

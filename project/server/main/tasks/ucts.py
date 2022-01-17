@@ -63,7 +63,6 @@ def ucts():
             'eth_1d_side': eth[4].split()[0],
             'eth_1d_date': str(datetime.strptime(eth[4].split()[1], '%m/%d/%Y').date()),
         }
-    print(ucts)
 
     db_insert('ucts', ucts)
 
