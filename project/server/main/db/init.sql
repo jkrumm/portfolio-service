@@ -286,4 +286,33 @@ CREATE TABLE `global`
     PRIMARY KEY (id)
 );
 
+drop table if exists ucts;
+
+CREATE TABLE ucts
+(
+    id           SMALLINT   NOT NULL AUTO_INCREMENT,
+    `timestamp`  DATE       NOT NULL,
+    btc_2h_side  VARCHAR(4) NOT NULL,
+    btc_2h_date  DATE       NOT NULL,
+    btc_4h_side  VARCHAR(4) NOT NULL,
+    btc_4h_date  DATE       NOT NULL,
+    btc_8h_side  VARCHAR(4) NOT NULL,
+    btc_8h_date  DATE       NOT NULL,
+    btc_12h_side VARCHAR(4) NOT NULL,
+    btc_12h_date DATE       NOT NULL,
+    btc_1d_side  VARCHAR(4) NOT NULL,
+    btc_1d_date  DATE       NOT NULL,
+    eth_2h_side  VARCHAR(4) NOT NULL,
+    eth_2h_date  DATE       NOT NULL,
+    eth_4h_side  VARCHAR(4) NOT NULL,
+    eth_4h_date  DATE       NOT NULL,
+    eth_8h_side  VARCHAR(4) NOT NULL,
+    eth_8h_date  DATE       NOT NULL,
+    eth_12h_side VARCHAR(4) NOT NULL,
+    eth_12h_date DATE       NOT NULL,
+    eth_1d_side  VARCHAR(4) NOT NULL,
+    eth_1d_date  DATE       NOT NULL,
+    PRIMARY KEY (id)
+);
+
 

@@ -9,6 +9,7 @@ from project.server.main.tasks.cbbi import cbbi
 from project.server.main.tasks.daily_push import daily_push
 from project.server.main.tasks.fng import fng
 from project.server.main.tasks.pnl import pnl
+from project.server.main.tasks.ucts import ucts
 from project.server.main.utils.db import db_fetch, db_insert, job_success, job_failure
 from project.server.main.tasks.daily import daily
 from project.server.main.tasks.db import trigger_error_queue
@@ -79,6 +80,11 @@ def run_task():
         elif task_type == "daily_push":
             task = q.enqueue(daily_push, job_id="daily_push",
                              # retry=Retry(max=2, interval=[50, 100]),
+                             on_success=job_success,
+                             on_failure=job_failure)
+        elif task_type == "ucts":
+            task = q.enqueue(ucts, job_id="ucts",
+                             retry=Retry(max=2, interval=[50, 100]),
                              on_success=job_success,
                              on_failure=job_failure)
         elif task_type == "cbbi":
