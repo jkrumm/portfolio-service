@@ -35,7 +35,8 @@ def marketcap():
                 'market_cap_dominance') else None,
             "rank_delta": i.get('rank_delta'),
             "high": f(i.get('high')),
-            "high_percentage": f(percentage(i.get('price'), i.get('high')) * 100),
+            "high_percentage": f(percentage(i.get('price'), i.get('high')) * 100) if i.get('price') and i.get(
+                'high') else None,
             "high_timestamp": str(transform_time(i.get('high_timestamp')) if i.get('high_timestamp') else None),
             "1d_volume": mil(i.get('1d').get('volume')) if i.get('1d') else None,
             "1d_price_change": f(i.get('1d').get('price_change')) if i.get('1d') else None,

@@ -148,7 +148,7 @@ def portfolio():
         if bitmex_positions[0]['symbol'] == 'XBTUSD':
             bitmex_btc_position = bitmex_positions[0]
         else:
-            bitmex_eth_position = bitmex_positions[1]
+            bitmex_eth_position = bitmex_positions[0]
 
     if len(bitmex_positions) == 2:
         if bitmex_positions[0]['symbol'] == 'XBTUSD':

@@ -171,7 +171,7 @@ CREATE TABLE marketcap
     high_timestamp        TIMESTAMP,
     1d_price_change       DECIMAL(20, 2),
     1d_price_change_pct   DECIMAL(7, 2),
-    1d_volume             MEDIUMINT,
+    1d_volume             BIGINT,
     1d_volume_change_pct  DECIMAL(7, 2),
     7d_price_change       DECIMAL(20, 2),
     7d_price_change_pct   DECIMAL(7, 2),

@@ -39,7 +39,7 @@ def get_nomics():
 
 
 def percentage(one, two):
-    if (one and two and float(one) > 0.0 and float(two) > 0.0):
+    if one is not None and two is not None and float(one) > 0.0 and float(two) > 0.0:
         return round((float(one) / float(two) - 1) * 100, 2)
     else:
         return None
