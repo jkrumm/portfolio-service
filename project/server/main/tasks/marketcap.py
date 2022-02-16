@@ -38,20 +38,21 @@ def marketcap():
             "high_percentage": f(percentage(i.get('price'), i.get('high')) * 100) if i.get('price') and i.get(
                 'high') else None,
             "high_timestamp": str(transform_time(i.get('high_timestamp')) if i.get('high_timestamp') else None),
-            "1d_volume": mil(i.get('1d').get('volume')) if i.get('1d') else None,
-            "1d_price_change": f(i.get('1d').get('price_change')) if i.get('1d') else None,
+            "1d_volume": mil(i.get('1d').get('volume')) if i.get('1d') and i.get('1d').get('volume') else None,
+            "1d_price_change": f(i.get('1d').get('price_change')) if i.get('1d') and i.get('1d').get(
+                'price_change') else None,
             "1d_price_change_pct": f(float(i.get('1d').get('price_change_pct')) * 100) if i.get('1d') and i.get(
                 '1d').get('price_change_pct') else None,
             "1d_volume_change_pct": f(float(i.get('1d').get('volume_change_pct')) * 100) if i.get('1d') and i.get(
                 '1d').get('volume_change_pct') else None,
-            "7d_volume": mil(i.get('7d').get('volume')) if i.get('7d') else None,
+            "7d_volume": mil(i.get('7d').get('volume')) if i.get('7d') and i.get('7d').get('volume') else None,
             "7d_volume_change_pct": f(float(i.get('7d').get('volume_change_pct')) * 100) if i.get('7d') and i.get(
                 '7d').get('volume_change_pct') else None,
             "7d_price_change": f(i.get('7d').get('price_change')) if i.get('7d') and i.get('7d').get(
                 'price_change') else None,
             "7d_price_change_pct": f(float(i.get('7d').get('price_change_pct')) * 100) if i.get('7d') and i.get(
                 '7d').get('price_change_pct') else None,
-            "30d_volume": mil(i.get('30d').get('volume')) if i.get('30d') else None,
+            "30d_volume": mil(i.get('30d').get('volume')) if i.get('30d') and i.get('30d').get('volume') else None,
             "30d_volume_change_pct": f(float(i.get('7d').get('price_change_pct')) * 100) if i.get('30d') and i.get(
                 '30d').get('price_change_pct') else None,
             "30d_price_change": f(i.get('30d').get('price_change')) if i.get('30d') and i.get('30d').get(

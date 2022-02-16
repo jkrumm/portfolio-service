@@ -55,7 +55,7 @@ def integer(val):
 def mil(val):
     if val:
         res = integer(float(val) / 1000000)
-        if res > 9223372036854775800:
+        if res is None or res > 9223372036854775800:
             return None
         else:
             return res

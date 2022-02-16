@@ -337,7 +337,8 @@ def portfolio():
     binance_open_orders = sorted(binance_open_orders, key=lambda d: d['market_percentage'])
 
     # db_insert_many_test("binance_orders", binance_open_orders)
-    db_insert_many("binance_orders", binance_open_orders)
+    if len(binance_open_orders) > 0:
+        db_insert_many("binance_orders", binance_open_orders)
 
     end = time.perf_counter()
     print("TASK: portfolio completed in " + str(f(end - start)) + "s")
