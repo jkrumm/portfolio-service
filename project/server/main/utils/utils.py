@@ -84,10 +84,14 @@ def f_btc(val):
 
 
 def get_json(url):
-    response = requests.get(url)
-    response.raise_for_status()  # raises exception when not a 2xx response
-    if response.status_code != 204:
+    try:
+        response = requests.get(url)
+    except requests.exceptions.RequestException as e:
+        return None
+    if response:
         return list(response.json())
+    else:
+        return None
 
 
 def get_time():

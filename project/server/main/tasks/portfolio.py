@@ -41,9 +41,11 @@ def portfolio():
         datetime.utcnow() - timedelta(days=7)))
     portfolio_1w = map_portfolio(portfolio_1w)[0] if portfolio_1w else None
 
-    atari = get_json("https://api.nomics.com/v1/currencies/ticker?key=" + os_get(
-        'NOMICS_KEY') + "&ids=ATRI&interval=1d,30d,7d&convert=USD")[0]
+    atari = None
     atari_amount = 1760
+    atari = get_json("https://api.nomics.com/v1/currencies/ticker?key=" + os_get(
+        'NOMICS_KEY') + "&ids=ATRI&interval=1d,30d,7d&convert=USD")
+    atari = atari[0] if atari else None
 
     # print(atari)
 
@@ -251,22 +253,25 @@ def portfolio():
     pm['bitmex_eth_position_opening'] = f(bitmex_last_trade_eth['price']) if bitmex_eth_position else None
     pm['bitmex_eth_position_opening_date'] = str(transform_time_ccxt(bitmex_last_trade_eth['datetime']))
 
-    pm['atari_total'] = f(float(atari['price']) * atari_amount)
-    pm['atari_total_btc'] = f_btc((float(atari['price']) * atari_amount) / btc_usd)
-    pm['atari_usd'] = f(atari['price'])
-    pm['atari_rank'] = integer(atari['rank'])
-    pm['atari_rank_delta'] = integer(atari['rank_delta'])
-    pm['atari_1d'] = f(float(atari["1d"]["price_change_pct"]) * 100)
-    pm['atari_1d_volume'] = f(float(atari["1d"]["volume_change_pct"]) * 100)
-    pm['atari_7d'] = f(float(atari["7d"]["price_change_pct"]) * 100)
-    pm['atari_7d_volume'] = f(float(atari["7d"]["volume_change_pct"]) * 100)
-    pm['atari_30d'] = f(float(atari["30d"]["price_change_pct"]) * 100)
-    pm['atari_30d_volume'] = f(float(atari["30d"]["volume_change_pct"]) * 100)
+    pm['atari_total'] = f(float(atari['price']) * atari_amount) if atari else None
+    pm['atari_total_btc'] = f_btc((float(atari['price']) * atari_amount) / btc_usd) if atari else None
+    pm['atari_usd'] = f(atari['price']) if atari else None
+    pm['atari_rank'] = integer(atari['rank']) if atari else None
+    pm['atari_rank_delta'] = integer(atari['rank_delta']) if atari else None
+    pm['atari_1d'] = f(float(atari["1d"]["price_change_pct"]) * 100) if atari else None
+    pm['atari_1d_volume'] = f(float(atari["1d"]["volume_change_pct"]) * 100) if atari else None
+    pm['atari_7d'] = f(float(atari["7d"]["price_change_pct"]) * 100) if atari else None
+    pm['atari_7d_volume'] = f(float(atari["7d"]["volume_change_pct"]) * 100) if atari else None
+    pm['atari_30d'] = f(float(atari["30d"]["price_change_pct"]) * 100) if atari else None
+    pm['atari_30d_volume'] = f(float(atari["30d"]["volume_change_pct"]) * 100) if atari else None
 
-    pm['total'] = f(pm['binance_total'] + pm['bitmex_total'] + pm['atari_total'])
+    pm['total'] = f(pm['binance_total'] + pm['bitmex_total'] + pm['atari_total']) if atari else f(
+        pm['binance_total'] + pm['bitmex_total'])
     pm['total_24h'] = percentage(pm['total'], portfolio_24h['total']) if portfolio_24h else None
     pm['total_1w'] = percentage(pm['total'], portfolio_1w['total']) if portfolio_1w else None
-    pm['total_btc'] = f_btc(pm['binance_total_btc'] + pm['bitmex_total_btc'] + pm['atari_total_btc'])
+    pm['total_btc'] = f_btc(
+        pm['binance_total_btc'] + pm['bitmex_total_btc'] + pm['atari_total_btc']) if atari else f_btc(
+        pm['binance_total_btc'] + pm['bitmex_total_btc'])
     pm['total_btc_24h'] = percentage(pm['total_btc'], portfolio_24h['total_btc']) if portfolio_24h else None
     pm['total_btc_1w'] = percentage(pm['total_btc'], portfolio_1w['total_btc']) if portfolio_1w else None
 
