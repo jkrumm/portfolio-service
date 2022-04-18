@@ -56,9 +56,12 @@ def portfolio():
         if curr == 'USDT':
             return 1.0
         else:
-            tick = exchange.fetchTicker(curr + '/USDT')
-            mid_point = tick['bid']
-            return round(float(mid_point), 2)
+            try:
+                tick = exchange.fetchTicker(curr + '/USDT')
+                mid_point = tick['bid']
+                return round(float(mid_point), 2)
+            except:
+                return None
 
     def get_price_btc(exchange, curr: str):
         if curr == 'BTC':
@@ -89,7 +92,7 @@ def portfolio():
             total = f(used + free)
             if total and total > 0.0:
                 bid_price = get_price(exchange, obj['asset'])
-                if round(bid_price * total, 2) > 10.0:
+                if bid_price and round(bid_price * total, 2) > 10.0:
                     bid_price_btc = get_price_btc(exchange, obj['asset'])
                     balance = {
                         'timestamp': str(get_time()),
