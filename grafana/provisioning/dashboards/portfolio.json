@@ -61,102 +61,15 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 6,
-        "w": 4,
+        "h": 3,
+        "w": 2,
         "x": 0,
-        "y": 1
-      },
-      "id": 66,
-      "options": {
-        "colorMode": "none",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "textMode": "value"
-      },
-      "pluginVersion": "8.4.0-46160pre",
-      "targets": [
-        {
-          "datasource": {
-            "type": "mysql",
-            "uid": "NG2hbM17z"
-          },
-          "format": "table",
-          "group": [],
-          "metricColumn": "none",
-          "rawQuery": false,
-          "rawSql": "SELECT\n  timestamp AS \"time\",\n  total AS \"btc_usd\"\nFROM portfolio\nWHERE\n  $__timeFilter(timestamp)\nORDER BY timestamp",
-          "refId": "A",
-          "select": [
-            [
-              {
-                "params": [
-                  "total"
-                ],
-                "type": "column"
-              },
-              {
-                "params": [
-                  "btc_usd"
-                ],
-                "type": "alias"
-              }
-            ]
-          ],
-          "table": "portfolio",
-          "timeColumn": "timestamp",
-          "timeColumnType": "datetime",
-          "where": [
-            {
-              "name": "$__timeFilter",
-              "params": [],
-              "type": "macro"
-            }
-          ]
-        }
-      ],
-      "title": "Total",
-      "type": "stat"
-    },
-    {
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "fixedColor": "text",
-            "mode": "continuous-RdYlGr"
-          },
-          "decimals": 1,
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          },
-          "unit": "currencyUSD"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 6,
-        "w": 4,
-        "x": 4,
         "y": 1
       },
       "id": 62,
       "options": {
         "colorMode": "none",
-        "graphMode": "area",
+        "graphMode": "none",
         "justifyMode": "auto",
         "orientation": "auto",
         "reduceOptions": {
@@ -213,78 +126,143 @@
       "type": "stat"
     },
     {
+      "aliasColors": {
+        "Binance": "yellow",
+        "Bitmex": "red",
+        "Total": "green"
+      },
+      "bars": true,
+      "dashLength": 10,
+      "dashes": false,
       "fieldConfig": {
         "defaults": {
-          "color": {
-            "fixedColor": "text",
-            "mode": "continuous-RdYlGr"
-          },
-          "decimals": 1,
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          },
-          "unit": "currencyUSD"
+          "unit": "percent"
         },
         "overrides": []
       },
+      "fill": 1,
+      "fillGradient": 0,
       "gridPos": {
         "h": 6,
-        "w": 4,
-        "x": 8,
+        "w": 8,
+        "x": 2,
         "y": 1
       },
-      "id": 65,
-      "options": {
-        "colorMode": "none",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "textMode": "value"
+      "hiddenSeries": false,
+      "id": 52,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
       },
+      "lines": false,
+      "linewidth": 1,
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": false
+      },
+      "percentage": false,
       "pluginVersion": "8.4.0-46160pre",
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [
+        {
+          "$$hashKey": "object:382",
+          "alias": "Binance",
+          "yaxis": 1
+        }
+      ],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
       "targets": [
         {
           "datasource": {
             "type": "mysql",
             "uid": "NG2hbM17z"
           },
-          "format": "table",
-          "group": [],
+          "format": "time_series",
+          "group": [
+            {
+              "params": [
+                "1d",
+                "none"
+              ],
+              "type": "time"
+            }
+          ],
           "metricColumn": "none",
           "rawQuery": false,
-          "rawSql": "SELECT\n  timestamp AS \"time\",\n  eth_usd AS \"btc_usd\"\nFROM portfolio\nWHERE\n  $__timeFilter(timestamp)\nORDER BY timestamp",
+          "rawSql": "SELECT\n  $__timeGroupAlias(timestamp,1d),\n  avg(bitmex_total_24h) AS \"Bitmex\",\n  avg(binance_total_24h) AS \"Binance\",\n  avg(current_24h) AS \"Total\"\nFROM pnl\nWHERE\n  $__timeFilter(timestamp)\nGROUP BY 1\nORDER BY $__timeGroup(timestamp,1d)",
           "refId": "A",
           "select": [
             [
               {
                 "params": [
-                  "eth_usd"
+                  "bitmex_total_24h"
                 ],
                 "type": "column"
               },
               {
                 "params": [
-                  "btc_usd"
+                  "avg"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Bitmex"
+                ],
+                "type": "alias"
+              }
+            ],
+            [
+              {
+                "params": [
+                  "binance_total_24h"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "avg"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Binance"
+                ],
+                "type": "alias"
+              }
+            ],
+            [
+              {
+                "params": [
+                  "current_24h"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "avg"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Total"
                 ],
                 "type": "alias"
               }
             ]
           ],
-          "table": "portfolio",
+          "table": "pnl",
           "timeColumn": "timestamp",
           "timeColumnType": "datetime",
           "where": [
@@ -296,8 +274,37 @@
           ]
         }
       ],
-      "title": "ETH",
-      "type": "stat"
+      "thresholds": [],
+      "timeRegions": [],
+      "title": "PNL - Total vs. Bitmex vs. Binance",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "mode": "time",
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "$$hashKey": "object:389",
+          "format": "percent",
+          "logBase": 1,
+          "show": true
+        },
+        {
+          "$$hashKey": "object:390",
+          "format": "percent",
+          "logBase": 1,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false
+      }
     },
     {
       "fieldConfig": {
@@ -328,7 +335,7 @@
       "gridPos": {
         "h": 3,
         "w": 2,
-        "x": 12,
+        "x": 10,
         "y": 1
       },
       "id": 67,
@@ -419,7 +426,7 @@
       "gridPos": {
         "h": 3,
         "w": 2,
-        "x": 14,
+        "x": 12,
         "y": 1
       },
       "id": 68,
@@ -510,7 +517,7 @@
       "gridPos": {
         "h": 3,
         "w": 2,
-        "x": 16,
+        "x": 14,
         "y": 1
       },
       "id": 69,
@@ -573,11 +580,13 @@
       "type": "stat"
     },
     {
+      "description": "",
       "fieldConfig": {
         "defaults": {
           "color": {
             "fixedColor": "text",
-            "mode": "fixed"
+            "mode": "fixed",
+            "seriesBy": "last"
           },
           "decimals": 2,
           "mappings": [],
@@ -594,19 +603,124 @@
               }
             ]
           },
-          "unit": "currencyUSD"
+          "unit": "none"
         },
         "overrides": []
       },
       "gridPos": {
-        "h": 3,
+        "h": 2,
+        "w": 2,
+        "x": 16,
+        "y": 1
+      },
+      "id": 108,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.4.0-46160pre",
+      "targets": [
+        {
+          "datasource": {
+            "type": "mysql",
+            "uid": "NG2hbM17z"
+          },
+          "format": "table",
+          "group": [
+            {
+              "params": [
+                "15m",
+                "none"
+              ],
+              "type": "time"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT (TIMESTAMPDIFF(SECOND, NOW(), timestamp)/60)*-1 FROM portfolio ORDER BY timestamp DESC LIMIT 1;",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "bitmex_btc_position_percentage"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "avg"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Total"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "portfolio",
+          "timeColumn": "timestamp",
+          "timeColumnType": "datetime",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "title": "Last Update",
+      "type": "stat"
+    },
+    {
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "text",
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 1
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 2,
         "w": 2,
         "x": 18,
         "y": 1
       },
-      "id": 73,
+      "id": 99,
       "options": {
-        "colorMode": "value",
+        "colorMode": "background",
         "graphMode": "none",
         "justifyMode": "auto",
         "orientation": "auto",
@@ -614,10 +728,10 @@
           "calcs": [
             "lastNotNull"
           ],
-          "fields": "",
+          "fields": "/^BTC 1D$/",
           "values": false
         },
-        "textMode": "value"
+        "textMode": "name"
       },
       "pluginVersion": "8.4.0-46160pre",
       "targets": [
@@ -630,25 +744,25 @@
           "group": [],
           "metricColumn": "none",
           "rawQuery": false,
-          "rawSql": "SELECT\n  timestamp AS \"time\",\n  altcoin_market_cap AS \"btc_usd\"\nFROM global\nWHERE\n  $__timeFilter(timestamp)\nORDER BY timestamp",
+          "rawSql": "SELECT\n  timestamp AS \"time\",\n  btc_1d AS \"BTC 1D\"\nFROM ucts\nWHERE\n  $__timeFilter(timestamp)\nORDER BY timestamp",
           "refId": "A",
           "select": [
             [
               {
                 "params": [
-                  "altcoin_market_cap"
+                  "btc_1d"
                 ],
                 "type": "column"
               },
               {
                 "params": [
-                  "btc_usd"
+                  "BTC 1D"
                 ],
                 "type": "alias"
               }
             ]
           ],
-          "table": "global",
+          "table": "ucts",
           "timeColumn": "timestamp",
           "timeColumnType": "datetime",
           "where": [
@@ -660,17 +774,16 @@
           ]
         }
       ],
-      "title": "ALT",
       "type": "stat"
     },
     {
+      "description": "",
       "fieldConfig": {
         "defaults": {
           "color": {
             "fixedColor": "text",
-            "mode": "fixed"
+            "mode": "thresholds"
           },
-          "decimals": 2,
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
@@ -681,23 +794,23 @@
               },
               {
                 "color": "green",
-                "value": 0
+                "value": 1
               }
             ]
           },
-          "unit": "currencyUSD"
+          "unit": "none"
         },
         "overrides": []
       },
       "gridPos": {
-        "h": 3,
+        "h": 2,
         "w": 2,
         "x": 20,
         "y": 1
       },
-      "id": 71,
+      "id": 100,
       "options": {
-        "colorMode": "value",
+        "colorMode": "background",
         "graphMode": "none",
         "justifyMode": "auto",
         "orientation": "auto",
@@ -705,10 +818,10 @@
           "calcs": [
             "lastNotNull"
           ],
-          "fields": "",
+          "fields": "/^ETH 12H$/",
           "values": false
         },
-        "textMode": "value"
+        "textMode": "name"
       },
       "pluginVersion": "8.4.0-46160pre",
       "targets": [
@@ -721,25 +834,25 @@
           "group": [],
           "metricColumn": "none",
           "rawQuery": false,
-          "rawSql": "SELECT\n  timestamp AS \"time\",\n  stablecoin_market_cap AS \"btc_usd\"\nFROM global\nWHERE\n  $__timeFilter(timestamp)\nORDER BY timestamp",
+          "rawSql": "SELECT\n  timestamp AS \"time\",\n  eth_12h AS \"ETH 12H\"\nFROM ucts\nWHERE\n  $__timeFilter(timestamp)\nORDER BY timestamp",
           "refId": "A",
           "select": [
             [
               {
                 "params": [
-                  "stablecoin_market_cap"
+                  "eth_12h"
                 ],
                 "type": "column"
               },
               {
                 "params": [
-                  "btc_usd"
+                  "ETH 12H"
                 ],
                 "type": "alias"
               }
             ]
           ],
-          "table": "global",
+          "table": "ucts",
           "timeColumn": "timestamp",
           "timeColumnType": "datetime",
           "where": [
@@ -751,17 +864,16 @@
           ]
         }
       ],
-      "title": "SC",
       "type": "stat"
     },
     {
+      "description": "",
       "fieldConfig": {
         "defaults": {
           "color": {
             "fixedColor": "text",
-            "mode": "fixed"
+            "mode": "thresholds"
           },
-          "decimals": 2,
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
@@ -772,23 +884,880 @@
               },
               {
                 "color": "green",
-                "value": 0
+                "value": 1
               }
             ]
           },
-          "unit": "currencyUSD"
+          "unit": "none"
         },
         "overrides": []
       },
       "gridPos": {
-        "h": 3,
-        "w": 2,
+        "h": 1,
+        "w": 1,
         "x": 22,
         "y": 1
       },
-      "id": 75,
+      "id": 77,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^BTC 2H$/",
+          "values": false
+        },
+        "textMode": "name"
+      },
+      "pluginVersion": "8.4.0-46160pre",
+      "targets": [
+        {
+          "datasource": {
+            "type": "mysql",
+            "uid": "NG2hbM17z"
+          },
+          "format": "table",
+          "group": [],
+          "metricColumn": "none",
+          "rawQuery": false,
+          "rawSql": "SELECT\n  timestamp AS \"time\",\n  btc_2h AS \"BTC 2H\"\nFROM ucts\nWHERE\n  $__timeFilter(timestamp)\nORDER BY timestamp",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "btc_2h"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "BTC 2H"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "ucts",
+          "timeColumn": "timestamp",
+          "timeColumnType": "datetime",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "text",
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 1
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 1,
+        "w": 1,
+        "x": 23,
+        "y": 1
+      },
+      "id": 78,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^ETH 2H$/",
+          "values": false
+        },
+        "textMode": "name"
+      },
+      "pluginVersion": "8.4.0-46160pre",
+      "targets": [
+        {
+          "datasource": {
+            "type": "mysql",
+            "uid": "NG2hbM17z"
+          },
+          "format": "table",
+          "group": [],
+          "metricColumn": "none",
+          "rawQuery": false,
+          "rawSql": "SELECT\n  timestamp AS \"time\",\n  eth_2h AS \"ETH 2H\"\nFROM ucts\nWHERE\n  $__timeFilter(timestamp)\nORDER BY timestamp",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "eth_2h"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "ETH 2H"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "ucts",
+          "timeColumn": "timestamp",
+          "timeColumnType": "datetime",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "text",
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 1
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 1,
+        "w": 1,
+        "x": 22,
+        "y": 2
+      },
+      "id": 79,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^BTC 4H$/",
+          "values": false
+        },
+        "textMode": "name"
+      },
+      "pluginVersion": "8.4.0-46160pre",
+      "targets": [
+        {
+          "datasource": {
+            "type": "mysql",
+            "uid": "NG2hbM17z"
+          },
+          "format": "table",
+          "group": [],
+          "metricColumn": "none",
+          "rawQuery": false,
+          "rawSql": "SELECT\n  timestamp AS \"time\",\n  btc_4h AS \"BTC 4H\"\nFROM ucts\nWHERE\n  $__timeFilter(timestamp)\nORDER BY timestamp",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "btc_4h"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "BTC 4H"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "ucts",
+          "timeColumn": "timestamp",
+          "timeColumnType": "datetime",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "text",
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 1
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 1,
+        "w": 1,
+        "x": 23,
+        "y": 2
+      },
+      "id": 84,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^ETH 4H$/",
+          "values": false
+        },
+        "textMode": "name"
+      },
+      "pluginVersion": "8.4.0-46160pre",
+      "targets": [
+        {
+          "datasource": {
+            "type": "mysql",
+            "uid": "NG2hbM17z"
+          },
+          "format": "table",
+          "group": [],
+          "metricColumn": "none",
+          "rawQuery": false,
+          "rawSql": "SELECT\n  timestamp AS \"time\",\n  eth_4h AS \"ETH 4H\"\nFROM ucts\nWHERE\n  $__timeFilter(timestamp)\nORDER BY timestamp",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "eth_4h"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "ETH 4H"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "ucts",
+          "timeColumn": "timestamp",
+          "timeColumnType": "datetime",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "green",
+            "mode": "thresholds",
+            "seriesBy": "last"
+          },
+          "decimals": 0,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "currencyUSD"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 2,
+        "x": 16,
+        "y": 3
+      },
+      "id": 95,
       "options": {
         "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.4.0-46160pre",
+      "targets": [
+        {
+          "datasource": {
+            "type": "mysql",
+            "uid": "NG2hbM17z"
+          },
+          "format": "table",
+          "group": [
+            {
+              "params": [
+                "15m",
+                "none"
+              ],
+              "type": "time"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT timestamp as \"time\", bitmex_unrealised FROM portfolio ORDER BY time DESC LIMIT 1;",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "bitmex_btc_position_percentage"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "avg"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Total"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "portfolio",
+          "timeColumn": "timestamp",
+          "timeColumnType": "datetime",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "title": "Unrealised",
+      "type": "stat"
+    },
+    {
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "green",
+            "mode": "thresholds",
+            "seriesBy": "last"
+          },
+          "decimals": 0,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "currencyUSD"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 2,
+        "x": 18,
+        "y": 3
+      },
+      "id": 93,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.4.0-46160pre",
+      "targets": [
+        {
+          "datasource": {
+            "type": "mysql",
+            "uid": "NG2hbM17z"
+          },
+          "format": "table",
+          "group": [
+            {
+              "params": [
+                "15m",
+                "none"
+              ],
+              "type": "time"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT timestamp as \"time\", bitmex_btc_position FROM portfolio ORDER BY time DESC LIMIT 1;",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "bitmex_btc_position_percentage"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "avg"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Total"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "portfolio",
+          "timeColumn": "timestamp",
+          "timeColumnType": "datetime",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "title": "BTC",
+      "type": "stat"
+    },
+    {
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "green",
+            "mode": "thresholds",
+            "seriesBy": "last"
+          },
+          "decimals": 0,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "currencyUSD"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 2,
+        "x": 20,
+        "y": 3
+      },
+      "id": 92,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.4.0-46160pre",
+      "targets": [
+        {
+          "datasource": {
+            "type": "mysql",
+            "uid": "NG2hbM17z"
+          },
+          "format": "table",
+          "group": [
+            {
+              "params": [
+                "15m",
+                "none"
+              ],
+              "type": "time"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT timestamp as \"time\", bitmex_eth_position FROM portfolio ORDER BY time DESC LIMIT 1;",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "bitmex_btc_position_percentage"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "avg"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Total"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "portfolio",
+          "timeColumn": "timestamp",
+          "timeColumnType": "datetime",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "title": "ETH",
+      "type": "stat"
+    },
+    {
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "text",
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 1
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 1,
+        "w": 1,
+        "x": 22,
+        "y": 3
+      },
+      "id": 80,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^BTC 8H$/",
+          "values": false
+        },
+        "textMode": "name"
+      },
+      "pluginVersion": "8.4.0-46160pre",
+      "targets": [
+        {
+          "datasource": {
+            "type": "mysql",
+            "uid": "NG2hbM17z"
+          },
+          "format": "table",
+          "group": [],
+          "metricColumn": "none",
+          "rawQuery": false,
+          "rawSql": "SELECT\n  timestamp AS \"time\",\n  btc_8h AS \"BTC 8H\"\nFROM ucts\nWHERE\n  $__timeFilter(timestamp)\nORDER BY timestamp",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "btc_8h"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "BTC 8H"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "ucts",
+          "timeColumn": "timestamp",
+          "timeColumnType": "datetime",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "text",
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 1
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 1,
+        "w": 1,
+        "x": 23,
+        "y": 3
+      },
+      "id": 83,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^ETH 8H$/",
+          "values": false
+        },
+        "textMode": "name"
+      },
+      "pluginVersion": "8.4.0-46160pre",
+      "targets": [
+        {
+          "datasource": {
+            "type": "mysql",
+            "uid": "NG2hbM17z"
+          },
+          "format": "table",
+          "group": [],
+          "metricColumn": "none",
+          "rawQuery": false,
+          "rawSql": "SELECT\n  timestamp AS \"time\",\n  eth_8h AS \"ETH 8H\"\nFROM ucts\nWHERE\n  $__timeFilter(timestamp)\nORDER BY timestamp",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "eth_8h"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "ETH 8H"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "ucts",
+          "timeColumn": "timestamp",
+          "timeColumnType": "datetime",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "text",
+            "mode": "continuous-RdYlGr"
+          },
+          "decimals": 1,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "currencyUSD"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 2,
+        "x": 0,
+        "y": 4
+      },
+      "id": 65,
+      "options": {
+        "colorMode": "none",
         "graphMode": "none",
         "justifyMode": "auto",
         "orientation": "auto",
@@ -812,13 +1781,13 @@
           "group": [],
           "metricColumn": "none",
           "rawQuery": false,
-          "rawSql": "SELECT\n  timestamp AS \"time\",\n  derivatives_volume_24h AS \"btc_usd\"\nFROM global\nWHERE\n  $__timeFilter(timestamp)\nORDER BY timestamp",
+          "rawSql": "SELECT\n  timestamp AS \"time\",\n  eth_usd AS \"btc_usd\"\nFROM portfolio\nWHERE\n  $__timeFilter(timestamp)\nORDER BY timestamp",
           "refId": "A",
           "select": [
             [
               {
                 "params": [
-                  "derivatives_volume_24h"
+                  "eth_usd"
                 ],
                 "type": "column"
               },
@@ -830,7 +1799,7 @@
               }
             ]
           ],
-          "table": "global",
+          "table": "portfolio",
           "timeColumn": "timestamp",
           "timeColumnType": "datetime",
           "where": [
@@ -842,50 +1811,251 @@
           ]
         }
       ],
-      "title": "FUT V",
+      "title": "ETH",
       "type": "stat"
     },
     {
+      "description": "",
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "continuous-GrYlRd"
+            "fixedColor": "text",
+            "mode": "fixed",
+            "seriesBy": "last"
           },
           "decimals": 0,
           "mappings": [],
-          "max": 0,
-          "min": 100,
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "red",
                 "value": null
               }
             ]
           },
-          "unit": "percent"
+          "unit": "none"
         },
         "overrides": []
       },
       "gridPos": {
         "h": 3,
-        "w": 2,
+        "w": 1,
+        "x": 10,
+        "y": 4
+      },
+      "id": 103,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.4.0-46160pre",
+      "targets": [
+        {
+          "datasource": {
+            "type": "mysql",
+            "uid": "NG2hbM17z"
+          },
+          "format": "table",
+          "group": [],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT COUNT(current_24h) AS \"metric\" FROM pnl LIMIT 1;",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "current_24h"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "Total"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "pnl",
+          "timeColumn": "timestamp",
+          "timeColumnType": "datetime",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            },
+            {
+              "datatype": "decimal",
+              "name": "",
+              "params": [
+                "current_24h",
+                ">=",
+                "0"
+              ],
+              "type": "expression"
+            }
+          ]
+        }
+      ],
+      "title": "T",
+      "type": "stat"
+    },
+    {
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "green",
+            "mode": "fixed",
+            "seriesBy": "last"
+          },
+          "decimals": 0,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 1,
+        "x": 11,
+        "y": 4
+      },
+      "id": 101,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.4.0-46160pre",
+      "targets": [
+        {
+          "datasource": {
+            "type": "mysql",
+            "uid": "NG2hbM17z"
+          },
+          "format": "table",
+          "group": [],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  COUNT(current_24h) AS \"metric\"\nFROM pnl\nWHERE\n  current_24h >= 0\nLIMIT 1;",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "current_24h"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "Total"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "pnl",
+          "timeColumn": "timestamp",
+          "timeColumnType": "datetime",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            },
+            {
+              "datatype": "decimal",
+              "name": "",
+              "params": [
+                "current_24h",
+                ">=",
+                "0"
+              ],
+              "type": "expression"
+            }
+          ]
+        }
+      ],
+      "title": "W",
+      "type": "stat"
+    },
+    {
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "red",
+            "mode": "fixed",
+            "seriesBy": "last"
+          },
+          "decimals": 0,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 1,
         "x": 12,
         "y": 4
       },
-      "id": 58,
+      "id": 102,
       "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
         "orientation": "auto",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
           ],
-          "fields": "/^metric$/",
+          "fields": "",
           "values": false
         },
-        "showThresholdLabels": false,
-        "showThresholdMarkers": false
+        "textMode": "auto"
       },
       "pluginVersion": "8.4.0-46160pre",
       "targets": [
@@ -898,74 +2068,93 @@
           "group": [],
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "SELECT value as metric FROM fng ORDER BY timestamp DESC LIMIT 1;",
+          "rawSql": "SELECT\n  COUNT(current_24h) AS \"metric\"\nFROM pnl\nWHERE\n  current_24h < 0\nLIMIT 1;",
           "refId": "A",
           "select": [
             [
               {
                 "params": [
-                  "confidence"
+                  "current_24h"
                 ],
                 "type": "column"
+              },
+              {
+                "params": [
+                  "Total"
+                ],
+                "type": "alias"
               }
             ]
           ],
-          "table": "cbbi",
+          "table": "pnl",
           "timeColumn": "timestamp",
-          "timeColumnType": "date",
+          "timeColumnType": "datetime",
           "where": [
             {
               "name": "$__timeFilter",
               "params": [],
               "type": "macro"
+            },
+            {
+              "datatype": "decimal",
+              "name": "",
+              "params": [
+                "current_24h",
+                ">=",
+                "0"
+              ],
+              "type": "expression"
             }
           ]
         }
       ],
-      "title": "Fear & Greed",
-      "type": "gauge"
+      "title": "L",
+      "type": "stat"
     },
     {
+      "description": "",
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "continuous-RdYlGr"
+            "fixedColor": "text",
+            "mode": "fixed",
+            "seriesBy": "last"
           },
           "decimals": 0,
           "mappings": [],
-          "max": 0,
-          "min": 100,
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "red",
                 "value": null
               }
             ]
           },
-          "unit": "percent"
+          "unit": "percentunit"
         },
         "overrides": []
       },
       "gridPos": {
         "h": 3,
-        "w": 2,
-        "x": 14,
+        "w": 1,
+        "x": 13,
         "y": 4
       },
-      "id": 41,
+      "id": 104,
       "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
         "orientation": "auto",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
           ],
-          "fields": "/^metric$/",
+          "fields": "",
           "values": false
         },
-        "showThresholdLabels": false,
-        "showThresholdMarkers": false
+        "textMode": "auto"
       },
       "pluginVersion": "8.4.0-46160pre",
       "targets": [
@@ -978,110 +2167,25 @@
           "group": [],
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "SELECT confidence as metric FROM cbbi ORDER BY timestamp DESC LIMIT 1;",
+          "rawSql": "SELECT w.wins/t.total AS \"metric\"\nFROM (SELECT COUNT(pnl.current_24h) AS \"total\" FROM pnl LIMIT 1) as t, (SELECT COUNT(pnl.current_24h) AS \"wins\" FROM pnl WHERE pnl.current_24h >= 0 LIMIT 1) as w;",
           "refId": "A",
           "select": [
             [
               {
                 "params": [
-                  "confidence"
-                ],
-                "type": "column"
-              }
-            ]
-          ],
-          "table": "cbbi",
-          "timeColumn": "timestamp",
-          "timeColumnType": "date",
-          "where": [
-            {
-              "name": "$__timeFilter",
-              "params": [],
-              "type": "macro"
-            }
-          ]
-        }
-      ],
-      "title": "CBBI",
-      "type": "gauge"
-    },
-    {
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "fixedColor": "text",
-            "mode": "fixed"
-          },
-          "decimals": 2,
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "red",
-                "value": null
-              },
-              {
-                "color": "green",
-                "value": 0
-              }
-            ]
-          },
-          "unit": "currencyUSD"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 3,
-        "w": 2,
-        "x": 16,
-        "y": 4
-      },
-      "id": 70,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "textMode": "value"
-      },
-      "pluginVersion": "8.4.0-46160pre",
-      "targets": [
-        {
-          "datasource": {
-            "type": "mysql",
-            "uid": "NG2hbM17z"
-          },
-          "format": "table",
-          "group": [],
-          "metricColumn": "none",
-          "rawQuery": false,
-          "rawSql": "SELECT\n  timestamp AS \"time\",\n  total_volume_24h AS \"btc_usd\"\nFROM global\nWHERE\n  $__timeFilter(timestamp)\nORDER BY timestamp",
-          "refId": "A",
-          "select": [
-            [
-              {
-                "params": [
-                  "total_volume_24h"
+                  "current_24h"
                 ],
                 "type": "column"
               },
               {
                 "params": [
-                  "btc_usd"
+                  "Total"
                 ],
                 "type": "alias"
               }
             ]
           ],
-          "table": "global",
+          "table": "pnl",
           "timeColumn": "timestamp",
           "timeColumnType": "datetime",
           "where": [
@@ -1089,193 +2193,21 @@
               "name": "$__timeFilter",
               "params": [],
               "type": "macro"
-            }
-          ]
-        }
-      ],
-      "title": "MC V",
-      "type": "stat"
-    },
-    {
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "fixedColor": "text",
-            "mode": "fixed"
-          },
-          "decimals": 2,
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "red",
-                "value": null
-              },
-              {
-                "color": "green",
-                "value": 0
-              }
-            ]
-          },
-          "unit": "currencyUSD"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 3,
-        "w": 2,
-        "x": 18,
-        "y": 4
-      },
-      "id": 74,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "textMode": "value"
-      },
-      "pluginVersion": "8.4.0-46160pre",
-      "targets": [
-        {
-          "datasource": {
-            "type": "mysql",
-            "uid": "NG2hbM17z"
-          },
-          "format": "table",
-          "group": [],
-          "metricColumn": "none",
-          "rawQuery": false,
-          "rawSql": "SELECT\n  timestamp AS \"time\",\n  altcoin_volume_24h AS \"btc_usd\"\nFROM global\nWHERE\n  $__timeFilter(timestamp)\nORDER BY timestamp",
-          "refId": "A",
-          "select": [
-            [
-              {
-                "params": [
-                  "altcoin_volume_24h"
-                ],
-                "type": "column"
-              },
-              {
-                "params": [
-                  "btc_usd"
-                ],
-                "type": "alias"
-              }
-            ]
-          ],
-          "table": "global",
-          "timeColumn": "timestamp",
-          "timeColumnType": "datetime",
-          "where": [
+            },
             {
-              "name": "$__timeFilter",
-              "params": [],
-              "type": "macro"
+              "datatype": "decimal",
+              "name": "",
+              "params": [
+                "current_24h",
+                ">=",
+                "0"
+              ],
+              "type": "expression"
             }
           ]
         }
       ],
-      "title": "ALT V",
-      "type": "stat"
-    },
-    {
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "fixedColor": "text",
-            "mode": "fixed"
-          },
-          "decimals": 2,
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "red",
-                "value": null
-              },
-              {
-                "color": "green",
-                "value": 0
-              }
-            ]
-          },
-          "unit": "currencyUSD"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 3,
-        "w": 2,
-        "x": 20,
-        "y": 4
-      },
-      "id": 72,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "textMode": "value"
-      },
-      "pluginVersion": "8.4.0-46160pre",
-      "targets": [
-        {
-          "datasource": {
-            "type": "mysql",
-            "uid": "NG2hbM17z"
-          },
-          "format": "table",
-          "group": [],
-          "metricColumn": "none",
-          "rawQuery": false,
-          "rawSql": "SELECT\n  timestamp AS \"time\",\n  stablecoin_volume_24h AS \"btc_usd\"\nFROM global\nWHERE\n  $__timeFilter(timestamp)\nORDER BY timestamp",
-          "refId": "A",
-          "select": [
-            [
-              {
-                "params": [
-                  "stablecoin_volume_24h"
-                ],
-                "type": "column"
-              },
-              {
-                "params": [
-                  "btc_usd"
-                ],
-                "type": "alias"
-              }
-            ]
-          ],
-          "table": "global",
-          "timeColumn": "timestamp",
-          "timeColumnType": "datetime",
-          "where": [
-            {
-              "name": "$__timeFilter",
-              "params": [],
-              "type": "macro"
-            }
-          ]
-        }
-      ],
-      "title": "SC V",
+      "title": "W R",
       "type": "stat"
     },
     {
@@ -1299,7 +2231,7 @@
       "gridPos": {
         "h": 3,
         "w": 2,
-        "x": 22,
+        "x": 14,
         "y": 4
       },
       "id": 76,
@@ -1382,6 +2314,687 @@
       "type": "piechart"
     },
     {
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "text",
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 1
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 1,
+        "w": 1,
+        "x": 22,
+        "y": 4
+      },
+      "id": 81,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^BTC 12H$/",
+          "values": false
+        },
+        "textMode": "name"
+      },
+      "pluginVersion": "8.4.0-46160pre",
+      "targets": [
+        {
+          "datasource": {
+            "type": "mysql",
+            "uid": "NG2hbM17z"
+          },
+          "format": "table",
+          "group": [],
+          "metricColumn": "none",
+          "rawQuery": false,
+          "rawSql": "SELECT\n  timestamp AS \"time\",\n  btc_12h AS \"BTC 12H\"\nFROM ucts\nWHERE\n  $__timeFilter(timestamp)\nORDER BY timestamp",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "btc_12h"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "BTC 12H"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "ucts",
+          "timeColumn": "timestamp",
+          "timeColumnType": "datetime",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "text",
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 1
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 1,
+        "x": 23,
+        "y": 4
+      },
+      "id": 85,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^ETH 12H$/",
+          "values": false
+        },
+        "textMode": "name"
+      },
+      "pluginVersion": "8.4.0-46160pre",
+      "targets": [
+        {
+          "datasource": {
+            "type": "mysql",
+            "uid": "NG2hbM17z"
+          },
+          "format": "table",
+          "group": [],
+          "metricColumn": "none",
+          "rawQuery": false,
+          "rawSql": "SELECT\n  timestamp AS \"time\",\n  eth_12h AS \"ETH 12H\"\nFROM ucts\nWHERE\n  $__timeFilter(timestamp)\nORDER BY timestamp",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "eth_12h"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "ETH 12H"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "ucts",
+          "timeColumn": "timestamp",
+          "timeColumnType": "datetime",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "green",
+            "mode": "thresholds",
+            "seriesBy": "last"
+          },
+          "decimals": 0,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 2,
+        "x": 16,
+        "y": 5
+      },
+      "id": 96,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.4.0-46160pre",
+      "targets": [
+        {
+          "datasource": {
+            "type": "mysql",
+            "uid": "NG2hbM17z"
+          },
+          "format": "table",
+          "group": [
+            {
+              "params": [
+                "15m",
+                "none"
+              ],
+              "type": "time"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT timestamp as \"time\", bitmex_unrealised_percentage FROM portfolio ORDER BY time DESC LIMIT 1;",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "bitmex_btc_position_percentage"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "avg"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Total"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "portfolio",
+          "timeColumn": "timestamp",
+          "timeColumnType": "datetime",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "title": "Unrealised %",
+      "type": "stat"
+    },
+    {
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "green",
+            "mode": "thresholds",
+            "seriesBy": "last"
+          },
+          "decimals": 0,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 2,
+        "x": 18,
+        "y": 5
+      },
+      "id": 91,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.4.0-46160pre",
+      "targets": [
+        {
+          "datasource": {
+            "type": "mysql",
+            "uid": "NG2hbM17z"
+          },
+          "format": "table",
+          "group": [
+            {
+              "params": [
+                "15m",
+                "none"
+              ],
+              "type": "time"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT timestamp as \"time\", bitmex_btc_position_percentage FROM portfolio ORDER BY time DESC LIMIT 1;",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "bitmex_btc_position_percentage"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "avg"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Total"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "portfolio",
+          "timeColumn": "timestamp",
+          "timeColumnType": "datetime",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "title": "BTC %",
+      "type": "stat"
+    },
+    {
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "green",
+            "mode": "thresholds",
+            "seriesBy": "last"
+          },
+          "decimals": 0,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 2,
+        "x": 20,
+        "y": 5
+      },
+      "id": 90,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.4.0-46160pre",
+      "targets": [
+        {
+          "datasource": {
+            "type": "mysql",
+            "uid": "NG2hbM17z"
+          },
+          "format": "table",
+          "group": [
+            {
+              "params": [
+                "15m",
+                "none"
+              ],
+              "type": "time"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT timestamp as \"time\", bitmex_eth_position_percentage FROM portfolio ORDER BY time DESC LIMIT 1;",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "bitmex_btc_position_percentage"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "avg"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "Total"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "portfolio",
+          "timeColumn": "timestamp",
+          "timeColumnType": "datetime",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "title": "ETH %",
+      "type": "stat"
+    },
+    {
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "text",
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 1
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 1,
+        "x": 22,
+        "y": 5
+      },
+      "id": 82,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^BTC 1D$/",
+          "values": false
+        },
+        "textMode": "name"
+      },
+      "pluginVersion": "8.4.0-46160pre",
+      "targets": [
+        {
+          "datasource": {
+            "type": "mysql",
+            "uid": "NG2hbM17z"
+          },
+          "format": "table",
+          "group": [],
+          "metricColumn": "none",
+          "rawQuery": false,
+          "rawSql": "SELECT\n  timestamp AS \"time\",\n  btc_1d AS \"BTC 1D\"\nFROM ucts\nWHERE\n  $__timeFilter(timestamp)\nORDER BY timestamp",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "btc_1d"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "BTC 1D"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "ucts",
+          "timeColumn": "timestamp",
+          "timeColumnType": "datetime",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "text",
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 1
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 1,
+        "w": 1,
+        "x": 23,
+        "y": 6
+      },
+      "id": 86,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^ETH 1D$/",
+          "values": false
+        },
+        "textMode": "name"
+      },
+      "pluginVersion": "8.4.0-46160pre",
+      "targets": [
+        {
+          "datasource": {
+            "type": "mysql",
+            "uid": "NG2hbM17z"
+          },
+          "format": "table",
+          "group": [],
+          "metricColumn": "none",
+          "rawQuery": false,
+          "rawSql": "SELECT\n  timestamp AS \"time\",\n  eth_1d AS \"ETH 1D\"\nFROM ucts\nWHERE\n  $__timeFilter(timestamp)\nORDER BY timestamp",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "eth_1d"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "ETH 1D"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "ucts",
+          "timeColumn": "timestamp",
+          "timeColumnType": "datetime",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "type": "stat"
+    },
+    {
       "collapsed": false,
       "gridPos": {
         "h": 1,
@@ -1399,7 +3012,7 @@
         "defaults": {
           "color": {
             "fixedColor": "green",
-            "mode": "continuous-GrYlRd",
+            "mode": "continuous-RdYlGr",
             "seriesBy": "last"
           },
           "custom": {
@@ -1448,6 +3061,10 @@
               {
                 "color": "red",
                 "value": null
+              },
+              {
+                "color": "#ccccdb1a",
+                "value": 6000
               },
               {
                 "color": "#ccccdb1a",
@@ -1508,8 +3125,12 @@
       "id": 5,
       "options": {
         "legend": {
-          "calcs": [],
-          "displayMode": "list",
+          "calcs": [
+            "max",
+            "min",
+            "mean"
+          ],
+          "displayMode": "table",
           "placement": "bottom"
         },
         "tooltip": {
@@ -1527,7 +3148,7 @@
           "group": [
             {
               "params": [
-                "15m",
+                "30m",
                 "none"
               ],
               "type": "time"
@@ -1535,7 +3156,7 @@
           ],
           "metricColumn": "none",
           "rawQuery": false,
-          "rawSql": "SELECT\n  $__timeGroupAlias(timestamp,15m),\n  avg(current) AS \"Total\"\nFROM portfolio\nWHERE\n  $__timeFilter(timestamp)\nGROUP BY 1\nORDER BY $__timeGroup(timestamp,15m)",
+          "rawSql": "SELECT\n  $__timeGroupAlias(timestamp,30m),\n  avg(current) AS \"Total\"\nFROM portfolio\nWHERE\n  $__timeFilter(timestamp)\nGROUP BY 1\nORDER BY $__timeGroup(timestamp,30m)",
           "refId": "A",
           "select": [
             [
@@ -1594,7 +3215,7 @@
               }
             ]
           },
-          "unit": "none"
+          "unit": "currencyUSD"
         },
         "overrides": []
       },
@@ -1663,7 +3284,7 @@
           "color": {
             "mode": "continuous-RdYlGr"
           },
-          "decimals": 4,
+          "decimals": 3,
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
@@ -1968,7 +3589,8 @@
                 "value": 80
               }
             ]
-          }
+          },
+          "unit": "currencyUSD"
         },
         "overrides": []
       },
@@ -2037,7 +3659,7 @@
           "color": {
             "mode": "continuous-RdYlGr"
           },
-          "decimals": 4,
+          "decimals": 3,
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
@@ -2342,7 +3964,8 @@
                 "value": 80
               }
             ]
-          }
+          },
+          "unit": "currencyUSD"
         },
         "overrides": []
       },
@@ -2411,7 +4034,7 @@
           "color": {
             "mode": "continuous-RdYlGr"
           },
-          "decimals": 4,
+          "decimals": 3,
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
@@ -2716,7 +4339,8 @@
                 "value": 80
               }
             ]
-          }
+          },
+          "unit": "currencyUSD"
         },
         "overrides": []
       },
@@ -3118,6 +4742,7 @@
       "renderer": "flot",
       "seriesOverrides": [
         {
+          "$$hashKey": "object:239",
           "alias": "Binance",
           "yaxis": 1
         }
@@ -3135,7 +4760,7 @@
           "group": [
             {
               "params": [
-                "4h",
+                "6h",
                 "none"
               ],
               "type": "time"
@@ -3143,7 +4768,7 @@
           ],
           "metricColumn": "none",
           "rawQuery": false,
-          "rawSql": "SELECT\n  $__timeGroupAlias(timestamp,4h),\n  avg(bitmex_total_24h) AS \"Bitmex\",\n  avg(binance_total_24h) AS \"Binance\",\n  avg(current_24h) AS \"Total\"\nFROM portfolio\nWHERE\n  $__timeFilter(timestamp)\nGROUP BY 1\nORDER BY $__timeGroup(timestamp,4h)",
+          "rawSql": "SELECT\n  $__timeGroupAlias(timestamp,6h),\n  avg(bitmex_total_24h) AS \"Bitmex\",\n  avg(binance_total_24h) AS \"Binance\",\n  avg(current_24h) AS \"Total\"\nFROM portfolio\nWHERE\n  $__timeFilter(timestamp)\nGROUP BY 1\nORDER BY $__timeGroup(timestamp,6h)",
           "refId": "A",
           "select": [
             [
@@ -3235,11 +4860,13 @@
       },
       "yaxes": [
         {
+          "$$hashKey": "object:246",
           "format": "percent",
           "logBase": 1,
           "show": true
         },
         {
+          "$$hashKey": "object:247",
           "format": "percent",
           "logBase": 1,
           "show": true
@@ -3250,132 +4877,70 @@
       }
     },
     {
-      "aliasColors": {
-        "Binance": "yellow",
-        "Bitmex": "red",
-        "Total": "green"
-      },
-      "bars": true,
-      "dashLength": 10,
-      "dashes": false,
+      "description": "",
       "fieldConfig": {
         "defaults": {
-          "unit": "percent"
+          "color": {
+            "fixedColor": "text",
+            "mode": "fixed",
+            "seriesBy": "last"
+          },
+          "decimals": 0,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              }
+            ]
+          },
+          "unit": "none"
         },
         "overrides": []
       },
-      "fill": 1,
-      "fillGradient": 0,
       "gridPos": {
-        "h": 6,
-        "w": 8,
+        "h": 3,
+        "w": 1,
         "x": 16,
         "y": 20
       },
-      "hiddenSeries": false,
-      "id": 52,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": false
-      },
-      "lines": false,
-      "linewidth": 1,
-      "nullPointMode": "null",
+      "id": 105,
       "options": {
-        "alertThreshold": false
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
       },
-      "percentage": false,
       "pluginVersion": "8.4.0-46160pre",
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [
-        {
-          "alias": "Binance",
-          "yaxis": 1
-        }
-      ],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
       "targets": [
         {
           "datasource": {
             "type": "mysql",
             "uid": "NG2hbM17z"
           },
-          "format": "time_series",
-          "group": [
-            {
-              "params": [
-                "1d",
-                "none"
-              ],
-              "type": "time"
-            }
-          ],
+          "format": "table",
+          "group": [],
           "metricColumn": "none",
-          "rawQuery": false,
-          "rawSql": "SELECT\n  $__timeGroupAlias(timestamp,1d),\n  avg(bitmex_total_24h) AS \"Bitmex\",\n  avg(binance_total_24h) AS \"Binance\",\n  avg(current_24h) AS \"Total\"\nFROM pnl\nWHERE\n  $__timeFilter(timestamp)\nGROUP BY 1\nORDER BY $__timeGroup(timestamp,1d)",
+          "rawQuery": true,
+          "rawSql": "SELECT COUNT(id) FROM binance_balances;",
           "refId": "A",
           "select": [
-            [
-              {
-                "params": [
-                  "bitmex_total_24h"
-                ],
-                "type": "column"
-              },
-              {
-                "params": [
-                  "avg"
-                ],
-                "type": "aggregate"
-              },
-              {
-                "params": [
-                  "Bitmex"
-                ],
-                "type": "alias"
-              }
-            ],
-            [
-              {
-                "params": [
-                  "binance_total_24h"
-                ],
-                "type": "column"
-              },
-              {
-                "params": [
-                  "avg"
-                ],
-                "type": "aggregate"
-              },
-              {
-                "params": [
-                  "Binance"
-                ],
-                "type": "alias"
-              }
-            ],
             [
               {
                 "params": [
                   "current_24h"
                 ],
                 "type": "column"
-              },
-              {
-                "params": [
-                  "avg"
-                ],
-                "type": "aggregate"
               },
               {
                 "params": [
@@ -3393,39 +4958,669 @@
               "name": "$__timeFilter",
               "params": [],
               "type": "macro"
+            },
+            {
+              "datatype": "decimal",
+              "name": "",
+              "params": [
+                "current_24h",
+                ">=",
+                "0"
+              ],
+              "type": "expression"
             }
           ]
         }
       ],
-      "thresholds": [],
-      "timeRegions": [],
-      "title": "PNL - Total vs. Bitmex vs. Binance",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "mode": "time",
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "percent",
-          "logBase": 1,
-          "show": true
+      "title": "B A",
+      "type": "stat"
+    },
+    {
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "text",
+            "mode": "fixed",
+            "seriesBy": "last"
+          },
+          "decimals": 0,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              }
+            ]
+          },
+          "unit": "none"
         },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 2,
+        "x": 17,
+        "y": 20
+      },
+      "id": 107,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.4.0-46160pre",
+      "targets": [
         {
-          "format": "percent",
-          "logBase": 1,
-          "show": true
+          "datasource": {
+            "type": "mysql",
+            "uid": "NG2hbM17z"
+          },
+          "format": "table",
+          "group": [],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT COUNT(id) FROM binance_balances WHERE balance >= 15;",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "current_24h"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "Total"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "pnl",
+          "timeColumn": "timestamp",
+          "timeColumnType": "datetime",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            },
+            {
+              "datatype": "decimal",
+              "name": "",
+              "params": [
+                "current_24h",
+                ">=",
+                "0"
+              ],
+              "type": "expression"
+            }
+          ]
         }
       ],
-      "yaxis": {
-        "align": false
-      }
+      "title": "B O 15",
+      "type": "stat"
+    },
+    {
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "text",
+            "mode": "fixed",
+            "seriesBy": "last"
+          },
+          "decimals": 0,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              }
+            ]
+          },
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 1,
+        "x": 19,
+        "y": 20
+      },
+      "id": 106,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.4.0-46160pre",
+      "targets": [
+        {
+          "datasource": {
+            "type": "mysql",
+            "uid": "NG2hbM17z"
+          },
+          "format": "table",
+          "group": [],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT usdt.t/total.t FROM (SELECT balance as t FROM binance_balances ORDER BY t DESC LIMIT 1) as usdt, (SELECT SUM(balance) as t FROM binance_balances) as total;",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "current_24h"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "Total"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "pnl",
+          "timeColumn": "timestamp",
+          "timeColumnType": "datetime",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            },
+            {
+              "datatype": "decimal",
+              "name": "",
+              "params": [
+                "current_24h",
+                ">=",
+                "0"
+              ],
+              "type": "expression"
+            }
+          ]
+        }
+      ],
+      "title": "B H",
+      "type": "stat"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-GrYlRd"
+          },
+          "decimals": 0,
+          "mappings": [],
+          "max": 0,
+          "min": 100,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 2,
+        "x": 20,
+        "y": 20
+      },
+      "id": 58,
+      "options": {
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^metric$/",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": false
+      },
+      "pluginVersion": "8.4.0-46160pre",
+      "targets": [
+        {
+          "datasource": {
+            "type": "mysql",
+            "uid": "NG2hbM17z"
+          },
+          "format": "table",
+          "group": [],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT value as metric FROM fng ORDER BY timestamp DESC LIMIT 1;",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "confidence"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "table": "cbbi",
+          "timeColumn": "timestamp",
+          "timeColumnType": "date",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "title": "Fear & Greed",
+      "type": "gauge"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-RdYlGr"
+          },
+          "decimals": 0,
+          "mappings": [],
+          "max": 0,
+          "min": 100,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 2,
+        "x": 22,
+        "y": 20
+      },
+      "id": 41,
+      "options": {
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^metric$/",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": false
+      },
+      "pluginVersion": "8.4.0-46160pre",
+      "targets": [
+        {
+          "datasource": {
+            "type": "mysql",
+            "uid": "NG2hbM17z"
+          },
+          "format": "table",
+          "group": [],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT confidence as metric FROM cbbi ORDER BY timestamp DESC LIMIT 1;",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "confidence"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "table": "cbbi",
+          "timeColumn": "timestamp",
+          "timeColumnType": "date",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "title": "CBBI",
+      "type": "gauge"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
+          },
+          "mappings": []
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 3,
+        "x": 16,
+        "y": 23
+      },
+      "id": 4,
+      "options": {
+        "displayLabels": [
+          "percent",
+          "name"
+        ],
+        "legend": {
+          "displayMode": "hidden",
+          "placement": "right",
+          "values": []
+        },
+        "pieType": "donut",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "mysql",
+            "uid": "NG2hbM17z"
+          },
+          "format": "time_series",
+          "group": [],
+          "metricColumn": "none",
+          "rawQuery": false,
+          "rawSql": "SELECT\n  timestamp AS \"time\",\n  binance_total AS \"Binance\",\n  bitmex_total AS \"Bitmex\",\n  atari_total AS \"Atari\"\nFROM portfolio\nWHERE\n  $__timeFilter(timestamp)\nORDER BY timestamp",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "binance_total"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "Binance"
+                ],
+                "type": "alias"
+              }
+            ],
+            [
+              {
+                "params": [
+                  "bitmex_total"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "Bitmex"
+                ],
+                "type": "alias"
+              }
+            ],
+            [
+              {
+                "params": [
+                  "atari_total"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "Atari"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "portfolio",
+          "timeColumn": "timestamp",
+          "timeColumnType": "datetime",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "title": "Alocation",
+      "type": "piechart"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto",
+            "minWidth": 80
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Balance"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "currencyUSD"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "24H"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "percent"
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "red",
+                      "value": null
+                    },
+                    {
+                      "color": "text",
+                      "value": 0
+                    },
+                    {
+                      "color": "green",
+                      "value": 1
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "custom.displayMode",
+                "value": "color-text"
+              },
+              {
+                "id": "decimals",
+                "value": 0
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "1W"
+            },
+            "properties": [
+              {
+                "id": "custom.displayMode",
+                "value": "color-text"
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "red",
+                      "value": null
+                    },
+                    {
+                      "color": "text",
+                      "value": 0
+                    },
+                    {
+                      "color": "green",
+                      "value": 1
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "unit",
+                "value": "percent"
+              },
+              {
+                "id": "decimals",
+                "value": 0
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 5,
+        "x": 19,
+        "y": 23
+      },
+      "id": 97,
+      "options": {
+        "footer": {
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true
+      },
+      "pluginVersion": "8.4.0-46160pre",
+      "targets": [
+        {
+          "datasource": {
+            "type": "mysql",
+            "uid": "NG2hbM17z"
+          },
+          "format": "table",
+          "group": [],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT currency as Currency, ROUND(balance,0) as Balance, m.`1d_price_change_pct` as \"24H\", m.`7d_price_change_pct` as \"1W\" FROM binance_balances b JOIN marketcap m on b.currency = m.symbol WHERE balance >= 15 ORDER BY balance DESC;",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "market_percentage"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "table": "binance_balances",
+          "timeColumn": "timestamp",
+          "timeColumnType": "datetime",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "type": "table"
     },
     {
       "fieldConfig": {
@@ -3559,13 +5754,13 @@
           ],
           "metricColumn": "none",
           "rawQuery": false,
-          "rawSql": "SELECT\n  $__timeGroupAlias(timestamp,1h),\n  avg(total) AS \"Total\",\n  avg(btc_usd) AS \"BTC\"\nFROM portfolio\nWHERE\n  $__timeFilter(timestamp)\nGROUP BY 1\nORDER BY $__timeGroup(timestamp,1h)",
+          "rawSql": "SELECT\n  $__timeGroupAlias(timestamp,1h),\n  avg(current) AS \"Total\",\n  avg(btc_usd) AS \"BTC\"\nFROM portfolio\nWHERE\n  $__timeFilter(timestamp)\nGROUP BY 1\nORDER BY $__timeGroup(timestamp,1h)",
           "refId": "A",
           "select": [
             [
               {
                 "params": [
-                  "total"
+                  "current"
                 ],
                 "type": "column"
               },
@@ -3622,131 +5817,72 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "palette-classic"
+            "fixedColor": "green",
+            "mode": "continuous-RdYlGr",
+            "seriesBy": "last"
           },
           "custom": {
+            "axisGridShow": true,
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "hue",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
               "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
             }
           },
-          "mappings": []
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 6,
-        "w": 3,
-        "x": 16,
-        "y": 26
-      },
-      "id": 20,
-      "options": {
-        "displayLabels": [
-          "percent",
-          "name"
-        ],
-        "legend": {
-          "displayMode": "hidden",
-          "placement": "right",
-          "values": []
-        },
-        "pieType": "donut",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "tooltip": {
-          "mode": "single"
-        }
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "mysql",
-            "uid": "NG2hbM17z"
-          },
-          "format": "time_series",
-          "group": [],
-          "metricColumn": "currency",
-          "rawQuery": false,
-          "rawSql": "SELECT\n  timestamp AS \"time\",\n  currency AS metric,\n  balance\nFROM binance_balances\nWHERE\n  $__timeFilter(timestamp)\nORDER BY timestamp",
-          "refId": "A",
-          "select": [
-            [
+          "decimals": 2,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
               {
-                "params": [
-                  "balance"
-                ],
-                "type": "column"
+                "color": "red",
+                "value": null
               }
             ]
-          ],
-          "table": "binance_balances",
-          "timeColumn": "timestamp",
-          "timeColumnType": "datetime",
-          "where": [
-            {
-              "name": "$__timeFilter",
-              "params": [],
-              "type": "macro"
-            }
-          ]
-        }
-      ],
-      "title": "Binance Alocation",
-      "type": "piechart"
-    },
-    {
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
           },
-          "custom": {
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            }
-          },
-          "mappings": []
+          "unit": "none"
         },
         "overrides": []
       },
       "gridPos": {
-        "h": 6,
-        "w": 3,
-        "x": 19,
-        "y": 26
+        "h": 8,
+        "w": 8,
+        "x": 16,
+        "y": 29
       },
-      "id": 4,
+      "id": 87,
       "options": {
-        "displayLabels": [
-          "percent",
-          "name"
-        ],
         "legend": {
+          "calcs": [],
           "displayMode": "hidden",
-          "placement": "right",
-          "values": []
-        },
-        "pieType": "donut",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
+          "placement": "bottom"
         },
         "tooltip": {
           "mode": "single"
         }
       },
+      "pluginVersion": "8.4.0-45809pre",
       "targets": [
         {
           "datasource": {
@@ -3754,50 +5890,36 @@
             "uid": "NG2hbM17z"
           },
           "format": "time_series",
-          "group": [],
+          "group": [
+            {
+              "params": [
+                "15m",
+                "none"
+              ],
+              "type": "time"
+            }
+          ],
           "metricColumn": "none",
-          "rawQuery": false,
-          "rawSql": "SELECT\n  timestamp AS \"time\",\n  binance_total AS \"Binance\",\n  bitmex_total AS \"Bitmex\",\n  atari_total AS \"Atari\"\nFROM portfolio\nWHERE\n  $__timeFilter(timestamp)\nORDER BY timestamp",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  $__timeGroupAlias(timestamp,1h),\n  avg(current/btc_usd) AS \"Binance / Bitmex\"\nFROM portfolio\nWHERE\n  $__timeFilter(timestamp)\nGROUP BY 1\nORDER BY $__timeGroup(timestamp,1h)",
           "refId": "A",
           "select": [
             [
               {
                 "params": [
-                  "binance_total"
+                  "current"
                 ],
                 "type": "column"
               },
               {
                 "params": [
-                  "Binance"
+                  "avg"
                 ],
-                "type": "alias"
-              }
-            ],
-            [
-              {
-                "params": [
-                  "bitmex_total"
-                ],
-                "type": "column"
+                "type": "aggregate"
               },
               {
                 "params": [
-                  "Bitmex"
-                ],
-                "type": "alias"
-              }
-            ],
-            [
-              {
-                "params": [
-                  "atari_total"
-                ],
-                "type": "column"
-              },
-              {
-                "params": [
-                  "Atari"
+                  "Total"
                 ],
                 "type": "alias"
               }
@@ -3815,8 +5937,8 @@
           ]
         }
       ],
-      "title": "Alocation",
-      "type": "piechart"
+      "title": "Total / BTC",
+      "type": "timeseries"
     },
     {
       "fieldConfig": {
@@ -3956,8 +6078,8 @@
             }
           ],
           "metricColumn": "none",
-          "rawQuery": false,
-          "rawSql": "SELECT\n  $__timeGroupAlias(timestamp,1h),\n  avg(binance_total) AS \"Binance\",\n  avg(bitmex_total) AS \"Bitmex\"\nFROM portfolio\nWHERE\n  $__timeFilter(timestamp)\nGROUP BY 1\nORDER BY $__timeGroup(timestamp,1h)",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  $__timeGroupAlias(timestamp,1h),\n  avg(binance_total) AS \"Binance\",\n  avg(bitmex_total+COALESCE(bitmex_unrealised, 0)) AS \"Bitmex\"\nFROM portfolio\nWHERE\n  $__timeFilter(timestamp)\nGROUP BY 1\nORDER BY $__timeGroup(timestamp,1h)",
           "refId": "A",
           "select": [
             [
@@ -4025,6 +6147,7 @@
             "seriesBy": "last"
           },
           "custom": {
+            "axisGridShow": true,
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
@@ -4068,16 +6191,16 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 6,
+        "h": 8,
         "w": 8,
         "x": 16,
-        "y": 32
+        "y": 37
       },
       "id": 54,
       "options": {
         "legend": {
           "calcs": [],
-          "displayMode": "list",
+          "displayMode": "hidden",
           "placement": "bottom"
         },
         "tooltip": {
@@ -4103,7 +6226,7 @@
           ],
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "SELECT\n  $__timeGroupAlias(timestamp,1h),\n  avg(binance_total/bitmex_total) AS \"Binance / Bitmex\"\nFROM portfolio\nWHERE\n  $__timeFilter(timestamp)\nGROUP BY 1\nORDER BY $__timeGroup(timestamp,1h)",
+          "rawSql": "SELECT\n  $__timeGroupAlias(timestamp,1h),\n  avg((bitmex_total+COALESCE(bitmex_unrealised, 0))/binance_total) AS \"Binance / Bitmex\"\nFROM portfolio\nWHERE\n  $__timeFilter(timestamp)\nGROUP BY 1\nORDER BY $__timeGroup(timestamp,1h)",
           "refId": "A",
           "select": [
             [
@@ -4139,8 +6262,248 @@
           ]
         }
       ],
-      "title": "Binance / Bitmex",
+      "title": "Bitmex / Binance",
       "type": "timeseries"
+    },
+    {
+      "aliasColors": {
+        "BTC": "text",
+        "Total": "text"
+      },
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "decimals": 0,
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "fill": 0,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 10,
+        "w": 16,
+        "x": 0,
+        "y": 38
+      },
+      "hiddenSeries": false,
+      "id": 88,
+      "legend": {
+        "alignAsTable": false,
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "rightSide": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 2,
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "8.4.0-46160pre",
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [
+        {
+          "$$hashKey": "object:307",
+          "alias": "FNG",
+          "yaxis": 2
+        },
+        {
+          "$$hashKey": "object:828",
+          "alias": "total",
+          "yaxis": 2
+        },
+        {
+          "$$hashKey": "object:841",
+          "alias": "Total",
+          "yaxis": 1
+        },
+        {
+          "$$hashKey": "object:1542",
+          "alias": "CBBI",
+          "yaxis": 2
+        }
+      ],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "datasource": {
+            "type": "mysql",
+            "uid": "NG2hbM17z"
+          },
+          "format": "time_series",
+          "group": [],
+          "metricColumn": "none",
+          "rawQuery": false,
+          "rawSql": "SELECT\n  timestamp AS \"time\",\n  confidence AS \"CBBI\"\nFROM cbbi\nWHERE\n  $__timeFilter(timestamp)\nORDER BY timestamp",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "confidence"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "CBBI"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "cbbi",
+          "timeColumn": "timestamp",
+          "timeColumnType": "date",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        },
+        {
+          "datasource": {
+            "type": "mysql",
+            "uid": "NG2hbM17z"
+          },
+          "format": "time_series",
+          "group": [],
+          "hide": false,
+          "metricColumn": "none",
+          "rawQuery": false,
+          "rawSql": "SELECT\n  timestamp AS \"time\",\n  value AS \"FNG\"\nFROM fng\nWHERE\n  $__timeFilter(timestamp)\nORDER BY timestamp",
+          "refId": "B",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "FNG"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "fng",
+          "timeColumn": "timestamp",
+          "timeColumnType": "date",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        },
+        {
+          "datasource": {
+            "type": "mysql",
+            "uid": "NG2hbM17z"
+          },
+          "format": "time_series",
+          "group": [
+            {
+              "params": [
+                "8h",
+                "none"
+              ],
+              "type": "time"
+            }
+          ],
+          "hide": false,
+          "metricColumn": "none",
+          "rawQuery": false,
+          "rawSql": "SELECT\n  $__timeGroupAlias(timestamp,8h),\n  avg(btc_usd) AS \"BTC\"\nFROM portfolio\nWHERE\n  $__timeFilter(timestamp)\nGROUP BY 1\nORDER BY $__timeGroup(timestamp,8h)",
+          "refId": "C",
+          "select": [
+            [
+              {
+                "params": [
+                  "btc_usd"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "avg"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "BTC"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "portfolio",
+          "timeColumn": "timestamp",
+          "timeColumnType": "datetime",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "thresholds": [],
+      "timeRegions": [],
+      "title": "CBBI & FNG & BTC",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "mode": "time",
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "$$hashKey": "object:253",
+          "decimals": 0,
+          "format": "none",
+          "logBase": 1,
+          "show": true
+        },
+        {
+          "$$hashKey": "object:254",
+          "decimals": 0,
+          "format": "none",
+          "logBase": 1,
+          "max": "100",
+          "min": "0",
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false
+      }
     },
     {
       "collapsed": false,
@@ -4148,7 +6511,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 38
+        "y": 48
       },
       "id": 24,
       "panels": [],
@@ -4159,168 +6522,76 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "continuous-GrYlRd"
+            "mode": "palette-classic"
           },
           "custom": {
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "axisSoftMin": 0,
-            "fillOpacity": 80,
-            "gradientMode": "scheme",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
               "viz": false
-            },
-            "lineWidth": 0,
-            "scaleDistribution": {
-              "type": "linear"
             }
           },
           "decimals": 0,
           "mappings": [],
-          "min": 0,
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 30
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 24,
-        "x": 0,
-        "y": 39
-      },
-      "id": 22,
-      "options": {
-        "barWidth": 0.6,
-        "groupWidth": 0.7,
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom"
-        },
-        "orientation": "auto",
-        "showValue": "auto",
-        "stacking": "none",
-        "tooltip": {
-          "mode": "single"
-        },
-        "xTickLabelRotation": 0
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "mysql",
-            "uid": "NG2hbM17z"
-          },
-          "format": "table",
-          "group": [],
-          "metricColumn": "symbol",
-          "rawQuery": true,
-          "rawSql": "SELECT symbol AS metric, market_percentage FROM binance_orders ORDER BY market_percentage",
-          "refId": "A",
-          "select": [
-            [
-              {
-                "params": [
-                  "market_percentage"
-                ],
-                "type": "column"
-              }
-            ]
-          ],
-          "table": "binance_orders",
-          "timeColumn": "timestamp",
-          "timeColumnType": "datetime",
-          "where": [
-            {
-              "name": "$__timeFilter",
-              "params": [],
-              "type": "macro"
-            }
-          ]
-        }
-      ],
-      "title": "Orders to Market",
-      "type": "barchart"
-    },
-    {
-      "fieldConfig": {
-        "defaults": {
-          "custom": {
-            "align": "auto",
-            "displayMode": "auto"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
+          "unit": "currencyUSD"
         },
         "overrides": []
       },
       "gridPos": {
         "h": 11,
-        "w": 12,
+        "w": 8,
         "x": 0,
-        "y": 47
+        "y": 49
       },
-      "id": 50,
+      "id": 20,
       "options": {
-        "footer": {
-          "fields": "",
-          "reducer": [
-            "sum"
-          ],
-          "show": false
+        "displayLabels": [
+          "percent",
+          "name"
+        ],
+        "legend": {
+          "displayMode": "table",
+          "placement": "right",
+          "values": [
+            "percent",
+            "value"
+          ]
         },
-        "showHeader": true
+        "pieType": "donut",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "tooltip": {
+          "mode": "single"
+        }
       },
-      "pluginVersion": "8.4.0-46160pre",
       "targets": [
         {
           "datasource": {
             "type": "mysql",
             "uid": "NG2hbM17z"
           },
-          "format": "table",
+          "format": "time_series",
           "group": [],
-          "metricColumn": "symbol",
-          "rawQuery": true,
-          "rawSql": "SELECT symbol as Symbol, side as Side, amount as Amount, price as Price, market as Market, market_percentage as MP FROM binance_orders ORDER BY market_percentage;",
+          "metricColumn": "currency",
+          "rawQuery": false,
+          "rawSql": "SELECT\n  timestamp AS \"time\",\n  currency AS metric,\n  balance\nFROM binance_balances\nWHERE\n  $__timeFilter(timestamp) AND\n  balance >= 60\nORDER BY timestamp",
           "refId": "A",
           "select": [
             [
               {
                 "params": [
-                  "market_percentage"
+                  "balance"
                 ],
                 "type": "column"
               }
             ]
           ],
-          "table": "binance_orders",
+          "table": "binance_balances",
           "timeColumn": "timestamp",
           "timeColumnType": "datetime",
           "where": [
@@ -4328,11 +6599,22 @@
               "name": "$__timeFilter",
               "params": [],
               "type": "macro"
+            },
+            {
+              "datatype": "decimal",
+              "name": "",
+              "params": [
+                "balance",
+                ">=",
+                "60"
+              ],
+              "type": "expression"
             }
           ]
         }
       ],
-      "type": "table"
+      "title": "Binance Alocation",
+      "type": "piechart"
     },
     {
       "fieldConfig": {
@@ -4361,9 +6643,9 @@
       },
       "gridPos": {
         "h": 11,
-        "w": 12,
-        "x": 12,
-        "y": 47
+        "w": 16,
+        "x": 8,
+        "y": 49
       },
       "id": 53,
       "options": {
@@ -4387,7 +6669,7 @@
           "group": [],
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "SELECT currency as Currency, balance as Balance, amount as Amount, b.price as Price, m.`1d_price_change_pct` as \"24H\", m.`7d_price_change_pct` as \"1W\", used_percentage as Used FROM binance_balances b JOIN marketcap m on b.currency = m.symbol ORDER BY balance DESC;",
+          "rawSql": "SELECT currency as Currency, ROUND(balance,0) as Balance, ROUND(amount,1) as Amount, b.price as Price, m.`1d_price_change_pct` as \"24H\", m.`7d_price_change_pct` as \"1W\" FROM binance_balances b JOIN marketcap m on b.currency = m.symbol WHERE balance >= 20 ORDER BY balance DESC;",
           "refId": "A",
           "select": [
             [
@@ -4419,7 +6701,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 58
+        "y": 60
       },
       "id": 57,
       "panels": [],
@@ -4456,7 +6738,7 @@
         "h": 21,
         "w": 24,
         "x": 0,
-        "y": 59
+        "y": 61
       },
       "id": 55,
       "options": {
@@ -4524,6 +6806,6 @@
   "timezone": "",
   "title": "Portfolio",
   "uid": "JRkcfvT7k",
-  "version": 116,
+  "version": 201,
   "weekStart": "monday"
 }

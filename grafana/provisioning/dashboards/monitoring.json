@@ -20,7 +20,7 @@
   },
   "editable": true,
   "fiscalYearStartMonth": 0,
-  "graphTooltip": 0,
+  "graphTooltip": 1,
   "id": 6,
   "links": [],
   "liveNow": false,
@@ -686,7 +686,7 @@
           "group": [],
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "SELECT COUNT(id) as count FROM job WHERE success = 1;",
+          "rawSql": "SELECT COUNT(id) as count FROM job;",
           "refId": "A",
           "select": [
             [
@@ -719,8 +719,8 @@
             "mode": "thresholds"
           },
           "mappings": [],
-          "max": 40,
-          "min": 20,
+          "max": 70,
+          "min": 38,
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -730,11 +730,11 @@
               },
               {
                 "color": "#EAB839",
-                "value": 30
+                "value": 57
               },
               {
                 "color": "red",
-                "value": 35
+                "value": 65
               }
             ]
           }
@@ -805,7 +805,7 @@
             "mode": "thresholds"
           },
           "mappings": [],
-          "max": 10,
+          "max": 12,
           "min": 0,
           "thresholds": {
             "mode": "absolute",
@@ -816,11 +816,11 @@
               },
               {
                 "color": "#EAB839",
-                "value": 6
+                "value": 8
               },
               {
                 "color": "red",
-                "value": 8
+                "value": 10
               }
             ]
           }
@@ -1227,7 +1227,7 @@
           ],
           "metricColumn": "job",
           "rawQuery": true,
-          "rawSql": "SELECT job as Job, COUNT(*) AS \"Count\" FROM job GROUP BY job;",
+          "rawSql": "SELECT job as Job, COUNT(*) AS \"Count\" FROM job GROUP BY job ORDER BY Count DESC;",
           "refId": "A",
           "select": [
             [
@@ -2333,7 +2333,7 @@
           "group": [],
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "SELECT TIMESTAMPDIFF(HOUR, NOW(), timestamp)*-1 as \"Hours Ago\", job as Job, success as Success, TIME_TO_SEC(duration) as Duration, error as Error FROM job WHERE job = \"daily\" OR job = \"pnl\" OR job = \"fng\" OR job = \"cbbi\" ORDER BY id DESC LIMIT 10;",
+          "rawSql": "SELECT TIMESTAMPDIFF(HOUR, NOW(), timestamp)*-1 as \"Hours Ago\", job as Job, success as Success, TIME_TO_SEC(duration) as Duration, error as Error FROM job WHERE job = \"daily\" OR job = \"pnl\" OR job = \"fng\" OR job = \"daily_push\" OR job = \"cbbi\" ORDER BY id DESC LIMIT 10;",
           "refId": "A",
           "select": [
             [
@@ -2515,6 +2515,6 @@
   "timezone": "",
   "title": "Monitoring",
   "uid": "Ib-qLvTnk",
-  "version": 64,
+  "version": 78,
   "weekStart": ""
 }
